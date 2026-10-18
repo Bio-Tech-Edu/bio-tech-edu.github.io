@@ -1,7 +1,7 @@
 const projects = [
   {
     title: "Termoquímica",
-    type: "OAD",
+    type: "REA",
     summary: "Recurso digital para estudo de energia em reações químicas, calor, entalpia e sua relação com transformações físicas e químicas.",
     description: "O objeto contribui para a modelagem conceitual por meio de explicações visuais e contextos voltados à investigação e à interpretação.",
     screenshot: "assets/screenshots/termoquimica_0.png",
@@ -17,7 +17,7 @@ const projects = [
   },
   {
     title: "Cinética",
-    type: "OAD",
+    type: "REA",
     summary: "Material interativo para exploração de velocidade de reação e fatores que influenciam a rapidez dos processos químicos.",
     description: "A proposta permite a análise de variáveis, interpretação de gráficos e construção de explicações científicas a partir de observações.",
     screenshot: "assets/screenshots/cinetica.png",
@@ -25,7 +25,7 @@ const projects = [
   },
   {
     title: "Equilíbrio",
-    type: "RED",
+    type: "REA",
     summary: "Recurso digital voltado ao estudo do equilíbrio químico e à compreensão de grandezas, reações reversíveis e estabilidade do sistema.",
     description: "A abordagem favorece o raciocínio quantitativo e a leitura de resultados em contextos de experimentação e modelagem conceitual.",
     screenshot: "assets/screenshots/equilibrio.png",
@@ -33,7 +33,7 @@ const projects = [
   },
   {
     title: "Eletroquímica",
-    type: "OAD",
+    type: "REA",
     summary: "Material para estudo de reações de oxirredução, células eletroquímicas e processos que conectam teoria e aplicações tecnológicas.",
     description: "A estrutura didática prioriza relação entre fenômenos químicos e contexto tecnológico, ampliando a compreensão científica e aplicada.",
     screenshot: "assets/screenshots/eletroquimica_000.png",
@@ -41,7 +41,7 @@ const projects = [
   },
   {
     title: "ENEM",
-    type: "REA",
+    type: "RED",
     summary: "Aulão e materiais de apoio para revisão de Ciências da Natureza com foco em repertório e estratégias de resolução de provas.",
     description: "O recurso apoia a preparação para o ENEM por meio de abordagem orientada para competências, análise de contextos e revisão estratégica.",
     screenshot: "assets/screenshots/enem.png",
@@ -49,7 +49,7 @@ const projects = [
   },
   {
     title: "Org",
-    type: "OAD",
+    type: "REA",
     summary: "Jornada interativa com cientistas brasileiras, missões, simulações e desafios em formato de aprendizagem imersiva.",
     description: "A proposta utiliza narrativa, interatividade e avaliação formativa para ampliar o engajamento e estimular o raciocínio científico.",
     screenshot: "assets/screenshots/org.png",
@@ -57,7 +57,7 @@ const projects = [
   },
   {
     title: "Genética Mendeliana: Explorando a análise de dados genéticos",
-    type: "RED",
+    type: "OAD",
     summary: "É um kit pedagógico modelo (editável): plano de aula; atividade prática em planilha e design gráfico web interativo (Canva Presentation/Document).",
     description: "Capacitar os alunos a compreenderem os princípios básicos da Genética Mendeliana, incluindo a primeira e a segunda lei de Mendel, e a analisar dados genéticos utilizando ferramentas computacionais, de acordo com a Base Nacional Comum Curricular (BNCC) e seu complemento.",
     screenshot: "assets/screenshots/kit_p_002.png",
@@ -90,7 +90,6 @@ function renderProjects(filter = "all") {
         <div class="project-actions">
           <a class="link-btn primary" href="${project.repo}" target="_blank" rel="noreferrer">Repositório</a>
           <a class="link-btn primary" href="${project.link}" target="_blank" rel="noreferrer">Acesso</a>
-          <a class="link-btn" href="${project.screenshot}" target="_blank" rel="noreferrer">Screenshot</a>
         </div>
       </div>
     `;
