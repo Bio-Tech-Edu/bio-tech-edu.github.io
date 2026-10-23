@@ -1,0 +1,1106 @@
+From 6023c97e107a11a05bad36719bcc7ff6a3292e39 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Fri, 23 Oct 2026 14:43:40 +0000
+Subject: [PATCH] =?UTF-8?q?Design=20v2:=20restaura=20CSS=20completo,=20ace?=
+ =?UTF-8?q?ssibilidade,=20busca/contagem=20no=20cat=C3=A1logo=20e=20cards?=
+ =?UTF-8?q?=20enxutos?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ README.md         |   9 +-
+ assets/script.js  | 116 ++++----
+ assets/styles.css | 731 ++++++++++++++++++++++++++++++++++++++++++++++
+ index.html        |  63 ++--
+ 4 files changed, 830 insertions(+), 89 deletions(-)
+
+diff --git a/README.md b/README.md
+index 9a33bd3..7fdf344 100644
+--- a/README.md
++++ b/README.md
+@@ -4,4 +4,11 @@ Site estático que reúne os Objetos de Aprendizagem Digital (OAD), Recursos Edu
+ 
+ Este repositório publica o site em https://bio-tech-edu.github.io/
+ 
+-Conteúdo criado automaticamente via Copilot — inclui páginas, estilos e imagens placeholder (SVG). Substitua os SVGs por screenshots reais quando disponíveis.
++## Estrutura
++
++- `index.html` — página única (hero, tipos de recurso, catálogo com busca e filtros, metodologia, sobre).
++- `assets/styles.css` — tema escuro verde/aqua, com foco visível, `prefers-reduced-motion` e textos a partir de 12 px.
++- `assets/script.js` — lista `projects` e renderização do catálogo. Para cada recurso, o campo opcional `alt` define o texto alternativo da captura.
++- `assets/screenshots/` — capturas reais dos recursos.
++
++Versão inicial gerada via Copilot; revisada e redesenhada na v2 (wireframes + correções de acessibilidade).
+diff --git a/assets/script.js b/assets/script.js
+index 5798584..cbe8069 100644
+--- a/assets/script.js
++++ b/assets/script.js
+@@ -84,102 +84,92 @@ const projects = [
+ 
+ const projectGrid = document.getElementById("project-grid");
+ const filterButtons = document.querySelectorAll(".filter");
++const searchInput = document.getElementById("search");
++let currentFilter = "all";
+ 
+ function renderSkillTags(skills, label, variant) {
+-  if (!Array.isArray(skills) || !skills.length) {
+-    return "";
+-  }
+-
+-  const tags = skills
+-    .map((skill) => `<span class="skill-chip ${variant}">${skill}</span>`)
+-    .join("");
+-
+-  return `
+-    <div class="skill-group">
+-      <span class="skill-label">${label}</span>
+-      <div class="skill-list">${tags}</div>
+-    </div>
+-  `;
++  if (!Array.isArray(skills) || !skills.length) return "";
++  const tags = skills.map((skill) => `<span class="skill-chip ${variant}">${skill}</span>`).join("");
++  return `<div class="skill-group"><span class="skill-label">${label}</span><div class="skill-list">${tags}</div></div>`;
+ }
+ 
+ function getActionButtons(project) {
+   const buttons = [];
+-
+-  if (project.repo) {
+-    buttons.push(`<a class="link-btn primary" href="${project.repo}" target="_blank" rel="noreferrer">Repositório</a>`);
+-  }
+-
+   if (project.link) {
+-    buttons.push(`<a class="link-btn secondary" href="${project.link}" target="_blank" rel="noreferrer">Acesso</a>`);
+-  }
+-
+-  if (!buttons.length) {
++    buttons.push(`<a class="link-btn primary" href="${project.link}" target="_blank" rel="noreferrer">Abrir recurso</a>`);
++    if (project.repo) buttons.push(`<a class="link-btn secondary" href="${project.repo}" target="_blank" rel="noreferrer">Código</a>`);
++  } else if (project.repo) {
++    buttons.push(`<a class="link-btn primary" href="${project.repo}" target="_blank" rel="noreferrer">Ver no GitHub</a>`);
++  } else {
+     buttons.push('<span class="link-btn muted">Em breve</span>');
+   }
+-
+   return buttons.join("");
+ }
+ 
+-function renderProjects(filter = "all") {
+-  projectGrid.innerHTML = "";
++function matches(project, query) {
++  if (!query) return true;
++  const hay = [project.title, project.type, project.summary, project.description, ...(project.bncc || []), ...(project.bnccComputacao || [])]
++    .join(" ").toLowerCase();
++  return hay.includes(query);
++}
++
++function updateCounts(query) {
++  filterButtons.forEach((btn) => {
++    const f = btn.dataset.filter;
++    const n = projects.filter((p) => (f === "all" || p.type === f) && matches(p, query)).length;
++    btn.textContent = `${btn.dataset.label} (${n})`;
++  });
++}
+ 
+-  const filteredProjects = filter === "all"
+-    ? projects
+-    : projects.filter((project) => project.type === filter);
++function renderProjects() {
++  const query = (searchInput?.value || "").trim().toLowerCase();
++  updateCounts(query);
++  projectGrid.innerHTML = "";
++  const list = projects.filter((p) => (currentFilter === "all" || p.type === currentFilter) && matches(p, query));
+ 
+-  if (!filteredProjects.length) {
+-    projectGrid.innerHTML = `
+-      <div class="empty-state">
+-        <h3>Nenhum projeto encontrado</h3>
+-        <p>Experimente outro filtro para visualizar outros materiais educacionais.</p>
+-      </div>
+-    `;
++  if (!list.length) {
++    projectGrid.innerHTML = `<div class="empty-state"><h3>Nenhum recurso encontrado</h3><p>Tente outro termo ou outro tipo de recurso.</p></div>`;
+     return;
+   }
+ 
+-  filteredProjects.forEach((project) => {
++  list.forEach((project) => {
+     const card = document.createElement("article");
+     card.className = "project-card";
++    const alt = project.alt || `Captura de tela do recurso ${project.title}`;
+     card.innerHTML = `
+-      <div class="project-thumb">
+-        <img src="${project.screenshot}" alt="${project.title} screenshot" />
+-      </div>
++      <div class="project-thumb"><img src="${project.screenshot}" alt="${alt}" loading="lazy" /></div>
+       <div class="project-content">
+         <span class="project-tag">${project.type}</span>
+         <h3>${project.title}</h3>
+         <p>${project.summary}</p>
+-        <p>${project.description}</p>
+-
+-        <div class="project-skills">
+-          ${renderSkillTags(project.bncc, "BNCC", "bncc")}
+-          ${renderSkillTags(project.bnccComputacao, "BNCC Computação", "computacao")}
+-        </div>
+-
+-        <div class="project-actions">
+-          ${getActionButtons(project)}
+-        </div>
+-      </div>
+-    `;
++        <details class="project-details">
++          <summary>Detalhes pedagógicos e BNCC</summary>
++          <p>${project.description}</p>
++          <div class="project-skills">
++            ${renderSkillTags(project.bncc, "BNCC", "bncc")}
++            ${renderSkillTags(project.bnccComputacao, "BNCC Computação", "computacao")}
++          </div>
++        </details>
++        <div class="project-actions">${getActionButtons(project)}</div>
++      </div>`;
+     projectGrid.appendChild(card);
+   });
+ }
+ 
+ filterButtons.forEach((button) => {
++  button.setAttribute("aria-pressed", String(button.classList.contains("active")));
+   button.addEventListener("click", () => {
+-    const selectedFilter = button.dataset.filter;
+-
++    currentFilter = button.dataset.filter;
+     filterButtons.forEach((btn) => {
+-      const isActive = btn === button;
+-      btn.classList.toggle("active", isActive);
+-      btn.setAttribute("aria-pressed", String(isActive));
++      const on = btn === button;
++      btn.classList.toggle("active", on);
++      btn.setAttribute("aria-pressed", String(on));
+     });
+-
+-    renderProjects(selectedFilter);
++    renderProjects();
+   });
+ });
+ 
+-filterButtons.forEach((button) => {
+-  button.setAttribute("aria-pressed", String(button.classList.contains("active")));
+-});
+-
++searchInput?.addEventListener("input", renderProjects);
++const metric = document.getElementById("metric-count");
++if (metric) metric.textContent = String(projects.length);
+ renderProjects();
+diff --git a/assets/styles.css b/assets/styles.css
+index d90130c..9e26494 100644
+--- a/assets/styles.css
++++ b/assets/styles.css
+@@ -1,3 +1,713 @@
++:root {
++  --bg: #061810;
++  --bg-strong: #030d09;
++  --bg-alt: #0d1f1a;
++  --panel: rgba(12, 27, 23, 0.78);
++  --panel-alt: rgba(16, 35, 31, 0.96);
++  --card: rgba(15, 31, 28, 0.9);
++  --card-strong: rgba(18, 38, 34, 0.96);
++  --line: rgba(173, 229, 213, 0.15);
++  --line-strong: rgba(120, 220, 186, 0.28);
++  --text: #ecfff8;
++  --muted: #cfe9df;
++  --green: #49d9a0;
++  --green-soft: rgba(73, 217, 160, 0.14);
++  --aqua: #78dfff;
++  --aqua-soft: rgba(120, 223, 255, 0.12);
++  --cyan: #9de5ff;
++  --shadow: 0 28px 70px rgba(0, 0, 0, 0.38);
++  --shadow-soft: 0 18px 40px rgba(6, 20, 16, 0.35);
++  --radius: 22px;
++  --radius-sm: 14px;
++  --container: 1180px;
++}
++
++* {
++  box-sizing: border-box;
++}
++
++html {
++  scroll-behavior: smooth;
++}
++
++body {
++  margin: 0;
++  min-height: 100vh;
++  font-family: "Inter", sans-serif;
++  color: var(--text);
++  background:
++    radial-gradient(circle at 10% 10%, rgba(73, 217, 160, 0.12), transparent 18%),
++    radial-gradient(circle at 88% 12%, rgba(120, 223, 255, 0.12), transparent 22%),
++    linear-gradient(180deg, var(--bg) 0%, #0a1c18 100%);
++  position: relative;
++  overflow-x: hidden;
++}
++
++body::before {
++  content: "";
++  position: fixed;
++  inset: 0;
++  pointer-events: none;
++  background-image: linear-gradient(rgba(255,255,255,0.01) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.01) 1px, transparent 1px);
++  background-size: 22px 22px;
++  mask-image: radial-gradient(circle at center, black 28%, transparent 100%);
++}
++
++img {
++  display: block;
++  max-width: 100%;
++}
++
++button {
++  font: inherit;
++}
++
++a {
++  color: inherit;
++  text-decoration: none;
++}
++
++.container {
++  width: min(var(--container), calc(100% - 36px));
++  margin: 0 auto;
++}
++
++.bg-orb {
++  position: fixed;
++  border-radius: 50%;
++  filter: blur(80px);
++  opacity: 0.5;
++  pointer-events: none;
++  z-index: 0;
++}
++
++.orb-one {
++  width: 430px;
++  height: 430px;
++  background: rgba(73, 217, 160, 0.16);
++  top: 80px;
++  left: -120px;
++}
++
++.orb-two {
++  width: 540px;
++  height: 540px;
++  background: rgba(120, 223, 255, 0.12);
++  right: -150px;
++  top: 200px;
++}
++
++.site-header,
++main,
++.site-footer {
++  position: relative;
++  z-index: 1;
++}
++
++.site-header {
++  padding: 26px 0 14px;
++}
++
++.topbar {
++  display: flex;
++  align-items: center;
++  justify-content: space-between;
++  gap: 18px;
++  padding: 10px 0 18px;
++  border-bottom: 1px solid var(--line);
++}
++
++.brand {
++  display: inline-flex;
++  align-items: center;
++  gap: 14px;
++  transition: transform 0.2s ease;
++}
++
++.brand:hover {
++  transform: translateY(-1px);
++}
++
++.brand img {
++  width: 54px;
++  height: 54px;
++  border-radius: 16px;
++  box-shadow: 0 12px 24px rgba(120, 223, 255, 0.18);
++  border: 1px solid rgba(255,255,255,0.08);
++}
++
++.brand strong {
++  display: block;
++  font-size: 1.1rem;
++  letter-spacing: 0.02em;
++}
++
++.brand-kicker {
++  display: block;
++  font-size: 0.64rem;
++  letter-spacing: 0.15em;
++  text-transform: uppercase;
++  color: var(--green);
++  opacity: 0.9;
++}
++
++.nav {
++  display: flex;
++  align-items: center;
++  gap: 18px;
++  color: var(--muted);
++  font-size: 0.95rem;
++}
++
++.nav a {
++  transition: color 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
++}
++
++.nav a:hover {
++  color: var(--text);
++  transform: translateY(-1px);
++}
++
++.nav-cta {
++  display: inline-flex;
++  align-items: center;
++  justify-content: center;
++  padding: 10px 15px;
++  border-radius: 999px;
++  border: 1px solid var(--line);
++  background: rgba(255,255,255,0.02);
++}
++
++.hero {
++  display: grid;
++  grid-template-columns: 1.2fr 0.8fr;
++  gap: 30px;
++  align-items: center;
++  padding: 54px 0 10px;
++}
++
++.badge {
++  display: inline-flex;
++  align-items: center;
++  padding: 8px 12px;
++  border-radius: 999px;
++  background: rgba(73, 217, 160, 0.1);
++  border: 1px solid rgba(73, 217, 160, 0.28);
++  color: var(--green);
++  font-size: 0.72rem;
++  letter-spacing: 0.14em;
++  text-transform: uppercase;
++  font-weight: 700;
++}
++
++.hero-copy h1 {
++  margin: 20px 0 16px;
++  font-size: clamp(2.8rem, 4.9vw, 4.8rem);
++  line-height: 0.98;
++  letter-spacing: -0.065em;
++  max-width: 720px;
++  text-wrap: balance;
++}
++
++.hero-copy p {
++  max-width: 640px;
++  font-size: 1.05rem;
++  line-height: 1.8;
++  color: var(--muted);
++}
++
++.cta-row {
++  display: flex;
++  flex-wrap: wrap;
++  gap: 14px;
++  margin-top: 30px;
++}
++
++.btn {
++  display: inline-flex;
++  align-items: center;
++  justify-content: center;
++  min-height: 52px;
++  padding: 0 22px;
++  border: 1px solid var(--line);
++  border-radius: 14px;
++  font-weight: 700;
++  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
++}
++
++.btn:hover {
++  transform: translateY(-2px);
++}
++
++.btn.primary {
++  background: linear-gradient(135deg, var(--green), var(--aqua));
++  color: #061b16;
++  box-shadow: 0 18px 34px rgba(73, 217, 160, 0.2);
++}
++
++.btn.secondary {
++  background: rgba(255,255,255,0.02);
++  color: var(--text);
++}
++
++.hero-metrics {
++  list-style: none;
++  padding: 0;
++  margin: 32px 0 0;
++  display: grid;
++  grid-template-columns: repeat(3, minmax(120px, 1fr));
++  gap: 16px;
++  max-width: 560px;
++}
++
++.hero-metrics li {
++  background: rgba(255, 255, 255, 0.02);
++  border: 1px solid var(--line);
++  border-radius: 18px;
++  padding: 18px 14px;
++  box-shadow: var(--shadow-soft);
++  transition: transform 0.2s ease, border-color 0.2s ease;
++}
++
++.hero-metrics li:hover {
++  transform: translateY(-2px);
++  border-color: rgba(120, 223, 255, 0.28);
++}
++
++.hero-metrics strong {
++  display: block;
++  font-size: 1.25rem;
++  margin-bottom: 8px;
++}
++
++.hero-metrics span {
++  color: var(--muted);
++  font-size: 0.78rem;
++}
++
++.hero-panel {
++  position: relative;
++  min-height: 420px;
++  padding: 18px;
++  border-radius: calc(var(--radius) + 12px);
++  background: linear-gradient(180deg, rgba(12, 24, 21, 0.97), rgba(7, 17, 15, 0.94));
++  border: 1px solid var(--line);
++  box-shadow: var(--shadow);
++  overflow: hidden;
++}
++
++.panel-glow {
++  position: absolute;
++  inset: 0;
++  background:
++    radial-gradient(circle at top right, rgba(120, 223, 255, 0.18), transparent 28%),
++    radial-gradient(circle at bottom left, rgba(73, 217, 160, 0.17), transparent 34%);
++}
++
++.panel-card {
++  position: relative;
++  z-index: 1;
++  background: rgba(9, 20, 17, 0.75);
++  border: 1px solid var(--line);
++  border-radius: var(--radius);
++  padding: 26px 22px;
++  margin-top: 18px;
++}
++
++.panel-label {
++  display: inline-flex;
++  padding: 8px 10px;
++  border-radius: 999px;
++  background: rgba(120,223,255,0.08);
++  border: 1px solid rgba(120,223,255,0.18);
++  color: var(--aqua);
++  font-size: 0.68rem;
++  letter-spacing: 0.12em;
++  text-transform: uppercase;
++  font-weight: 700;
++}
++
++.panel-card h2 {
++  margin: 18px 0 10px;
++  line-height: 1.1;
++  font-size: clamp(1.8rem, 3vw, 2.5rem);
++}
++
++.panel-card p {
++  margin: 0;
++  color: var(--muted);
++  line-height: 1.8;
++}
++
++.mini-grid {
++  position: relative;
++  z-index: 1;
++  margin-top: 20px;
++  display: grid;
++  grid-template-columns: repeat(2, minmax(0, 1fr));
++  gap: 14px;
++}
++
++.mini-grid div {
++  background: rgba(255,255,255,0.02);
++  border: 1px solid var(--line);
++  border-radius: 16px;
++  padding: 18px 16px;
++  transition: transform 0.2s ease, border-color 0.2s ease;
++}
++
++.mini-grid div:hover {
++  transform: translateY(-2px);
++  border-color: rgba(73, 217, 160, 0.24);
++}
++
++.mini-grid strong {
++  display: block;
++  font-size: 1rem;
++  margin-bottom: 6px;
++}
++
++.mini-grid span {
++  color: var(--muted);
++  font-size: 0.8rem;
++}
++
++.section {
++  padding: 100px 0;
++}
++
++.section-head {
++  margin-bottom: 28px;
++}
++
++.section-head.center {
++  text-align: center;
++}
++
++.eyebrow {
++  display: inline-block;
++  font-size: 0.72rem;
++  letter-spacing: 0.14em;
++  text-transform: uppercase;
++  color: var(--green);
++  font-weight: 700;
++  margin-bottom: 16px;
++}
++
++.section-head h2,
++.section-head h3 {
++  margin: 0;
++  font-size: clamp(2rem, 4vw, 3.1rem);
++  letter-spacing: -0.05em;
++  line-height: 1.1;
++  max-width: 760px;
++}
++
++.about-grid {
++  display: grid;
++  grid-template-columns: repeat(3, minmax(0, 1fr));
++  gap: 22px;
++}
++
++.info-card {
++  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
++  border: 1px solid var(--line);
++  border-radius: var(--radius);
++  padding: 22px 20px;
++  box-shadow: var(--shadow-soft);
++  transition: transform 0.2s ease, border-color 0.2s ease;
++}
++
++.info-card:hover {
++  transform: translateY(-4px);
++  border-color: rgba(73, 217, 160, 0.25);
++}
++
++.card-icon {
++  display: inline-flex;
++  align-items: center;
++  justify-content: center;
++  width: 44px;
++  height: 44px;
++  border-radius: 12px;
++  background: linear-gradient(135deg, var(--green-soft), var(--aqua-soft));
++  border: 1px solid rgba(255,255,255,0.06);
++  color: var(--green);
++  font-weight: 700;
++}
++
++.info-card h3 {
++  margin: 18px 0 12px;
++  font-size: 1.3rem;
++}
++
++.info-card p {
++  margin: 0;
++  color: var(--muted);
++  line-height: 1.8;
++}
++
++.filters {
++  display: flex;
++  flex-wrap: wrap;
++  gap: 10px;
++  margin: 28px 0 24px;
++}
++
++.filter {
++  padding: 10px 18px;
++  border-radius: 999px;
++  border: 1px solid var(--line);
++  background: rgba(255,255,255,0.02);
++  color: var(--muted);
++  cursor: pointer;
++  transition: 0.2s ease;
++}
++
++.filter.active,
++.filter:hover {
++  background: linear-gradient(135deg, rgba(73,217,160,0.12), rgba(120,223,255,0.08));
++  border-color: rgba(73,217,160,0.28);
++  color: var(--text);
++}
++
++.project-grid {
++  display: grid;
++  grid-template-columns: repeat(3, minmax(0, 1fr));
++  gap: 22px;
++}
++
++.project-card {
++  display: flex;
++  flex-direction: column;
++  min-height: 100%;
++  border-radius: var(--radius);
++  overflow: hidden;
++  background: linear-gradient(180deg, rgba(20, 35, 32, 0.96), rgba(11, 24, 22, 0.96));
++  border: 1px solid var(--line);
++  box-shadow: var(--shadow-soft);
++  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
++}
++
++.project-card:hover {
++  transform: translateY(-5px);
++  border-color: rgba(73,217,160,0.28);
++  box-shadow: 0 28px 54px rgba(0, 0, 0, 0.26);
++}
++
++.project-thumb {
++  position: relative;
++  aspect-ratio: 16 / 10;
++  background: linear-gradient(135deg, rgba(73, 217, 160, 0.14), rgba(120, 223, 255, 0.1), rgba(8, 20, 18, 1));
++  border-bottom: 1px solid var(--line);
++}
++
++.project-thumb::after {
++  content: "";
++  position: absolute;
++  inset: 0;
++  background: linear-gradient(180deg, rgba(6, 24, 16, 0) 0%, rgba(6, 24, 16, 0.28) 100%);
++}
++
++.project-thumb img {
++  width: 100%;
++  height: 100%;
++  object-fit: cover;
++}
++
++.project-content {
++  display: flex;
++  flex: 1;
++  flex-direction: column;
++  gap: 12px;
++  padding: 20px 18px 18px;
++}
++
++.project-tag {
++  display: inline-flex;
++  align-self: flex-start;
++  padding: 7px 10px;
++  border-radius: 999px;
++  background: rgba(120,223,255,0.08);
++  border: 1px solid rgba(120,223,255,0.18);
++  color: var(--aqua);
++  font-size: 0.7rem;
++  text-transform: uppercase;
++  letter-spacing: 0.12em;
++  font-weight: 700;
++}
++
++.project-content h3 {
++  margin: 0;
++  font-size: 1.32rem;
++}
++
++.project-content p {
++  margin: 0;
++  color: var(--muted);
++  line-height: 1.7;
++}
++
++.project-actions {
++  margin-top: auto;
++  display: flex;
++  gap: 10px;
++  flex-wrap: wrap;
++  padding-top: 10px;
++}
++
++.link-btn {
++  display: inline-flex;
++  align-items: center;
++  justify-content: center;
++  min-height: 40px;
++  padding: 0 14px;
++  border-radius: 10px;
++  border: 1px solid var(--line);
++  font-size: 0.87rem;
++  font-weight: 600;
++  transition: transform 0.2s ease, border-color 0.2s ease;
++}
++
++.link-btn.primary {
++  background: linear-gradient(135deg, rgba(73,217,160,0.16), rgba(120,223,255,0.08));
++  border-color: rgba(73,217,160,0.24);
++}
++
++.link-btn.secondary {
++  background: rgba(255,255,255,0.02);
++}
++
++.link-btn.muted {
++  background: rgba(255,255,255,0.02);
++  color: var(--muted);
++  cursor: default;
++}
++
++.link-btn:hover {
++  transform: translateY(-1px);
++}
++
++.empty-state {
++  grid-column: 1 / -1;
++  padding: 36px 24px;
++  text-align: center;
++  border: 1px dashed rgba(173, 229, 213, 0.22);
++  border-radius: var(--radius);
++  background: rgba(255,255,255,0.02);
++}
++
++.empty-state h3 {
++  margin: 0 0 10px;
++  font-size: 1.5rem;
++}
++
++.empty-state p {
++  margin: 0;
++  color: var(--muted);
++}
++
++.method-grid {
++  display: grid;
++  grid-template-columns: repeat(4, minmax(0, 1fr));
++  gap: 18px;
++}
++
++.method-item {
++  background: linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.01));
++  border-radius: var(--radius);
++  border: 1px solid var(--line);
++  padding: 22px 18px;
++  box-shadow: var(--shadow-soft);
++  transition: transform 0.2s ease, border-color 0.2s ease;
++}
++
++.method-item:hover {
++  transform: translateY(-2px);
++  border-color: rgba(73, 217, 160, 0.22);
++}
++
++.method-item span {
++  display: inline-flex;
++  align-items: center;
++  justify-content: center;
++  width: 42px;
++  height: 42px;
++  border-radius: 12px;
++  background: rgba(73,217,160,0.12);
++  border: 1px solid rgba(73,217,160,0.18);
++  color: var(--green);
++  font-weight: 800;
++  margin-bottom: 16px;
++}
++
++.method-item h3 {
++  margin: 0 0 10px;
++  font-size: 1.15rem;
++}
++
++.method-item p {
++  margin: 0;
++  color: var(--muted);
++  line-height: 1.8;
++}
++
++.site-footer {
++  border-top: 1px solid var(--line);
++  background: rgba(3, 13, 11, 0.88);
++}
++
++.footer-inner {
++  display: flex;
++  align-items: center;
++  justify-content: space-between;
++  gap: 18px;
++  min-height: 78px;
++  color: var(--muted);
++}
++
++@media (max-width: 980px) {
++  .hero,
++  .about-grid,
++  .project-grid,
++  .method-grid {
++    grid-template-columns: 1fr 1fr;
++  }
++
++  .hero {
++    grid-template-columns: 1fr;
++  }
++}
++
++@media (max-width: 720px) {
++  .topbar {
++    flex-direction: column;
++    align-items: flex-start;
++  }
++
++  .nav {
++    flex-wrap: wrap;
++  }
++
++  .about-grid,
++  .project-grid,
++  .method-grid {
++    grid-template-columns: 1fr;
++  }
++
++  .hero-metrics {
++    grid-template-columns: 1fr;
++  }
++
++  .footer-inner {
++    flex-direction: column;
++    justify-content: center;
++    text-align: center;
++    padding: 18px 0;
++  }
++}
++
++/* --- chips de competências (versão atual) --- */
+ .project-skills {
+   display: grid;
+   gap: 10px;
+@@ -76,3 +786,24 @@
+     padding: 4px 7px;
+   }
+ }
++
++/* --- v2: acessibilidade e novos componentes --- */
++.skip-link{position:absolute;left:12px;top:-60px;z-index:100;padding:12px 18px;border-radius:10px;background:var(--green);color:#03150e;font-weight:700;text-decoration:none}
++.skip-link:focus{top:12px}
++a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--aqua);outline-offset:3px}
++@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
++.gh-link{display:inline-flex;align-items:center;gap:8px;min-height:44px}
++.gh-link svg{width:24px;height:24px;fill:currentColor}
++.hero-img{width:100%;height:auto;border-radius:var(--radius-sm);margin-bottom:16px}
++.types{padding-top:0}
++.toolbar{display:grid;gap:6px;max-width:420px;margin:0 0 16px}
++.toolbar label{font-size:.85rem;font-weight:600;color:var(--muted)}
++.toolbar input{min-height:44px;padding:0 14px;border-radius:var(--radius-sm);border:1px solid var(--line-strong);background:var(--card);color:var(--text);font:inherit}
++.filter{min-height:44px}
++.project-details{margin-top:4px}
++.project-details summary{cursor:pointer;min-height:44px;display:flex;align-items:center;font-weight:600;color:var(--cyan)}
++.project-details p{margin:8px 0}
++.skill-label{font-size:.75rem}
++.skill-chip{font-size:.75rem;min-height:28px;padding:5px 9px}
++.project-tag{font-size:.75rem}
++.link-btn{min-height:44px;display:inline-flex;align-items:center}
+diff --git a/index.html b/index.html
+index a03dc08..890ac50 100644
+--- a/index.html
++++ b/index.html
+@@ -3,26 +3,26 @@
+   <head>
+     <meta charset="UTF-8" />
+     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+-    <title>Bio+Tech EduDesign | Educação digital aplicada à ciência e tecnologia</title>
++    <title>Bio+Tech EduDesign | Recursos educacionais abertos em ciência e tecnologia</title>
+     <link rel="icon" type="image/png" href="assets/favicon.png" />
+     <meta
+       name="description"
+       content="Bio+Tech EduDesign cria recursos educacionais digitais, objetos de aprendizagem e materiais abertos para ciência, tecnologia e educação."
+     />
+-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+     <link rel="preconnect" href="https://fonts.googleapis.com" />
+     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+     <link rel="stylesheet" href="assets/styles.css" />
+   </head>
+   <body>
++    <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+     <div class="bg-orb orb-one"></div>
+     <div class="bg-orb orb-two"></div>
+ 
+     <header class="site-header">
+       <div class="container topbar">
+-        <a class="brand" href="#top" aria-label="Bio-Tech-Edu home">
+-          <img src="assets/favicon.png" alt="Bio-Tech-Edu" />
++        <a class="brand" href="#top" aria-label="Bio+Tech EduDesign — início">
++          <img src="assets/favicon.png" alt="" width="44" height="44" />
+           <div>
+             <span class="brand-kicker">Marca</span>
+             <strong>Bio+Tech EduDesign</strong>
+@@ -31,28 +31,29 @@
+ 
+         <nav class="nav" aria-label="Navegação principal">
+           <a href="#sobre">Sobre</a>
+-          <a href="#projetos">Projetos</a>
++          <a href="#projetos">Catálogo</a>
++          <a href="#tipos">Tipos de recurso</a>
+           <a href="#metodologia">Metodologia</a>
+-          <a href="https://github.com/Bio-Tech-Edu" target="_blank" rel="noreferrer" class="nav-cta" aria-label="GitHub da Bio-Tech-Edu"><i class="fa fa-github" style="font-size:24px"></i></a>
++          <a href="https://github.com/Bio-Tech-Edu" target="_blank" rel="noreferrer" class="nav-cta gh-link"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg><span>GitHub</span></a>
+         </nav>
+       </div>
+ 
+       <div class="container hero" id="top">
+         <div class="hero-copy">
+-          <span class="badge">OAD • REA • RED</span>
+-          <h1>Educação digital aplicada à ciência, tecnologia e inovação.</h1>
++          <span class="badge">Recursos educacionais abertos</span>
++          <h1>Ciência e tecnologia para aprender fazendo.</h1>
+           <p>
+             Bio+Tech EduDesign reúne design educacional, rigor científico e tecnologia para criar materiais
+             digitais acessíveis, pedagógicos e inspiradores em educação em ciências, biotecnologia e aprendizagem aberta.
+           </p>
+ 
+           <div class="cta-row">
+-            <a class="btn primary" href="#projetos">Ver catálogo</a>
+-            <a class="btn secondary" href="https://github.com/Bio-Tech-Edu" target="_blank" rel="noreferrer">Comunidade GitHub</a>
++            <a class="btn primary" href="#projetos">Explorar catálogo</a>
++            <a class="btn secondary" href="#metodologia">Usar em sala de aula</a>
+           </div>
+ 
+           <ul class="hero-metrics" aria-label="Indicadores da marca">
+-            <li><strong>12+</strong><span>repositórios</span></li>
++            <li><strong id="metric-count">8</strong><span>recursos no catálogo</span></li>
+             <li><strong>OAD</strong><span>aprendizagem digital</span></li>
+             <li><strong>REA</strong><span>recursos abertos</span></li>
+           </ul>
+@@ -60,6 +61,7 @@
+ 
+         <div class="hero-panel" aria-label="Resumo institucional">
+           <div class="panel-glow"></div>
++          <img class="hero-img" src="assets/hero.png" width="1667" height="584" alt="Livros, caderno aberto, DNA e notebook com ícones de dados, representando biologia, educação e tecnologia." />
+           <div class="panel-card">
+             <span class="panel-label">Marca</span>
+             <h2>Design para aprender com clareza e impacto.</h2>
+@@ -87,12 +89,12 @@
+       </div>
+     </header>
+ 
+-    <main>
++    <main id="conteudo">
+       <section id="sobre" class="section intro">
+         <div class="container">
+           <div class="section-head center">
+             <span class="eyebrow">Sobre</span>
+-            <h3>A marca Bio+Tech EduDesign nasce na interseção entre biologia, computação, educação digital, ciência de dados e biotecnologia.</h3>
++            <h2>A marca Bio+Tech EduDesign nasce na interseção entre biologia, computação, educação digital, ciência de dados e biotecnologia.</h2>
+           </div>
+ 
+           <div class="about-grid">
+@@ -129,6 +131,18 @@
+         </div>
+       </section>
+ 
++      <section id="tipos" class="section types">
++        <div class="container">
++          <div class="section-head"><span class="eyebrow">Glossário</span><h2>Tipos de recurso</h2></div>
++
++          <div class="catalog-intro">
++            <p><strong>RED</strong> — Recurso Educacional Digital, material de ensino em formato eletrônico.</p>
++            <p><strong>REA</strong> — Recurso Educacional Aberto, conteúdo pedagógico com licença livre ou domínio público.</p>
++            <p><strong>OAD</strong> — Objeto de Aprendizagem Digital, unidade menor, interativa e reutilizável.</p>
++          </div>
++        </div>
++      </section>
++
+       <section id="projetos" class="section portfolio">
+         <div class="container">
+           <div class="section-head">
+@@ -136,17 +150,16 @@
+             <h2>Produtos educacionais selecionados</h2>
+           </div>
+ 
+-          <div class="catalog-intro">
+-            <p><strong>RED</strong> — Recurso Educacional Digital, material de ensino em formato eletrônico.</p>
+-            <p><strong>REA</strong> — Recurso Educacional Aberto, conteúdo pedagógico com licença livre ou domínio público.</p>
+-            <p><strong>OAD</strong> — Objeto de Aprendizagem Digital, unidade menor, interativa e reutilizável.</p>
++          <div class="toolbar">
++            <label for="search">Buscar por tema ou habilidade</label>
++            <input id="search" type="search" placeholder="Ex.: equilíbrio, EM13CN01" autocomplete="off" />
+           </div>
+ 
+-          <div class="filters" aria-label="Filtros de projetos">
+-            <button class="filter active" data-filter="all">Todos</button>
+-            <button class="filter" data-filter="OAD">OAD</button>
+-            <button class="filter" data-filter="REA">REA</button>
+-            <button class="filter" data-filter="RED">RED</button>
++          <div class="filters" role="group" aria-label="Filtrar por tipo de recurso">
++            <button class="filter active" data-filter="all" data-label="Todos">Todos</button>
++            <button class="filter" data-filter="OAD" data-label="OAD">OAD</button>
++            <button class="filter" data-filter="REA" data-label="REA">REA</button>
++            <button class="filter" data-filter="RED" data-label="RED">RED</button>
+           </div>
+ 
+           <div id="project-grid" class="project-grid" aria-live="polite"></div>
+@@ -157,7 +170,7 @@
+         <div class="container">
+           <div class="section-head center">
+             <span class="eyebrow">Metodologia</span>
+-            <h3>Fundamentos do design educacional</h3>
++            <h2>Fundamentos do design educacional</h2>
+           </div>
+ 
+           <div class="method-grid">
+@@ -191,14 +204,14 @@
+ 
+     <footer class="site-footer">
+       <div class="container footer-inner">
+-        <p>© 2026 <strong>Pâmella Araújo Balcaçar | Bio + Tech EduDesign</strong>.</p>
++        <p>© 2026 <strong>Pâmella Araújo Balcaçar | Bio+Tech EduDesign</strong>.</p>
+         <p>
+           O conteúdo deste site é distribuído sob a licença
+           <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.pt" target="_blank" rel="noopener">CC BY-SA 4.0</a>.<br />
+           O código-fonte está disponível sob a licença
+           <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener">MIT</a>.
+         </p>
+-        <a href="https://github.com/Bio-Tech-Edu" target="_blank" rel="noreferrer" aria-label="GitHub da Bio-Tech-Edu"><i class="fa fa-github" style="font-size:48px"></i></a>
++        <a class="gh-link" href="https://github.com/Bio-Tech-Edu" target="_blank" rel="noreferrer"><svg style="width:40px;height:40px" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg><span>GitHub da Bio-Tech-Edu</span></a>
+       </div>
+     </footer>
+ 
+-- 
+2.43.0
+
