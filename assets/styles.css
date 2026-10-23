@@ -2,49 +2,77 @@
   display: grid;
   gap: 10px;
   margin-top: 6px;
+  padding-top: 2px;
 }
 
 .skill-group {
   display: grid;
-  gap: 6px;
+  gap: 5px;
 }
 
 .skill-label {
   display: inline-flex;
   align-items: center;
-  font-size: 0.64rem;
-  letter-spacing: 0.1em;
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--muted);
-  opacity: 0.9;
+  color: rgba(207, 233, 223, 0.8);
+  font-weight: 700;
 }
 
 .skill-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 6px;
 }
 
 .skill-chip {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 5px 8px;
+  min-height: 24px;
+  padding: 4px 8px;
   border-radius: 999px;
-  font-size: 0.65rem;
+  font-size: 0.64rem;
   font-weight: 700;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
   border: 1px solid transparent;
+  line-height: 1;
 }
 
 .skill-chip.bncc {
-  background: rgba(73, 217, 160, 0.12);
-  border-color: rgba(73, 217, 160, 0.18);
-  color: var(--green);
+  background: rgba(73, 217, 160, 0.08);
+  border-color: rgba(73, 217, 160, 0.16);
+  color: rgba(73, 217, 160, 0.95);
 }
 
 .skill-chip.computacao {
-  background: rgba(120, 223, 255, 0.08);
-  border-color: rgba(120, 223, 255, 0.16);
-  color: var(--aqua);
+  background: rgba(120, 223, 255, 0.06);
+  border-color: rgba(120, 223, 255, 0.14);
+  color: rgba(120, 223, 255, 0.95);
+}
+
+@media (max-width: 720px) {
+  .project-content {
+    gap: 10px;
+    padding: 16px 14px 14px;
+  }
+
+  .project-content h3 {
+    font-size: 1.18rem;
+  }
+
+  .project-skills {
+    gap: 8px;
+  }
+
+  .skill-label {
+    font-size: 0.55rem;
+    letter-spacing: 0.09em;
+  }
+
+  .skill-chip {
+    font-size: 0.58rem;
+    padding: 4px 7px;
+  }
 }
