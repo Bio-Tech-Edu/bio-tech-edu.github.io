@@ -42,7 +42,7 @@ const projects = [
   {
     title: "ENEM",
     type: "RED",
-    summary: "Dashboard educacional preparatório para o ENEM",
+    summary: "Dashboard educacional preparatório para o ENEM.",
     description: "O recurso apoia a preparação para o ENEM por meio de abordagem orientada para competências, análise de contextos e revisão estratégica.",
     screenshot: "assets/screenshots/enem.png",
     repo: "https://github.com/Bio-Tech-Edu/enem"
@@ -58,9 +58,10 @@ const projects = [
   {
     title: "Genética Mendeliana: Explorando a análise de dados genéticos",
     type: "OAD",
-    summary: "É um kit pedagógico modelo (editável): plano de aula; atividade prática em planilha e design gráfico web interativo (Canva Presentation/Document).",
-    description: "Capacitar os alunos a compreenderem os princípios básicos da Genética Mendeliana, incluindo a primeira e a segunda lei de Mendel, e a analisar dados genéticos utilizando ferramentas computacionais, de acordo com a Base Nacional Comum Curricular (BNCC) e seu complemento.",
+    summary: "Kit pedagógico modelo com plano de aula, atividade prática em planilha e design gráfico web interativo.",
+    description: "Capacita os alunos a compreenderem os princípios básicos da Genética Mendeliana e a analisarem dados genéticos com apoio de ferramentas digitais.",
     screenshot: "assets/screenshots/kit_p_002.png",
+    repo: null,
     link: "https://canva.link/5u59sg358jzkuio"
   }
 ];
@@ -68,14 +69,42 @@ const projects = [
 const projectGrid = document.getElementById("project-grid");
 const filterButtons = document.querySelectorAll(".filter");
 
+function getActionButtons(project) {
+  const buttons = [];
+
+  if (project.repo) {
+    buttons.push(`<a class="link-btn primary" href="${project.repo}" target="_blank" rel="noreferrer">Repositório</a>`);
+  }
+
+  if (project.link) {
+    buttons.push(`<a class="link-btn secondary" href="${project.link}" target="_blank" rel="noreferrer">Acesso</a>`);
+  }
+
+  if (!buttons.length) {
+    buttons.push('<span class="link-btn muted">Em breve</span>');
+  }
+
+  return buttons.join("");
+}
+
 function renderProjects(filter = "all") {
   projectGrid.innerHTML = "";
 
-  const filtered = filter === "all"
+  const filteredProjects = filter === "all"
     ? projects
     : projects.filter((project) => project.type === filter);
 
-  filtered.forEach((project) => {
+  if (!filteredProjects.length) {
+    projectGrid.innerHTML = `
+      <div class="empty-state">
+        <h3>Nenhum projeto encontrado</h3>
+        <p>Experimente outro filtro para visualizar outros materiais educacionais.</p>
+      </div>
+    `;
+    return;
+  }
+
+  filteredProjects.forEach((project) => {
     const card = document.createElement("article");
     card.className = "project-card";
     card.innerHTML = `
@@ -88,8 +117,7 @@ function renderProjects(filter = "all") {
         <p>${project.summary}</p>
         <p>${project.description}</p>
         <div class="project-actions">
-          <a class="link-btn primary" href="${project.repo}" target="_blank" rel="noreferrer">Repositório</a>
-          <a class="link-btn primary" href="${project.link}" target="_blank" rel="noreferrer">Acesso</a>
+          ${getActionButtons(project)}
         </div>
       </div>
     `;
@@ -99,10 +127,20 @@ function renderProjects(filter = "all") {
 
 filterButtons.forEach((button) => {
   button.addEventListener("click", () => {
-    filterButtons.forEach((btn) => btn.classList.remove("active"));
-    button.classList.add("active");
-    renderProjects(button.dataset.filter);
+    const selectedFilter = button.dataset.filter;
+
+    filterButtons.forEach((btn) => {
+      const isActive = btn === button;
+      btn.classList.toggle("active", isActive);
+      btn.setAttribute("aria-pressed", String(isActive));
+    });
+
+    renderProjects(selectedFilter);
   });
+});
+
+filterButtons.forEach((button) => {
+  button.setAttribute("aria-pressed", String(button.classList.contains("active")));
 });
 
 renderProjects();
