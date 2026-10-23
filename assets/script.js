@@ -26,7 +26,7 @@ const projects = [
   {
     title: "Equilíbrio",
     type: "REA",
-    summary: "Recurso digital voltado ao estudo do equilíbrio químico e à compreensão de grandezas, reações reversíveis e estabilidade do sistema.",
+    summary: "Recurso educacional aberto voltado ao estudo do equilíbrio químico e à compreensão de grandezas, reações reversíveis e estabilidade do sistema.",
     description: "A abordagem favorece o raciocínio quantitativo e a leitura de resultados em contextos de experimentação e modelagem conceitual.",
     screenshot: "assets/screenshots/equilibrio.png",
     repo: "https://github.com/Bio-Tech-Edu/equilibrio"
@@ -42,7 +42,7 @@ const projects = [
   {
     title: "ENEM",
     type: "RED",
-    summary: "Aulão e materiais de apoio para revisão de Ciências da Natureza com foco em repertório e estratégias de resolução de provas.",
+    summary: "Dashboard educacional preparatório para o ENEM",
     description: "O recurso apoia a preparação para o ENEM por meio de abordagem orientada para competências, análise de contextos e revisão estratégica.",
     screenshot: "assets/screenshots/enem.png",
     repo: "https://github.com/Bio-Tech-Edu/enem"
