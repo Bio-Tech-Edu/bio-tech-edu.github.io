@@ -84,102 +84,92 @@ const projects = [
 
 const projectGrid = document.getElementById("project-grid");
 const filterButtons = document.querySelectorAll(".filter");
+const searchInput = document.getElementById("search");
+let currentFilter = "all";
 
 function renderSkillTags(skills, label, variant) {
-  if (!Array.isArray(skills) || !skills.length) {
-    return "";
-  }
-
-  const tags = skills
-    .map((skill) => `<span class="skill-chip ${variant}">${skill}</span>`)
-    .join("");
-
-  return `
-    <div class="skill-group">
-      <span class="skill-label">${label}</span>
-      <div class="skill-list">${tags}</div>
-    </div>
-  `;
+  if (!Array.isArray(skills) || !skills.length) return "";
+  const tags = skills.map((skill) => `<span class="skill-chip ${variant}">${skill}</span>`).join("");
+  return `<div class="skill-group"><span class="skill-label">${label}</span><div class="skill-list">${tags}</div></div>`;
 }
 
 function getActionButtons(project) {
   const buttons = [];
-
-  if (project.repo) {
-    buttons.push(`<a class="link-btn primary" href="${project.repo}" target="_blank" rel="noreferrer">Repositório</a>`);
-  }
-
   if (project.link) {
-    buttons.push(`<a class="link-btn secondary" href="${project.link}" target="_blank" rel="noreferrer">Acesso</a>`);
-  }
-
-  if (!buttons.length) {
+    buttons.push(`<a class="link-btn primary" href="${project.link}" target="_blank" rel="noreferrer">Abrir recurso</a>`);
+    if (project.repo) buttons.push(`<a class="link-btn secondary" href="${project.repo}" target="_blank" rel="noreferrer">Código</a>`);
+  } else if (project.repo) {
+    buttons.push(`<a class="link-btn primary" href="${project.repo}" target="_blank" rel="noreferrer">Ver no GitHub</a>`);
+  } else {
     buttons.push('<span class="link-btn muted">Em breve</span>');
   }
-
   return buttons.join("");
 }
 
-function renderProjects(filter = "all") {
+function matches(project, query) {
+  if (!query) return true;
+  const hay = [project.title, project.type, project.summary, project.description, ...(project.bncc || []), ...(project.bnccComputacao || [])]
+    .join(" ").toLowerCase();
+  return hay.includes(query);
+}
+
+function updateCounts(query) {
+  filterButtons.forEach((btn) => {
+    const f = btn.dataset.filter;
+    const n = projects.filter((p) => (f === "all" || p.type === f) && matches(p, query)).length;
+    btn.textContent = `${btn.dataset.label} (${n})`;
+  });
+}
+
+function renderProjects() {
+  const query = (searchInput?.value || "").trim().toLowerCase();
+  updateCounts(query);
   projectGrid.innerHTML = "";
+  const list = projects.filter((p) => (currentFilter === "all" || p.type === currentFilter) && matches(p, query));
 
-  const filteredProjects = filter === "all"
-    ? projects
-    : projects.filter((project) => project.type === filter);
-
-  if (!filteredProjects.length) {
-    projectGrid.innerHTML = `
-      <div class="empty-state">
-        <h3>Nenhum projeto encontrado</h3>
-        <p>Experimente outro filtro para visualizar outros materiais educacionais.</p>
-      </div>
-    `;
+  if (!list.length) {
+    projectGrid.innerHTML = `<div class="empty-state"><h3>Nenhum recurso encontrado</h3><p>Tente outro termo ou outro tipo de recurso.</p></div>`;
     return;
   }
 
-  filteredProjects.forEach((project) => {
+  list.forEach((project) => {
     const card = document.createElement("article");
     card.className = "project-card";
+    const alt = project.alt || `Captura de tela do recurso ${project.title}`;
     card.innerHTML = `
-      <div class="project-thumb">
-        <img src="${project.screenshot}" alt="${project.title} screenshot" />
-      </div>
+      <div class="project-thumb"><img src="${project.screenshot}" alt="${alt}" loading="lazy" /></div>
       <div class="project-content">
         <span class="project-tag">${project.type}</span>
         <h3>${project.title}</h3>
         <p>${project.summary}</p>
-        <p>${project.description}</p>
-
-        <div class="project-skills">
-          ${renderSkillTags(project.bncc, "BNCC", "bncc")}
-          ${renderSkillTags(project.bnccComputacao, "BNCC Computação", "computacao")}
-        </div>
-
-        <div class="project-actions">
-          ${getActionButtons(project)}
-        </div>
-      </div>
-    `;
+        <details class="project-details">
+          <summary>Detalhes pedagógicos e BNCC</summary>
+          <p>${project.description}</p>
+          <div class="project-skills">
+            ${renderSkillTags(project.bncc, "BNCC", "bncc")}
+            ${renderSkillTags(project.bnccComputacao, "BNCC Computação", "computacao")}
+          </div>
+        </details>
+        <div class="project-actions">${getActionButtons(project)}</div>
+      </div>`;
     projectGrid.appendChild(card);
   });
 }
 
 filterButtons.forEach((button) => {
+  button.setAttribute("aria-pressed", String(button.classList.contains("active")));
   button.addEventListener("click", () => {
-    const selectedFilter = button.dataset.filter;
-
+    currentFilter = button.dataset.filter;
     filterButtons.forEach((btn) => {
-      const isActive = btn === button;
-      btn.classList.toggle("active", isActive);
-      btn.setAttribute("aria-pressed", String(isActive));
+      const on = btn === button;
+      btn.classList.toggle("active", on);
+      btn.setAttribute("aria-pressed", String(on));
     });
-
-    renderProjects(selectedFilter);
+    renderProjects();
   });
 });
 
-filterButtons.forEach((button) => {
-  button.setAttribute("aria-pressed", String(button.classList.contains("active")));
-});
-
+searchInput?.addEventListener("input", renderProjects);
+const metric = document.getElementById("metric-count");
+if (metric) metric.textContent = String(projects.length);
 renderProjects();
