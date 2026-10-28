@@ -1,9 +1,9 @@
 From 6023c97e107a11a05bad36719bcc7ff6a3292e39 Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Fri, 23 Oct 2026 14:43:40 +0000
-Subject: [PATCH] =?UTF-8?q?Design=20v2:=20restaura=20CSS=20completo,=20ace?=
- =?UTF-8?q?ssibilidade,=20busca/contagem=20no=20cat=C3=A1logo=20e=20cards?=
- =?UTF-8?q?=20enxutos?=
+Subject: [PATCH 1/2] =?UTF-8?q?Design=20v2:=20restaura=20CSS=20completo,?=
+ =?UTF-8?q?=20acessibilidade,=20busca/contagem=20no=20cat=C3=A1logo=20e=20?=
+ =?UTF-8?q?cards=20enxutos?=
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -1101,6 +1101,300 @@ index a03dc08..890ac50 100644
        </div>
      </footer>
  
+-- 
+2.43.0
+
+
+From 1149bc0f9e5f5df56d157471eb340ee2f70f70d3 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Wed, 28 Oct 2026 00:41:10 +0000
+Subject: [PATCH 2/2] =?UTF-8?q?Design=20v3:=20tema=20claro/escuro,=20se?=
+ =?UTF-8?q?=C3=A7=C3=A3o=20Para=20quem=20=C3=A9,=20se=C3=A7=C3=B5es=20reor?=
+ =?UTF-8?q?denadas=20e=20README=20executivo?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ README.md         | 68 ++++++++++++++++++++++++++++-----
+ assets/script.js  | 13 +++++++
+ assets/styles.css | 21 +++++++++++
+ index.html        | 95 +++++++++++++++++++++++++++--------------------
+ 4 files changed, 147 insertions(+), 50 deletions(-)
+
+diff --git a/README.md b/README.md
+index 7fdf344..3bde0ba 100644
+--- a/README.md
++++ b/README.md
+@@ -1,14 +1,64 @@
+-# Vitrine Bio‑Tech‑Edu
++# Bio+Tech EduDesign
+ 
+-Site estático que reúne os Objetos de Aprendizagem Digital (OAD), Recursos Educacionais Abertos (REA) e Recursos Educacionais Digitais (RED) públicos desenvolvidos pela marca Bio‑Tech‑Edu.
++Vitrine de **recursos educacionais abertos** em ciência e tecnologia, com design educacional, rigor científico e acessibilidade digital.
+ 
+-Este repositório publica o site em https://bio-tech-edu.github.io/
++**Site:** https://bio-tech-edu.github.io · **Organização:** https://github.com/Bio-Tech-Edu
+ 
+-## Estrutura
++## Resumo executivo
+ 
+-- `index.html` — página única (hero, tipos de recurso, catálogo com busca e filtros, metodologia, sobre).
+-- `assets/styles.css` — tema escuro verde/aqua, com foco visível, `prefers-reduced-motion` e textos a partir de 12 px.
+-- `assets/script.js` — lista `projects` e renderização do catálogo. Para cada recurso, o campo opcional `alt` define o texto alternativo da captura.
+-- `assets/screenshots/` — capturas reais dos recursos.
++| Item | Descrição |
++|---|---|
++| Propósito | Reunir e divulgar recursos digitais abertos para o ensino de ciências, dados e tecnologia |
++| Público | Professores, estudantes universitários e estagiários |
++| Tipos de recurso | OAD (objeto de aprendizagem digital), REA (recurso educacional aberto) e RED (recurso educacional digital) |
++| Alinhamento curricular | Habilidades da BNCC e da BNCC Computação indicadas em cada recurso |
++| Licenças | Conteúdo em CC BY-SA 4.0; código-fonte em MIT |
+ 
+-Versão inicial gerada via Copilot; revisada e redesenhada na v2 (wireframes + correções de acessibilidade).
++## Fundamentação técnico-pedagógica
++
++O design dos recursos se apoia em quatro eixos: **aprendizagem ativa**, **gamificação**, **simulação** e **feedback formativo**. Cada recurso do catálogo informa tipo, resumo, habilidades BNCC e acesso ao recurso e ao código.
++
++## Acessibilidade
++
++- Link "Pular para o conteúdo" e navegação por teclado com foco visível.
++- Textos a partir de 12 px, alvos de toque de 44 px e hierarquia de títulos h1 → h2 → h3.
++- Respeito a `prefers-reduced-motion` e ao tema do sistema (claro ou escuro), com alternância manual.
++- Textos alternativos nas imagens (campo opcional `alt` por recurso).
++
++## Arquitetura técnica
++
++Site estático (HTML, CSS e JavaScript puros), sem etapa de build, publicado pelo GitHub Pages.
++
++```
++index.html           página única: hero, público, tipos, catálogo, metodologia, sobre
++assets/styles.css    tokens de tema (escuro e claro), layout e componentes
++assets/script.js     lista `projects`, busca, filtros com contagem e alternância de tema
++assets/screenshots/  capturas dos recursos
++```
++
++## Como adicionar um recurso ao catálogo
++
++Inclua um objeto na lista `projects` de `assets/script.js`:
++
++| Campo | Uso |
++|---|---|
++| `title`, `type` | Nome e tipo (`OAD`, `REA` ou `RED`) |
++| `summary` | Uma frase sobre o que o estudante faz e aprende |
++| `description` | Detalhamento pedagógico (exibido em "Detalhes pedagógicos e BNCC") |
++| `bncc`, `bnccComputacao` | Listas de códigos de habilidades |
++| `screenshot`, `alt` | Caminho da captura e texto alternativo descritivo |
++| `link`, `repo` | Acesso ao recurso e ao código (ao menos um dos dois) |
++
++## Desenvolvimento local
++
++Abra `index.html` no navegador ou use um servidor estático, por exemplo `python3 -m http.server 8000`.
++
++## Contribuição
++
++Sugestões de conteúdo, acessibilidade e código são bem-vindas por *issues* e *pull requests* no GitHub.
++
++## Licença
++
++Conteúdo: [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.pt). Código: [MIT](https://opensource.org/licenses/MIT).
++
++© 2026 Pâmella Araújo Balcaçar
+diff --git a/assets/script.js b/assets/script.js
+index cbe8069..5d861df 100644
+--- a/assets/script.js
++++ b/assets/script.js
+@@ -173,3 +173,16 @@ searchInput?.addEventListener("input", renderProjects);
+ const metric = document.getElementById("metric-count");
+ if (metric) metric.textContent = String(projects.length);
+ renderProjects();
++
++const themeBtn = document.getElementById("theme-toggle");
++function syncThemeButton() {
++  const light = document.documentElement.getAttribute("data-theme") === "light";
++  if (themeBtn) themeBtn.textContent = light ? "Tema escuro" : "Tema claro";
++}
++themeBtn?.addEventListener("click", () => {
++  const next = document.documentElement.getAttribute("data-theme") === "light" ? "dark" : "light";
++  document.documentElement.setAttribute("data-theme", next);
++  try { localStorage.setItem("theme", next); } catch (e) {}
++  syncThemeButton();
++});
++syncThemeButton();
+diff --git a/assets/styles.css b/assets/styles.css
+index 9e26494..9d08108 100644
+--- a/assets/styles.css
++++ b/assets/styles.css
+@@ -807,3 +807,24 @@ a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{o
+ .skill-chip{font-size:.75rem;min-height:28px;padding:5px 9px}
+ .project-tag{font-size:.75rem}
+ .link-btn{min-height:44px;display:inline-flex;align-items:center}
++
++
++/* --- v3: tema claro, alternância e "Para quem é" --- */
++:root{color-scheme:dark}
++:root[data-theme="light"]{color-scheme:light;--bg:#f3f8f5;--bg-strong:#e6efeb;--bg-alt:#e9f2ee;--panel:rgba(255,255,255,.9);--panel-alt:#fff;--card:#fff;--card-strong:#fff;--line:rgba(8,70,52,.16);--line-strong:rgba(8,90,66,.34);--text:#0c241c;--muted:#36524a;--green:#0b7a57;--green-soft:rgba(11,122,87,.1);--aqua:#0a6f93;--aqua-soft:rgba(10,111,147,.1);--cyan:#0a6f93;--shadow:0 18px 40px rgba(12,36,28,.12);--shadow-soft:0 10px 24px rgba(12,36,28,.1)}
++:root[data-theme="light"] body{background:radial-gradient(circle at 10% 10%,rgba(11,122,87,.08),transparent 18%),radial-gradient(circle at 88% 12%,rgba(10,111,147,.08),transparent 22%),linear-gradient(180deg,var(--bg) 0%,#e4eee9 100%)}
++:root[data-theme="light"] .bg-orb{opacity:.25}
++:root[data-theme="light"] .btn.primary{background:linear-gradient(135deg,#0b7a57,#0a6f93);color:#fff}
++:root[data-theme="light"] .skip-link{color:#fff;background:#0b7a57}
++:root[data-theme="light"] .hero-panel,:root[data-theme="light"] .project-card,:root[data-theme="light"] .info-card,:root[data-theme="light"] .method-item,:root[data-theme="light"] .hero-metrics li{background:#fff}
++:root[data-theme="light"] .project-thumb{background:linear-gradient(135deg,rgba(11,122,87,.1),rgba(10,111,147,.08),#fff)}
++:root[data-theme="light"] .project-thumb::after{background:none}
++:root[data-theme="light"] .method-item span{background:rgba(11,122,87,.1);color:#0b7a57}
++.theme-toggle{min-height:44px;padding:0 16px;border-radius:999px;border:1px solid var(--line-strong);background:var(--card);color:var(--text);font:inherit;font-weight:600;cursor:pointer}
++.theme-toggle:hover{border-color:var(--green)}
++.audience-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
++.audience-card{padding:24px;border-radius:var(--radius);border:1px solid var(--line);background:var(--card);display:flex;flex-direction:column;gap:10px}
++.audience-card h3{margin:0}
++.audience-card p{margin:0;color:var(--muted)}
++.audience-card a{margin-top:auto;min-height:44px;display:inline-flex;align-items:center;font-weight:600;color:var(--cyan)}
++@media (max-width:900px){.audience-grid{grid-template-columns:1fr}}
+diff --git a/index.html b/index.html
+index 890ac50..97fbb82 100644
+--- a/index.html
++++ b/index.html
+@@ -4,10 +4,11 @@
+     <meta charset="UTF-8" />
+     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+     <title>Bio+Tech EduDesign | Recursos educacionais abertos em ciência e tecnologia</title>
++    <script>try{var t=localStorage.getItem("theme");if(!t)t=matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";document.documentElement.setAttribute("data-theme",t)}catch(e){document.documentElement.setAttribute("data-theme","dark")}</script>
+     <link rel="icon" type="image/png" href="assets/favicon.png" />
+     <meta
+       name="description"
+-      content="Bio+Tech EduDesign cria recursos educacionais digitais, objetos de aprendizagem e materiais abertos para ciência, tecnologia e educação."
++      content="Recursos educacionais abertos em ciência e tecnologia para professores, estudantes universitários e estagiários. Alinhados à BNCC, com código aberto."
+     />
+     <link rel="preconnect" href="https://fonts.googleapis.com" />
+     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+@@ -30,10 +31,12 @@
+         </a>
+ 
+         <nav class="nav" aria-label="Navegação principal">
+-          <a href="#sobre">Sobre</a>
++          <a href="#publico">Para quem é</a>
+           <a href="#projetos">Catálogo</a>
+           <a href="#tipos">Tipos de recurso</a>
+           <a href="#metodologia">Metodologia</a>
++          <a href="#sobre">Sobre</a>
++          <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Alternar entre tema claro e escuro">Tema claro</button>
+           <a href="https://github.com/Bio-Tech-Edu" target="_blank" rel="noreferrer" class="nav-cta gh-link"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg><span>GitHub</span></a>
+         </nav>
+       </div>
+@@ -43,13 +46,13 @@
+           <span class="badge">Recursos educacionais abertos</span>
+           <h1>Ciência e tecnologia para aprender fazendo.</h1>
+           <p>
+-            Bio+Tech EduDesign reúne design educacional, rigor científico e tecnologia para criar materiais
+-            digitais acessíveis, pedagógicos e inspiradores em educação em ciências, biotecnologia e aprendizagem aberta.
++            Recursos digitais abertos, alinhados à BNCC, para professores planejarem aulas, estudantes universitários
++            aprofundarem conteúdos e estagiários aprenderem na prática como se constrói material educacional de qualidade.
+           </p>
+ 
+           <div class="cta-row">
+             <a class="btn primary" href="#projetos">Explorar catálogo</a>
+-            <a class="btn secondary" href="#metodologia">Usar em sala de aula</a>
++            <a class="btn secondary" href="#publico">Para quem é</a>
+           </div>
+ 
+           <ul class="hero-metrics" aria-label="Indicadores da marca">
+@@ -90,43 +93,13 @@
+     </header>
+ 
+     <main id="conteudo">
+-      <section id="sobre" class="section intro">
++      <section id="publico" class="section audience">
+         <div class="container">
+-          <div class="section-head center">
+-            <span class="eyebrow">Sobre</span>
+-            <h2>A marca Bio+Tech EduDesign nasce na interseção entre biologia, computação, educação digital, ciência de dados e biotecnologia.</h2>
+-          </div>
+-
+-          <div class="about-grid">
+-            <article class="info-card">
+-              <span class="card-icon">01</span>
+-              <h3>Missão</h3>
+-              <p>Transformar temas complexos da ciência e da tecnologia em recursos visuais, pedagógicos e acessíveis, com rigor acadêmico e linguagem clara.</p>
+-            </article>
+-
+-            <article class="info-card">
+-              <span class="card-icon">02</span>
+-              <h3>Visão</h3>
+-              <p>Construir um ecossistema de aprendizagem colaborativa e aberta, com experiência digital inspiradora para estudantes, professores e criadores de conteúdo.</p>
+-            </article>
+-
+-            <article class="info-card">
+-              <span class="card-icon">03</span>
+-              <h3>Valores</h3>
+-              <p>Acessibilidade digital, inclusão, rigor científico, inovação tecnológica, empatia docente e cultura aberta.</p>
+-            </article>
+-
+-            <article class="info-card">
+-              <span class="card-icon">04</span>
+-              <h3>Origem</h3>
+-              <p>O movimento começou com pesquisas, tutoriais, atividades em ciência de dados e projetos acadêmicos que evoluíram para recursos digitais aplicados à educação.</p>
+-            </article>
+-
+-            <article class="info-card">
+-              <span class="card-icon">05</span>
+-              <h3>Futuro</h3>
+-              <p>Consolidar uma biblioteca de materiais digitais e abertos que ampliem o acesso ao conhecimento em biologia, dados, tecnologia e educação.</p>
+-            </article>
++          <div class="section-head center"><span class="eyebrow">Para quem é</span><h2>Um recurso, três jeitos de usar</h2></div>
++          <div class="audience-grid">
++            <article class="audience-card"><h3>Professores</h3><p>Planeje aulas com recursos prontos, organizados por habilidades da BNCC e BNCC Computação.</p><a href="#projetos">Ver recursos por habilidade</a></article>
++            <article class="audience-card"><h3>Estudantes universitários</h3><p>Revise conceitos, explore simulações e estude o código aberto como referência para trabalhos e projetos.</p><a href="#projetos">Explorar o catálogo</a></article>
++            <article class="audience-card"><h3>Estagiários</h3><p>Conheça a estrutura dos recursos, a metodologia de design educacional e o código no GitHub.</p><a href="#metodologia">Ver a metodologia</a></article>
+           </div>
+         </div>
+       </section>
+@@ -200,6 +173,46 @@
+           </div>
+         </div>
+       </section>
++      <section id="sobre" class="section intro">
++        <div class="container">
++          <div class="section-head center">
++            <span class="eyebrow">Sobre</span>
++            <h2>A marca Bio+Tech EduDesign nasce na interseção entre biologia, computação, educação digital, ciência de dados e biotecnologia.</h2>
++          </div>
++
++          <div class="about-grid">
++            <article class="info-card">
++              <span class="card-icon">01</span>
++              <h3>Missão</h3>
++              <p>Transformar temas complexos da ciência e da tecnologia em recursos visuais, pedagógicos e acessíveis, com rigor acadêmico e linguagem clara.</p>
++            </article>
++
++            <article class="info-card">
++              <span class="card-icon">02</span>
++              <h3>Visão</h3>
++              <p>Construir um ecossistema de aprendizagem colaborativa e aberta, com experiência digital inspiradora para estudantes, professores e criadores de conteúdo.</p>
++            </article>
++
++            <article class="info-card">
++              <span class="card-icon">03</span>
++              <h3>Valores</h3>
++              <p>Acessibilidade digital, inclusão, rigor científico, inovação tecnológica, empatia docente e cultura aberta.</p>
++            </article>
++
++            <article class="info-card">
++              <span class="card-icon">04</span>
++              <h3>Origem</h3>
++              <p>O movimento começou com pesquisas, tutoriais, atividades em ciência de dados e projetos acadêmicos que evoluíram para recursos digitais aplicados à educação.</p>
++            </article>
++
++            <article class="info-card">
++              <span class="card-icon">05</span>
++              <h3>Futuro</h3>
++              <p>Consolidar uma biblioteca de materiais digitais e abertos que ampliem o acesso ao conhecimento em biologia, dados, tecnologia e educação.</p>
++            </article>
++          </div>
++        </div>
++      </section>
+     </main>
+ 
+     <footer class="site-footer">
 -- 
 2.43.0
 

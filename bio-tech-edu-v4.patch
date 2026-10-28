@@ -1,0 +1,3488 @@
+From 36204060b7b95078c4b92c52106b410022630763 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Wed, 28 Oct 2026 00:41:10 +0000
+Subject: [PATCH 1/3] =?UTF-8?q?Design=20v3:=20tema=20claro/escuro,=20se?=
+ =?UTF-8?q?=C3=A7=C3=A3o=20Para=20quem=20=C3=A9,=20se=C3=A7=C3=B5es=20reor?=
+ =?UTF-8?q?denadas=20e=20README=20executivo?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ README.md         | 68 ++++++++++++++++++++++++++++-----
+ assets/script.js  | 13 +++++++
+ assets/styles.css | 21 +++++++++++
+ index.html        | 95 +++++++++++++++++++++++++++--------------------
+ 4 files changed, 147 insertions(+), 50 deletions(-)
+
+diff --git a/README.md b/README.md
+index 7fdf344..3bde0ba 100644
+--- a/README.md
++++ b/README.md
+@@ -1,14 +1,64 @@
+-# Vitrine Bio‑Tech‑Edu
++# Bio+Tech EduDesign
+ 
+-Site estático que reúne os Objetos de Aprendizagem Digital (OAD), Recursos Educacionais Abertos (REA) e Recursos Educacionais Digitais (RED) públicos desenvolvidos pela marca Bio‑Tech‑Edu.
++Vitrine de **recursos educacionais abertos** em ciência e tecnologia, com design educacional, rigor científico e acessibilidade digital.
+ 
+-Este repositório publica o site em https://bio-tech-edu.github.io/
++**Site:** https://bio-tech-edu.github.io · **Organização:** https://github.com/Bio-Tech-Edu
+ 
+-## Estrutura
++## Resumo executivo
+ 
+-- `index.html` — página única (hero, tipos de recurso, catálogo com busca e filtros, metodologia, sobre).
+-- `assets/styles.css` — tema escuro verde/aqua, com foco visível, `prefers-reduced-motion` e textos a partir de 12 px.
+-- `assets/script.js` — lista `projects` e renderização do catálogo. Para cada recurso, o campo opcional `alt` define o texto alternativo da captura.
+-- `assets/screenshots/` — capturas reais dos recursos.
++| Item | Descrição |
++|---|---|
++| Propósito | Reunir e divulgar recursos digitais abertos para o ensino de ciências, dados e tecnologia |
++| Público | Professores, estudantes universitários e estagiários |
++| Tipos de recurso | OAD (objeto de aprendizagem digital), REA (recurso educacional aberto) e RED (recurso educacional digital) |
++| Alinhamento curricular | Habilidades da BNCC e da BNCC Computação indicadas em cada recurso |
++| Licenças | Conteúdo em CC BY-SA 4.0; código-fonte em MIT |
+ 
+-Versão inicial gerada via Copilot; revisada e redesenhada na v2 (wireframes + correções de acessibilidade).
++## Fundamentação técnico-pedagógica
++
++O design dos recursos se apoia em quatro eixos: **aprendizagem ativa**, **gamificação**, **simulação** e **feedback formativo**. Cada recurso do catálogo informa tipo, resumo, habilidades BNCC e acesso ao recurso e ao código.
++
++## Acessibilidade
++
++- Link "Pular para o conteúdo" e navegação por teclado com foco visível.
++- Textos a partir de 12 px, alvos de toque de 44 px e hierarquia de títulos h1 → h2 → h3.
++- Respeito a `prefers-reduced-motion` e ao tema do sistema (claro ou escuro), com alternância manual.
++- Textos alternativos nas imagens (campo opcional `alt` por recurso).
++
++## Arquitetura técnica
++
++Site estático (HTML, CSS e JavaScript puros), sem etapa de build, publicado pelo GitHub Pages.
++
++```
++index.html           página única: hero, público, tipos, catálogo, metodologia, sobre
++assets/styles.css    tokens de tema (escuro e claro), layout e componentes
++assets/script.js     lista `projects`, busca, filtros com contagem e alternância de tema
++assets/screenshots/  capturas dos recursos
++```
++
++## Como adicionar um recurso ao catálogo
++
++Inclua um objeto na lista `projects` de `assets/script.js`:
++
++| Campo | Uso |
++|---|---|
++| `title`, `type` | Nome e tipo (`OAD`, `REA` ou `RED`) |
++| `summary` | Uma frase sobre o que o estudante faz e aprende |
++| `description` | Detalhamento pedagógico (exibido em "Detalhes pedagógicos e BNCC") |
++| `bncc`, `bnccComputacao` | Listas de códigos de habilidades |
++| `screenshot`, `alt` | Caminho da captura e texto alternativo descritivo |
++| `link`, `repo` | Acesso ao recurso e ao código (ao menos um dos dois) |
++
++## Desenvolvimento local
++
++Abra `index.html` no navegador ou use um servidor estático, por exemplo `python3 -m http.server 8000`.
++
++## Contribuição
++
++Sugestões de conteúdo, acessibilidade e código são bem-vindas por *issues* e *pull requests* no GitHub.
++
++## Licença
++
++Conteúdo: [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.pt). Código: [MIT](https://opensource.org/licenses/MIT).
++
++© 2026 Pâmella Araújo Balcaçar
+diff --git a/assets/script.js b/assets/script.js
+index cbe8069..5d861df 100644
+--- a/assets/script.js
++++ b/assets/script.js
+@@ -173,3 +173,16 @@ searchInput?.addEventListener("input", renderProjects);
+ const metric = document.getElementById("metric-count");
+ if (metric) metric.textContent = String(projects.length);
+ renderProjects();
++
++const themeBtn = document.getElementById("theme-toggle");
++function syncThemeButton() {
++  const light = document.documentElement.getAttribute("data-theme") === "light";
++  if (themeBtn) themeBtn.textContent = light ? "Tema escuro" : "Tema claro";
++}
++themeBtn?.addEventListener("click", () => {
++  const next = document.documentElement.getAttribute("data-theme") === "light" ? "dark" : "light";
++  document.documentElement.setAttribute("data-theme", next);
++  try { localStorage.setItem("theme", next); } catch (e) {}
++  syncThemeButton();
++});
++syncThemeButton();
+diff --git a/assets/styles.css b/assets/styles.css
+index 9e26494..9d08108 100644
+--- a/assets/styles.css
++++ b/assets/styles.css
+@@ -807,3 +807,24 @@ a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{o
+ .skill-chip{font-size:.75rem;min-height:28px;padding:5px 9px}
+ .project-tag{font-size:.75rem}
+ .link-btn{min-height:44px;display:inline-flex;align-items:center}
++
++
++/* --- v3: tema claro, alternância e "Para quem é" --- */
++:root{color-scheme:dark}
++:root[data-theme="light"]{color-scheme:light;--bg:#f3f8f5;--bg-strong:#e6efeb;--bg-alt:#e9f2ee;--panel:rgba(255,255,255,.9);--panel-alt:#fff;--card:#fff;--card-strong:#fff;--line:rgba(8,70,52,.16);--line-strong:rgba(8,90,66,.34);--text:#0c241c;--muted:#36524a;--green:#0b7a57;--green-soft:rgba(11,122,87,.1);--aqua:#0a6f93;--aqua-soft:rgba(10,111,147,.1);--cyan:#0a6f93;--shadow:0 18px 40px rgba(12,36,28,.12);--shadow-soft:0 10px 24px rgba(12,36,28,.1)}
++:root[data-theme="light"] body{background:radial-gradient(circle at 10% 10%,rgba(11,122,87,.08),transparent 18%),radial-gradient(circle at 88% 12%,rgba(10,111,147,.08),transparent 22%),linear-gradient(180deg,var(--bg) 0%,#e4eee9 100%)}
++:root[data-theme="light"] .bg-orb{opacity:.25}
++:root[data-theme="light"] .btn.primary{background:linear-gradient(135deg,#0b7a57,#0a6f93);color:#fff}
++:root[data-theme="light"] .skip-link{color:#fff;background:#0b7a57}
++:root[data-theme="light"] .hero-panel,:root[data-theme="light"] .project-card,:root[data-theme="light"] .info-card,:root[data-theme="light"] .method-item,:root[data-theme="light"] .hero-metrics li{background:#fff}
++:root[data-theme="light"] .project-thumb{background:linear-gradient(135deg,rgba(11,122,87,.1),rgba(10,111,147,.08),#fff)}
++:root[data-theme="light"] .project-thumb::after{background:none}
++:root[data-theme="light"] .method-item span{background:rgba(11,122,87,.1);color:#0b7a57}
++.theme-toggle{min-height:44px;padding:0 16px;border-radius:999px;border:1px solid var(--line-strong);background:var(--card);color:var(--text);font:inherit;font-weight:600;cursor:pointer}
++.theme-toggle:hover{border-color:var(--green)}
++.audience-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
++.audience-card{padding:24px;border-radius:var(--radius);border:1px solid var(--line);background:var(--card);display:flex;flex-direction:column;gap:10px}
++.audience-card h3{margin:0}
++.audience-card p{margin:0;color:var(--muted)}
++.audience-card a{margin-top:auto;min-height:44px;display:inline-flex;align-items:center;font-weight:600;color:var(--cyan)}
++@media (max-width:900px){.audience-grid{grid-template-columns:1fr}}
+diff --git a/index.html b/index.html
+index 890ac50..97fbb82 100644
+--- a/index.html
++++ b/index.html
+@@ -4,10 +4,11 @@
+     <meta charset="UTF-8" />
+     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+     <title>Bio+Tech EduDesign | Recursos educacionais abertos em ciência e tecnologia</title>
++    <script>try{var t=localStorage.getItem("theme");if(!t)t=matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";document.documentElement.setAttribute("data-theme",t)}catch(e){document.documentElement.setAttribute("data-theme","dark")}</script>
+     <link rel="icon" type="image/png" href="assets/favicon.png" />
+     <meta
+       name="description"
+-      content="Bio+Tech EduDesign cria recursos educacionais digitais, objetos de aprendizagem e materiais abertos para ciência, tecnologia e educação."
++      content="Recursos educacionais abertos em ciência e tecnologia para professores, estudantes universitários e estagiários. Alinhados à BNCC, com código aberto."
+     />
+     <link rel="preconnect" href="https://fonts.googleapis.com" />
+     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+@@ -30,10 +31,12 @@
+         </a>
+ 
+         <nav class="nav" aria-label="Navegação principal">
+-          <a href="#sobre">Sobre</a>
++          <a href="#publico">Para quem é</a>
+           <a href="#projetos">Catálogo</a>
+           <a href="#tipos">Tipos de recurso</a>
+           <a href="#metodologia">Metodologia</a>
++          <a href="#sobre">Sobre</a>
++          <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Alternar entre tema claro e escuro">Tema claro</button>
+           <a href="https://github.com/Bio-Tech-Edu" target="_blank" rel="noreferrer" class="nav-cta gh-link"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg><span>GitHub</span></a>
+         </nav>
+       </div>
+@@ -43,13 +46,13 @@
+           <span class="badge">Recursos educacionais abertos</span>
+           <h1>Ciência e tecnologia para aprender fazendo.</h1>
+           <p>
+-            Bio+Tech EduDesign reúne design educacional, rigor científico e tecnologia para criar materiais
+-            digitais acessíveis, pedagógicos e inspiradores em educação em ciências, biotecnologia e aprendizagem aberta.
++            Recursos digitais abertos, alinhados à BNCC, para professores planejarem aulas, estudantes universitários
++            aprofundarem conteúdos e estagiários aprenderem na prática como se constrói material educacional de qualidade.
+           </p>
+ 
+           <div class="cta-row">
+             <a class="btn primary" href="#projetos">Explorar catálogo</a>
+-            <a class="btn secondary" href="#metodologia">Usar em sala de aula</a>
++            <a class="btn secondary" href="#publico">Para quem é</a>
+           </div>
+ 
+           <ul class="hero-metrics" aria-label="Indicadores da marca">
+@@ -90,43 +93,13 @@
+     </header>
+ 
+     <main id="conteudo">
+-      <section id="sobre" class="section intro">
++      <section id="publico" class="section audience">
+         <div class="container">
+-          <div class="section-head center">
+-            <span class="eyebrow">Sobre</span>
+-            <h2>A marca Bio+Tech EduDesign nasce na interseção entre biologia, computação, educação digital, ciência de dados e biotecnologia.</h2>
+-          </div>
+-
+-          <div class="about-grid">
+-            <article class="info-card">
+-              <span class="card-icon">01</span>
+-              <h3>Missão</h3>
+-              <p>Transformar temas complexos da ciência e da tecnologia em recursos visuais, pedagógicos e acessíveis, com rigor acadêmico e linguagem clara.</p>
+-            </article>
+-
+-            <article class="info-card">
+-              <span class="card-icon">02</span>
+-              <h3>Visão</h3>
+-              <p>Construir um ecossistema de aprendizagem colaborativa e aberta, com experiência digital inspiradora para estudantes, professores e criadores de conteúdo.</p>
+-            </article>
+-
+-            <article class="info-card">
+-              <span class="card-icon">03</span>
+-              <h3>Valores</h3>
+-              <p>Acessibilidade digital, inclusão, rigor científico, inovação tecnológica, empatia docente e cultura aberta.</p>
+-            </article>
+-
+-            <article class="info-card">
+-              <span class="card-icon">04</span>
+-              <h3>Origem</h3>
+-              <p>O movimento começou com pesquisas, tutoriais, atividades em ciência de dados e projetos acadêmicos que evoluíram para recursos digitais aplicados à educação.</p>
+-            </article>
+-
+-            <article class="info-card">
+-              <span class="card-icon">05</span>
+-              <h3>Futuro</h3>
+-              <p>Consolidar uma biblioteca de materiais digitais e abertos que ampliem o acesso ao conhecimento em biologia, dados, tecnologia e educação.</p>
+-            </article>
++          <div class="section-head center"><span class="eyebrow">Para quem é</span><h2>Um recurso, três jeitos de usar</h2></div>
++          <div class="audience-grid">
++            <article class="audience-card"><h3>Professores</h3><p>Planeje aulas com recursos prontos, organizados por habilidades da BNCC e BNCC Computação.</p><a href="#projetos">Ver recursos por habilidade</a></article>
++            <article class="audience-card"><h3>Estudantes universitários</h3><p>Revise conceitos, explore simulações e estude o código aberto como referência para trabalhos e projetos.</p><a href="#projetos">Explorar o catálogo</a></article>
++            <article class="audience-card"><h3>Estagiários</h3><p>Conheça a estrutura dos recursos, a metodologia de design educacional e o código no GitHub.</p><a href="#metodologia">Ver a metodologia</a></article>
+           </div>
+         </div>
+       </section>
+@@ -200,6 +173,46 @@
+           </div>
+         </div>
+       </section>
++      <section id="sobre" class="section intro">
++        <div class="container">
++          <div class="section-head center">
++            <span class="eyebrow">Sobre</span>
++            <h2>A marca Bio+Tech EduDesign nasce na interseção entre biologia, computação, educação digital, ciência de dados e biotecnologia.</h2>
++          </div>
++
++          <div class="about-grid">
++            <article class="info-card">
++              <span class="card-icon">01</span>
++              <h3>Missão</h3>
++              <p>Transformar temas complexos da ciência e da tecnologia em recursos visuais, pedagógicos e acessíveis, com rigor acadêmico e linguagem clara.</p>
++            </article>
++
++            <article class="info-card">
++              <span class="card-icon">02</span>
++              <h3>Visão</h3>
++              <p>Construir um ecossistema de aprendizagem colaborativa e aberta, com experiência digital inspiradora para estudantes, professores e criadores de conteúdo.</p>
++            </article>
++
++            <article class="info-card">
++              <span class="card-icon">03</span>
++              <h3>Valores</h3>
++              <p>Acessibilidade digital, inclusão, rigor científico, inovação tecnológica, empatia docente e cultura aberta.</p>
++            </article>
++
++            <article class="info-card">
++              <span class="card-icon">04</span>
++              <h3>Origem</h3>
++              <p>O movimento começou com pesquisas, tutoriais, atividades em ciência de dados e projetos acadêmicos que evoluíram para recursos digitais aplicados à educação.</p>
++            </article>
++
++            <article class="info-card">
++              <span class="card-icon">05</span>
++              <h3>Futuro</h3>
++              <p>Consolidar uma biblioteca de materiais digitais e abertos que ampliem o acesso ao conhecimento em biologia, dados, tecnologia e educação.</p>
++            </article>
++          </div>
++        </div>
++      </section>
+     </main>
+ 
+     <footer class="site-footer">
+-- 
+2.43.0
+
+
+From c5598be9877d1d3415ca8a6fc8cdcf3b22a2699c Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Wed, 28 Oct 2026 20:56:45 +0000
+Subject: [PATCH 2/3] Design v4: identidade da marca (azul/turquesa/laranja) e
+ blog com posts em markdown convertidos automaticamente
+
+---
+ .github/workflows/blog.yml                    |  37 +++
+ README.md                                     |  49 +++-
+ assets/blog.js                                | 147 ++++++++++++
+ assets/script.js                              |  13 --
+ assets/styles.css                             | 211 ++++++++++++------
+ assets/theme.js                               |  13 ++
+ blog.html                                     | 168 ++++++++++++++
+ ...essibilidade-digital-checklist-minimo.html | 139 ++++++++++++
+ blog/bncc-computacao-por-onde-comecar.html    | 155 +++++++++++++
+ blog/config.json                              |   6 +
+ blog/feed.xml                                 |   8 +
+ ...ar-aula-com-recursos-digitais-abertos.html | 144 ++++++++++++
+ blog/posts.json                               |  60 +++++
+ index.html                                    |   4 +
+ package-lock.json                             | 137 ++++++++++++
+ package.json                                  |   9 +
+ ...-10-05-bncc-computacao-por-onde-comecar.md |  27 +++
+ ...acessibilidade-digital-checklist-minimo.md |  25 +++
+ ...ejar-aula-com-recursos-digitais-abertos.md |  27 +++
+ posts/_modelo.md                              |  20 ++
+ scripts/blog.template.html                    |  86 +++++++
+ scripts/build-blog.mjs                        | 164 ++++++++++++++
+ 22 files changed, 1567 insertions(+), 82 deletions(-)
+ create mode 100644 .github/workflows/blog.yml
+ create mode 100644 assets/blog.js
+ create mode 100644 assets/theme.js
+ create mode 100644 blog.html
+ create mode 100644 blog/acessibilidade-digital-checklist-minimo.html
+ create mode 100644 blog/bncc-computacao-por-onde-comecar.html
+ create mode 100644 blog/config.json
+ create mode 100644 blog/feed.xml
+ create mode 100644 blog/planejar-aula-com-recursos-digitais-abertos.html
+ create mode 100644 blog/posts.json
+ create mode 100644 package-lock.json
+ create mode 100644 package.json
+ create mode 100644 posts/2026-10-05-bncc-computacao-por-onde-comecar.md
+ create mode 100644 posts/2026-10-12-acessibilidade-digital-checklist-minimo.md
+ create mode 100644 posts/2026-10-20-planejar-aula-com-recursos-digitais-abertos.md
+ create mode 100644 posts/_modelo.md
+ create mode 100644 scripts/blog.template.html
+ create mode 100644 scripts/build-blog.mjs
+
+diff --git a/.github/workflows/blog.yml b/.github/workflows/blog.yml
+new file mode 100644
+index 0000000..ab4e2f6
+--- /dev/null
++++ b/.github/workflows/blog.yml
+@@ -0,0 +1,37 @@
++name: Gerar blog
++
++on:
++  push:
++    branches: [main]
++    paths:
++      - "posts/**"
++      - "assets/blog/**"
++      - "scripts/**"
++      - "index.html"
++      - "package.json"
++  workflow_dispatch:
++
++permissions:
++  contents: write
++
++concurrency:
++  group: blog-build
++  cancel-in-progress: true
++
++jobs:
++  build:
++    runs-on: ubuntu-latest
++    steps:
++      - uses: actions/checkout@v4
++      - uses: actions/setup-node@v4
++        with:
++          node-version: 22
++          cache: npm
++      - run: npm ci
++      - run: node scripts/build-blog.mjs
++      - name: Publicar arquivos gerados
++        run: |
++          git config user.name "github-actions[bot]"
++          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
++          git add blog blog.html
++          git diff --cached --quiet || (git commit -m "chore(blog): atualiza publicações geradas" && git push)
+diff --git a/README.md b/README.md
+index 3bde0ba..fe3b5b3 100644
+--- a/README.md
++++ b/README.md
+@@ -10,6 +10,7 @@ Vitrine de **recursos educacionais abertos** em ciência e tecnologia, com desig
+ |---|---|
+ | Propósito | Reunir e divulgar recursos digitais abertos para o ensino de ciências, dados e tecnologia |
+ | Público | Professores, estudantes universitários e estagiários |
++| Blog | Publicações em markdown convertidas automaticamente, com busca, categorias, tags e comunidade |
+ | Tipos de recurso | OAD (objeto de aprendizagem digital), REA (recurso educacional aberto) e RED (recurso educacional digital) |
+ | Alinhamento curricular | Habilidades da BNCC e da BNCC Computação indicadas em cada recurso |
+ | Licenças | Conteúdo em CC BY-SA 4.0; código-fonte em MIT |
+@@ -27,15 +28,51 @@ O design dos recursos se apoia em quatro eixos: **aprendizagem ativa**, **gamifi
+ 
+ ## Arquitetura técnica
+ 
+-Site estático (HTML, CSS e JavaScript puros), sem etapa de build, publicado pelo GitHub Pages.
++Site estático (HTML, CSS e JavaScript puros), publicado pelo GitHub Pages. O único passo de build é a conversão dos textos do blog (Node.js, `marked` e `gray-matter`).
+ 
+ ```
+-index.html           página única: hero, público, tipos, catálogo, metodologia, sobre
+-assets/styles.css    tokens de tema (escuro e claro), layout e componentes
+-assets/script.js     lista `projects`, busca, filtros com contagem e alternância de tema
+-assets/screenshots/  capturas dos recursos
++index.html               página inicial: hero, público, tipos, catálogo, metodologia, sobre
++blog.html                página do blog (gerada a partir de scripts/blog.template.html)
++blog/                    publicações geradas (HTML, posts.json, feed.xml) e config.json (editável)
++posts/                   textos em markdown (fonte das publicações)
++assets/styles.css        tokens de tema (escuro e claro, cores da marca), layout e componentes
++assets/script.js         lista `projects`, busca e filtros do catálogo
++assets/blog.js           carrossel, busca, filtros, tags, comunidade e mídia do blog
++assets/theme.js          alternância de tema claro e escuro
++assets/blog/             imagens usadas nas publicações
++scripts/build-blog.mjs   conversor markdown → HTML
++.github/workflows/       automação que roda o conversor a cada push em posts/
+ ```
+ 
++## Identidade visual
++
++Paleta extraída do logotipo e do hero: azul-marinho (`#143f6a`) como base do tema escuro, turquesa (`#2cc4c0`) e ciano (`#40c0d0`) como apoio e laranja (`#f28a1e`) para ações principais. No tema claro, as cores de texto e links usam tons mais escuros para manter contraste mínimo de 4,5:1.
++
++## Blog
++
++As publicações são arquivos markdown em `posts/`. A cada push na branch `main` que altere `posts/`, a automação (`.github/workflows/blog.yml`) converte os textos em páginas HTML, atualiza `blog/posts.json` e `blog/feed.xml` e publica o resultado.
++
++**Para publicar:**
++
++1. Copie `posts/_modelo.md` para `posts/AAAA-MM-DD-titulo.md` e preencha o cabeçalho (título, data, resumo, área, atuação, tags).
++2. Escreva o texto em markdown. Imagens ficam em `assets/blog/` e são citadas como `assets/blog/arquivo.png`.
++3. Faça o commit na `main`. Em cerca de um minuto, a publicação aparece em `blog.html`.
++
++| Campo do cabeçalho | Função |
++|---|---|
++| `title`, `date` | Obrigatórios (data no formato AAAA-MM-DD) |
++| `summary` | Texto do carrossel e dos cards |
++| `area` | Área do conhecimento (menu lateral) |
++| `atuacao` | Atuação profissional na educação (menu lateral) |
++| `tags` | Lista de tags |
++| `destaque` | Número maior = mais destaque no carrossel (5 publicações) |
++| `cover`, `cover_alt` | Capa opcional e seu texto alternativo |
++| `rascunho: true` | Não publica |
++
++**Comunidade e mídia:** edite `blog/config.json` (campo `whatsapp` com o link de convite e a lista `midia`).
++
++**Teste local:** `npm install`, `npm run build:blog` e `python3 -m http.server 8000`.
++
+ ## Como adicionar um recurso ao catálogo
+ 
+ Inclua um objeto na lista `projects` de `assets/script.js`:
+@@ -51,7 +88,7 @@ Inclua um objeto na lista `projects` de `assets/script.js`:
+ 
+ ## Desenvolvimento local
+ 
+-Abra `index.html` no navegador ou use um servidor estático, por exemplo `python3 -m http.server 8000`.
++Use um servidor estático, por exemplo `python3 -m http.server 8000` (o blog carrega arquivos JSON e não funciona abrindo o HTML direto).
+ 
+ ## Contribuição
+ 
+diff --git a/assets/blog.js b/assets/blog.js
+new file mode 100644
+index 0000000..c5bc88c
+--- /dev/null
++++ b/assets/blog.js
+@@ -0,0 +1,147 @@
++(async function () {
++  const $ = (id) => document.getElementById(id);
++  const el = (tag, props = {}, ...kids) => {
++    const n = document.createElement(tag);
++    for (const [k, v] of Object.entries(props)) {
++      if (v == null || v === false) continue;
++      if (k === "class") n.className = v;
++      else if (k === "text") n.textContent = v;
++      else if (k.startsWith("on")) n.addEventListener(k.slice(2), v);
++      else n.setAttribute(k, v === true ? "" : v);
++    }
++    kids.flat().forEach((c) => c != null && n.append(c));
++    return n;
++  };
++  const norm = (s) => String(s || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
++  const fmt = (iso) => new Date(iso + "T12:00:00").toLocaleDateString("pt-BR", { day: "2-digit", month: "short", year: "numeric" });
++  const PAGE = 6;
++
++  // ----- comunidade e mídia (config editável em blog/config.json) -----
++  const config = await fetch("blog/config.json").then((r) => (r.ok ? r.json() : {})).catch(() => ({}));
++  const waBox = $("wa-box");
++  if (config.whatsapp) {
++    waBox.append(
++      el("p", { text: "Converse com outros professores, estudantes e estagiários e receba novidades dos recursos." }),
++      el("a", { class: "btn primary", href: config.whatsapp, target: "_blank", rel: "noopener noreferrer", text: "Entrar na comunidade" }),
++    );
++  } else {
++    waBox.append(el("p", { text: "O link da comunidade será divulgado em breve." }));
++  }
++  const mediaList = $("media-links");
++  (config.midia || []).forEach((m) => mediaList.append(el("li", {}, el("a", { href: m.url, target: "_blank", rel: "noopener noreferrer", text: m.titulo }))));
++  if (!mediaList.children.length) mediaList.remove();
++
++  // ----- publicações -----
++  let posts = [];
++  try {
++    posts = await fetch("blog/posts.json").then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); });
++  } catch (e) {
++    $("post-list").replaceChildren(el("p", { class: "empty", text: "Não foi possível carregar as publicações. Se estiver abrindo o arquivo direto do computador, use um servidor local (python3 -m http.server)." }));
++    return;
++  }
++  if (!posts.length) {
++    $("post-list").replaceChildren(el("p", { class: "empty", text: "Ainda não há publicações." }));
++    return;
++  }
++
++  // ----- carrossel: 5 publicações de maior destaque (depois, as mais recentes) -----
++  const top = [...posts].sort((a, b) => (b.destaque - a.destaque) || b.date.localeCompare(a.date)).slice(0, 5);
++  const slidesBox = $("carousel-slides");
++  const dotsBox = $("carousel-dots");
++  let cur = 0;
++  const slides = top.map((p, i) =>
++    el("article", { class: "slide", role: "group", "aria-roledescription": "slide", "aria-label": `${i + 1} de ${top.length}`, hidden: i !== 0 },
++      el("div", { class: "slide-media" }, p.cover ? el("img", { src: p.cover, alt: p.coverAlt || "", loading: i ? "lazy" : "eager" }) : null),
++      el("div", { class: "slide-body" },
++        el("span", { class: "project-tag", text: p.area }),
++        el("h3", {}, el("a", { href: p.url, text: p.title })),
++        el("p", { text: p.summary }),
++        el("p", { class: "meta", text: `${fmt(p.date)} · ${p.readingTime} min de leitura` }),
++        el("a", { class: "btn primary", href: p.url, text: "Ler publicação" }),
++      ),
++    ),
++  );
++  slidesBox.append(...slides);
++  const dots = top.map((p, i) => el("button", { type: "button", "aria-label": `Ir para a publicação ${i + 1}`, onclick: () => show(i) }));
++  dotsBox.append(...dots);
++  function show(i) {
++    cur = (i + top.length) % top.length;
++    slides.forEach((s, k) => (s.hidden = k !== cur));
++    dots.forEach((d, k) => d.setAttribute("aria-current", String(k === cur)));
++    $("carousel-count").textContent = `${cur + 1} de ${top.length}`;
++  }
++  $("carousel-prev").addEventListener("click", () => show(cur - 1));
++  $("carousel-next").addEventListener("click", () => show(cur + 1));
++  $("carousel").addEventListener("keydown", (e) => {
++    if (e.key === "ArrowLeft") show(cur - 1);
++    if (e.key === "ArrowRight") show(cur + 1);
++  });
++  if (top.length < 2) document.querySelector(".carousel-ctrl").hidden = true;
++  show(0);
++  $("carousel").hidden = false;
++
++  // ----- busca, facetas, tags -----
++  const params = new URLSearchParams(location.search);
++  const state = { q: params.get("q") || "", area: params.get("area") || "", atuacao: params.get("atuacao") || "", tag: params.get("tag") || "", limit: PAGE };
++  const LABEL = { area: "Área", atuacao: "Atuação", tag: "Tag", q: "Busca" };
++
++  function syncUrl() {
++    const p = new URLSearchParams();
++    for (const k of ["q", "area", "atuacao", "tag"]) if (state[k]) p.set(k, state[k]);
++    const s = p.toString();
++    history.replaceState(null, "", s ? `?${s}` : location.pathname);
++  }
++  const filtered = () =>
++    posts.filter((p) =>
++      (!state.q || norm([p.title, p.summary, p.area, p.atuacao, ...p.tags].join(" ")).includes(norm(state.q))) &&
++      (!state.area || p.area === state.area) &&
++      (!state.atuacao || p.atuacao === state.atuacao) &&
++      (!state.tag || p.tags.includes(state.tag)));
++  const count = (get) => {
++    const m = new Map();
++    posts.forEach((p) => [].concat(get(p)).forEach((v) => m.set(v, (m.get(v) || 0) + 1)));
++    return [...m.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], "pt-BR"));
++  };
++  function toggle(key, val) {
++    state[key] = state[key] === val ? "" : val;
++    state.limit = PAGE;
++    render();
++  }
++  function renderFacet(box, key, entries) {
++    box.replaceChildren(...entries.map(([name, n]) =>
++      el("button", { type: "button", "aria-pressed": String(state[key] === name), onclick: () => toggle(key, name) },
++        el("span", { text: name }), el("span", { class: "count", text: String(n) }))));
++  }
++  function card(p) {
++    return el("article", { class: "post-card" },
++      p.cover ? el("img", { class: "post-cover", src: p.cover, alt: p.coverAlt || "", loading: "lazy" }) : el("div", { class: "post-cover", "aria-hidden": "true" }),
++      el("div", { class: "post-card-body" },
++        el("span", { class: "project-tag", text: p.area }),
++        el("h3", {}, el("a", { href: p.url, text: p.title })),
++        el("p", { text: p.summary }),
++        el("p", { class: "meta", text: `${fmt(p.date)} · ${p.readingTime} min · ${p.atuacao}` }),
++        el("a", { class: "more", href: p.url, "aria-label": `Ler: ${p.title}`, text: "Ler publicação →" }),
++      ));
++  }
++  function render() {
++    syncUrl();
++    renderFacet($("facet-area"), "area", count((p) => p.area));
++    renderFacet($("facet-atuacao"), "atuacao", count((p) => p.atuacao));
++    $("tag-cloud").replaceChildren(...count((p) => p.tags).slice(0, 30).map(([t, n]) =>
++      el("button", { type: "button", "aria-pressed": String(state.tag === t), onclick: () => toggle("tag", t), text: `#${t} (${n})` })));
++
++    const active = ["q", "area", "atuacao", "tag"].filter((k) => state[k]);
++    $("active-filters").replaceChildren(...active.map((k) =>
++      el("button", { type: "button", class: "chip-btn", "aria-label": `Remover filtro ${LABEL[k]}: ${state[k]}`, onclick: () => { state[k] = ""; if (k === "q") $("post-search").value = ""; state.limit = PAGE; render(); }, text: `${LABEL[k]}: ${state[k]} ✕` })),
++      active.length > 1 ? el("button", { type: "button", class: "chip-btn", onclick: () => { ["q", "area", "atuacao", "tag"].forEach((k) => (state[k] = "")); $("post-search").value = ""; render(); }, text: "Limpar tudo" }) : null);
++
++    const list = filtered();
++    $("result-count").textContent = `${list.length} ${list.length === 1 ? "publicação" : "publicações"}`;
++    $("post-list").replaceChildren(...(list.length ? list.slice(0, state.limit).map(card) : [el("p", { class: "empty", text: "Nenhuma publicação encontrada. Tente outro termo ou remova filtros." })]));
++    $("load-more").hidden = list.length <= state.limit;
++  }
++  $("post-search").value = state.q;
++  $("post-search").addEventListener("input", (e) => { state.q = e.target.value.trim(); state.limit = PAGE; render(); });
++  $("load-more").addEventListener("click", () => { state.limit += PAGE; render(); });
++  render();
++})();
+diff --git a/assets/script.js b/assets/script.js
+index 5d861df..cbe8069 100644
+--- a/assets/script.js
++++ b/assets/script.js
+@@ -173,16 +173,3 @@ searchInput?.addEventListener("input", renderProjects);
+ const metric = document.getElementById("metric-count");
+ if (metric) metric.textContent = String(projects.length);
+ renderProjects();
+-
+-const themeBtn = document.getElementById("theme-toggle");
+-function syncThemeButton() {
+-  const light = document.documentElement.getAttribute("data-theme") === "light";
+-  if (themeBtn) themeBtn.textContent = light ? "Tema escuro" : "Tema claro";
+-}
+-themeBtn?.addEventListener("click", () => {
+-  const next = document.documentElement.getAttribute("data-theme") === "light" ? "dark" : "light";
+-  document.documentElement.setAttribute("data-theme", next);
+-  try { localStorage.setItem("theme", next); } catch (e) {}
+-  syncThemeButton();
+-});
+-syncThemeButton();
+diff --git a/assets/styles.css b/assets/styles.css
+index 9d08108..cc93b3d 100644
+--- a/assets/styles.css
++++ b/assets/styles.css
+@@ -1,22 +1,24 @@
+ :root {
+-  --bg: #061810;
+-  --bg-strong: #030d09;
+-  --bg-alt: #0d1f1a;
+-  --panel: rgba(12, 27, 23, 0.78);
+-  --panel-alt: rgba(16, 35, 31, 0.96);
+-  --card: rgba(15, 31, 28, 0.9);
+-  --card-strong: rgba(18, 38, 34, 0.96);
+-  --line: rgba(173, 229, 213, 0.15);
+-  --line-strong: rgba(120, 220, 186, 0.28);
+-  --text: #ecfff8;
+-  --muted: #cfe9df;
+-  --green: #49d9a0;
+-  --green-soft: rgba(73, 217, 160, 0.14);
+-  --aqua: #78dfff;
+-  --aqua-soft: rgba(120, 223, 255, 0.12);
+-  --cyan: #9de5ff;
+-  --shadow: 0 28px 70px rgba(0, 0, 0, 0.38);
+-  --shadow-soft: 0 18px 40px rgba(6, 20, 16, 0.35);
++  --bg: #071b30;
++  --bg-strong: #041220;
++  --bg-alt: #0b2744;
++  --panel: rgba(12, 40, 70, 0.78);
++  --panel-alt: rgba(15, 48, 84, 0.96);
++  --card: rgba(14, 44, 77, 0.9);
++  --card-strong: rgba(18, 54, 92, 0.96);
++  --line: rgba(140, 205, 235, 0.16);
++  --line-strong: rgba(64, 192, 208, 0.36);
++  --text: #eef8ff;
++  --muted: #c5dbea;
++  --green: #2cc4c0;
++  --green-soft: rgba(44, 196, 192, 0.14);
++  --aqua: #6fd6e6;
++  --aqua-soft: rgba(64, 192, 208, 0.12);
++  --cyan: #8fe0ee;
++  --accent: #f28a1e;
++  --accent-ink: #07213a;
++  --shadow: 0 28px 70px rgba(0, 0, 0, 0.4);
++  --shadow-soft: 0 18px 40px rgba(4, 18, 32, 0.4);
+   --radius: 22px;
+   --radius-sm: 14px;
+   --container: 1180px;
+@@ -36,9 +38,9 @@ body {
+   font-family: "Inter", sans-serif;
+   color: var(--text);
+   background:
+-    radial-gradient(circle at 10% 10%, rgba(73, 217, 160, 0.12), transparent 18%),
+-    radial-gradient(circle at 88% 12%, rgba(120, 223, 255, 0.12), transparent 22%),
+-    linear-gradient(180deg, var(--bg) 0%, #0a1c18 100%);
++    radial-gradient(circle at 10% 10%, rgba(47, 196, 198, 0.12), transparent 18%),
++    radial-gradient(circle at 88% 12%, rgba(95, 160, 235, 0.12), transparent 22%),
++    linear-gradient(180deg, var(--bg) 0%, #0c2038 100%);
+   position: relative;
+   overflow-x: hidden;
+ }
+@@ -84,7 +86,7 @@ a {
+ .orb-one {
+   width: 430px;
+   height: 430px;
+-  background: rgba(73, 217, 160, 0.16);
++  background: rgba(47, 196, 198, 0.16);
+   top: 80px;
+   left: -120px;
+ }
+@@ -92,7 +94,7 @@ a {
+ .orb-two {
+   width: 540px;
+   height: 540px;
+-  background: rgba(120, 223, 255, 0.12);
++  background: rgba(95, 160, 235, 0.12);
+   right: -150px;
+   top: 200px;
+ }
+@@ -132,7 +134,7 @@ main,
+   width: 54px;
+   height: 54px;
+   border-radius: 16px;
+-  box-shadow: 0 12px 24px rgba(120, 223, 255, 0.18);
++  box-shadow: 0 12px 24px rgba(95, 160, 235, 0.18);
+   border: 1px solid rgba(255,255,255,0.08);
+ }
+ 
+@@ -191,8 +193,8 @@ main,
+   align-items: center;
+   padding: 8px 12px;
+   border-radius: 999px;
+-  background: rgba(73, 217, 160, 0.1);
+-  border: 1px solid rgba(73, 217, 160, 0.28);
++  background: rgba(47, 196, 198, 0.1);
++  border: 1px solid rgba(47, 196, 198, 0.28);
+   color: var(--green);
+   font-size: 0.72rem;
+   letter-spacing: 0.14em;
+@@ -241,8 +243,8 @@ main,
+ 
+ .btn.primary {
+   background: linear-gradient(135deg, var(--green), var(--aqua));
+-  color: #061b16;
+-  box-shadow: 0 18px 34px rgba(73, 217, 160, 0.2);
++  color: #04182c;
++  box-shadow: 0 18px 34px rgba(47, 196, 198, 0.2);
+ }
+ 
+ .btn.secondary {
+@@ -271,7 +273,7 @@ main,
+ 
+ .hero-metrics li:hover {
+   transform: translateY(-2px);
+-  border-color: rgba(120, 223, 255, 0.28);
++  border-color: rgba(95, 160, 235, 0.28);
+ }
+ 
+ .hero-metrics strong {
+@@ -290,7 +292,7 @@ main,
+   min-height: 420px;
+   padding: 18px;
+   border-radius: calc(var(--radius) + 12px);
+-  background: linear-gradient(180deg, rgba(12, 24, 21, 0.97), rgba(7, 17, 15, 0.94));
++  background: linear-gradient(180deg, rgba(10, 28, 50, 0.97), rgba(7, 20, 38, 0.94));
+   border: 1px solid var(--line);
+   box-shadow: var(--shadow);
+   overflow: hidden;
+@@ -300,8 +302,8 @@ main,
+   position: absolute;
+   inset: 0;
+   background:
+-    radial-gradient(circle at top right, rgba(120, 223, 255, 0.18), transparent 28%),
+-    radial-gradient(circle at bottom left, rgba(73, 217, 160, 0.17), transparent 34%);
++    radial-gradient(circle at top right, rgba(95, 160, 235, 0.18), transparent 28%),
++    radial-gradient(circle at bottom left, rgba(47, 196, 198, 0.17), transparent 34%);
+ }
+ 
+ .panel-card {
+@@ -318,8 +320,8 @@ main,
+   display: inline-flex;
+   padding: 8px 10px;
+   border-radius: 999px;
+-  background: rgba(120,223,255,0.08);
+-  border: 1px solid rgba(120,223,255,0.18);
++  background: rgba(95,160,235,0.08);
++  border: 1px solid rgba(95,160,235,0.18);
+   color: var(--aqua);
+   font-size: 0.68rem;
+   letter-spacing: 0.12em;
+@@ -358,7 +360,7 @@ main,
+ 
+ .mini-grid div:hover {
+   transform: translateY(-2px);
+-  border-color: rgba(73, 217, 160, 0.24);
++  border-color: rgba(47, 196, 198, 0.24);
+ }
+ 
+ .mini-grid strong {
+@@ -420,7 +422,7 @@ main,
+ 
+ .info-card:hover {
+   transform: translateY(-4px);
+-  border-color: rgba(73, 217, 160, 0.25);
++  border-color: rgba(47, 196, 198, 0.25);
+ }
+ 
+ .card-icon {
+@@ -466,8 +468,8 @@ main,
+ 
+ .filter.active,
+ .filter:hover {
+-  background: linear-gradient(135deg, rgba(73,217,160,0.12), rgba(120,223,255,0.08));
+-  border-color: rgba(73,217,160,0.28);
++  background: linear-gradient(135deg, rgba(47,196,198,0.12), rgba(95,160,235,0.08));
++  border-color: rgba(47,196,198,0.28);
+   color: var(--text);
+ }
+ 
+@@ -483,7 +485,7 @@ main,
+   min-height: 100%;
+   border-radius: var(--radius);
+   overflow: hidden;
+-  background: linear-gradient(180deg, rgba(20, 35, 32, 0.96), rgba(11, 24, 22, 0.96));
++  background: linear-gradient(180deg, rgba(16, 40, 70, 0.96), rgba(9, 26, 48, 0.96));
+   border: 1px solid var(--line);
+   box-shadow: var(--shadow-soft);
+   transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+@@ -491,14 +493,14 @@ main,
+ 
+ .project-card:hover {
+   transform: translateY(-5px);
+-  border-color: rgba(73,217,160,0.28);
++  border-color: rgba(47,196,198,0.28);
+   box-shadow: 0 28px 54px rgba(0, 0, 0, 0.26);
+ }
+ 
+ .project-thumb {
+   position: relative;
+   aspect-ratio: 16 / 10;
+-  background: linear-gradient(135deg, rgba(73, 217, 160, 0.14), rgba(120, 223, 255, 0.1), rgba(8, 20, 18, 1));
++  background: linear-gradient(135deg, rgba(47, 196, 198, 0.14), rgba(95, 160, 235, 0.1), rgba(8, 22, 42, 1));
+   border-bottom: 1px solid var(--line);
+ }
+ 
+@@ -506,7 +508,7 @@ main,
+   content: "";
+   position: absolute;
+   inset: 0;
+-  background: linear-gradient(180deg, rgba(6, 24, 16, 0) 0%, rgba(6, 24, 16, 0.28) 100%);
++  background: linear-gradient(180deg, rgba(6, 22, 44, 0) 0%, rgba(6, 22, 44, 0.28) 100%);
+ }
+ 
+ .project-thumb img {
+@@ -528,8 +530,8 @@ main,
+   align-self: flex-start;
+   padding: 7px 10px;
+   border-radius: 999px;
+-  background: rgba(120,223,255,0.08);
+-  border: 1px solid rgba(120,223,255,0.18);
++  background: rgba(95,160,235,0.08);
++  border: 1px solid rgba(95,160,235,0.18);
+   color: var(--aqua);
+   font-size: 0.7rem;
+   text-transform: uppercase;
+@@ -570,8 +572,8 @@ main,
+ }
+ 
+ .link-btn.primary {
+-  background: linear-gradient(135deg, rgba(73,217,160,0.16), rgba(120,223,255,0.08));
+-  border-color: rgba(73,217,160,0.24);
++  background: linear-gradient(135deg, rgba(47,196,198,0.16), rgba(95,160,235,0.08));
++  border-color: rgba(47,196,198,0.24);
+ }
+ 
+ .link-btn.secondary {
+@@ -624,7 +626,7 @@ main,
+ 
+ .method-item:hover {
+   transform: translateY(-2px);
+-  border-color: rgba(73, 217, 160, 0.22);
++  border-color: rgba(47, 196, 198, 0.22);
+ }
+ 
+ .method-item span {
+@@ -634,8 +636,8 @@ main,
+   width: 42px;
+   height: 42px;
+   border-radius: 12px;
+-  background: rgba(73,217,160,0.12);
+-  border: 1px solid rgba(73,217,160,0.18);
++  background: rgba(47,196,198,0.12);
++  border: 1px solid rgba(47,196,198,0.18);
+   color: var(--green);
+   font-weight: 800;
+   margin-bottom: 16px;
+@@ -654,7 +656,7 @@ main,
+ 
+ .site-footer {
+   border-top: 1px solid var(--line);
+-  background: rgba(3, 13, 11, 0.88);
++  background: rgba(3, 12, 26, 0.88);
+ }
+ 
+ .footer-inner {
+@@ -751,15 +753,15 @@ main,
+ }
+ 
+ .skill-chip.bncc {
+-  background: rgba(73, 217, 160, 0.08);
+-  border-color: rgba(73, 217, 160, 0.16);
+-  color: rgba(73, 217, 160, 0.95);
++  background: rgba(47, 196, 198, 0.08);
++  border-color: rgba(47, 196, 198, 0.16);
++  color: rgba(47, 196, 198, 0.95);
+ }
+ 
+ .skill-chip.computacao {
+-  background: rgba(120, 223, 255, 0.06);
+-  border-color: rgba(120, 223, 255, 0.14);
+-  color: rgba(120, 223, 255, 0.95);
++  background: rgba(95, 160, 235, 0.06);
++  border-color: rgba(95, 160, 235, 0.14);
++  color: rgba(95, 160, 235, 0.95);
+ }
+ 
+ @media (max-width: 720px) {
+@@ -788,7 +790,7 @@ main,
+ }
+ 
+ /* --- v2: acessibilidade e novos componentes --- */
+-.skip-link{position:absolute;left:12px;top:-60px;z-index:100;padding:12px 18px;border-radius:10px;background:var(--green);color:#03150e;font-weight:700;text-decoration:none}
++.skip-link{position:absolute;left:12px;top:-60px;z-index:100;padding:12px 18px;border-radius:10px;background:var(--green);color:#04182c;font-weight:700;text-decoration:none}
+ .skip-link:focus{top:12px}
+ a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--aqua);outline-offset:3px}
+ @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+@@ -811,15 +813,12 @@ a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{o
+ 
+ /* --- v3: tema claro, alternância e "Para quem é" --- */
+ :root{color-scheme:dark}
+-:root[data-theme="light"]{color-scheme:light;--bg:#f3f8f5;--bg-strong:#e6efeb;--bg-alt:#e9f2ee;--panel:rgba(255,255,255,.9);--panel-alt:#fff;--card:#fff;--card-strong:#fff;--line:rgba(8,70,52,.16);--line-strong:rgba(8,90,66,.34);--text:#0c241c;--muted:#36524a;--green:#0b7a57;--green-soft:rgba(11,122,87,.1);--aqua:#0a6f93;--aqua-soft:rgba(10,111,147,.1);--cyan:#0a6f93;--shadow:0 18px 40px rgba(12,36,28,.12);--shadow-soft:0 10px 24px rgba(12,36,28,.1)}
+-:root[data-theme="light"] body{background:radial-gradient(circle at 10% 10%,rgba(11,122,87,.08),transparent 18%),radial-gradient(circle at 88% 12%,rgba(10,111,147,.08),transparent 22%),linear-gradient(180deg,var(--bg) 0%,#e4eee9 100%)}
++:root[data-theme="light"] body{background:radial-gradient(circle at 10% 10%,rgba(11,122,128,.08),transparent 18%),radial-gradient(circle at 88% 12%,rgba(23,73,123,.08),transparent 22%),linear-gradient(180deg,var(--bg) 0%,#e3ecf5 100%)}
+ :root[data-theme="light"] .bg-orb{opacity:.25}
+-:root[data-theme="light"] .btn.primary{background:linear-gradient(135deg,#0b7a57,#0a6f93);color:#fff}
+-:root[data-theme="light"] .skip-link{color:#fff;background:#0b7a57}
+ :root[data-theme="light"] .hero-panel,:root[data-theme="light"] .project-card,:root[data-theme="light"] .info-card,:root[data-theme="light"] .method-item,:root[data-theme="light"] .hero-metrics li{background:#fff}
+-:root[data-theme="light"] .project-thumb{background:linear-gradient(135deg,rgba(11,122,87,.1),rgba(10,111,147,.08),#fff)}
++:root[data-theme="light"] .project-thumb{background:linear-gradient(135deg,rgba(11,122,128,.1),rgba(23,73,123,.08),#fff)}
+ :root[data-theme="light"] .project-thumb::after{background:none}
+-:root[data-theme="light"] .method-item span{background:rgba(11,122,87,.1);color:#0b7a57}
++:root[data-theme="light"] .method-item span{background:rgba(11,122,128,.1);color:#0b7a80}
+ .theme-toggle{min-height:44px;padding:0 16px;border-radius:999px;border:1px solid var(--line-strong);background:var(--card);color:var(--text);font:inherit;font-weight:600;cursor:pointer}
+ .theme-toggle:hover{border-color:var(--green)}
+ .audience-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+@@ -828,3 +827,89 @@ a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{o
+ .audience-card p{margin:0;color:var(--muted)}
+ .audience-card a{margin-top:auto;min-height:44px;display:inline-flex;align-items:center;font-weight:600;color:var(--cyan)}
+ @media (max-width:900px){.audience-grid{grid-template-columns:1fr}}
++
++
++/* --- v4: identidade da marca (azul-marinho, turquesa, laranja) --- */
++:root[data-theme="light"]{--orange:#b85c00}
++.eyebrow,.brand-kicker{color:var(--orange)}
++.badge{border-color:var(--orange)}
++.hero-metrics strong{color:var(--orange)}
++.filter.active,.filter[aria-pressed="true"]{border-color:var(--orange)}
++.brand img{border-radius:50%;background:#fff}
++
++
++/* --- v4: identidade da marca (azul-marinho, turquesa e laranja) e blog --- */
++:root[data-theme="light"]{color-scheme:light;--bg:#f4f9fc;--bg-strong:#e7f0f6;--bg-alt:#eaf2f8;--panel:rgba(255,255,255,.92);--panel-alt:#fff;--card:#fff;--card-strong:#fff;--line:rgba(20,63,106,.16);--line-strong:rgba(20,63,106,.34);--text:#0f2d4a;--muted:#3b5772;--green:#0a7c86;--green-soft:rgba(10,124,134,.1);--aqua:#0b6f9a;--aqua-soft:rgba(11,111,154,.1);--cyan:#0b6a94;--shadow:0 18px 40px rgba(15,45,74,.12);--shadow-soft:0 10px 24px rgba(15,45,74,.1)}
++.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:transparent}
++.btn.primary:hover{filter:brightness(1.08)}
++.visually-hidden{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
++.nav a[aria-current="page"]{color:var(--text);box-shadow:inset 0 -2px 0 var(--accent)}
++.meta{font-size:.85rem;color:var(--muted);margin:0}
++.empty{padding:24px;border:1px dashed var(--line-strong);border-radius:var(--radius);color:var(--muted);margin:0}
++.blog-hero{padding:56px 0 24px;display:grid;gap:12px;max-width:760px}
++.blog-hero h1{font-size:clamp(1.9rem,4vw,2.8rem);line-height:1.15;margin:0}
++.blog-hero p{color:var(--muted);margin:0;font-size:1.05rem}
++.carousel{border:1px solid var(--line);border-radius:var(--radius);background:var(--card);overflow:hidden;box-shadow:var(--shadow-soft)}
++.carousel[hidden],.carousel-ctrl[hidden]{display:none}
++.slide{display:grid;grid-template-columns:1fr 1fr;min-height:320px}
++.slide[hidden]{display:none}
++.slide-media{min-height:200px;background:linear-gradient(135deg,var(--green-soft),var(--aqua-soft))}
++.slide-media img{width:100%;height:100%;object-fit:cover;display:block}
++.slide-body{padding:32px;display:flex;flex-direction:column;gap:12px;justify-content:center;align-items:flex-start}
++.slide-body h3{font-size:clamp(1.3rem,2.4vw,1.9rem);line-height:1.2;margin:0}
++.slide-body h3 a,.post-card h3 a{color:inherit;text-decoration:none}
++.slide-body h3 a:hover,.post-card h3 a:hover{text-decoration:underline}
++.slide-body p{margin:0;color:var(--muted)}
++.carousel-ctrl{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 16px;border-top:1px solid var(--line)}
++.icon-btn{min-width:44px;min-height:44px;border-radius:999px;border:1px solid var(--line-strong);background:var(--card);color:var(--text);font:inherit;font-size:1.3rem;cursor:pointer}
++.dots{display:flex}
++.dots button{width:44px;height:44px;border:0;background:none;cursor:pointer;display:grid;place-items:center}
++.dots button::before{content:"";width:10px;height:10px;border-radius:50%;background:var(--line-strong)}
++.dots button[aria-current="true"]::before{background:var(--accent);width:14px;height:14px}
++.blog-layout{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:32px;align-items:start;padding:40px 0 72px}
++.blog-main h2{margin:0 0 16px;font-size:1.5rem}
++.blog-search{display:grid;gap:6px;max-width:460px;margin-bottom:12px}
++.blog-search label{font-size:.85rem;font-weight:600;color:var(--muted)}
++.blog-search input{min-height:44px;padding:0 14px;border-radius:var(--radius-sm);border:1px solid var(--line-strong);background:var(--card);color:var(--text);font:inherit}
++.active-filters{display:flex;flex-wrap:wrap;gap:8px}
++.chip-btn{min-height:44px;padding:0 14px;border-radius:999px;border:1px solid var(--line-strong);background:var(--green-soft);color:var(--text);font:inherit;font-size:.9rem;cursor:pointer}
++.result-count{color:var(--muted);font-size:.9rem;margin:8px 0 16px}
++.post-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin-bottom:24px}
++.post-card{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:var(--radius);background:var(--card);overflow:hidden}
++.post-cover{aspect-ratio:16/9;width:100%;object-fit:cover;display:block;background:linear-gradient(135deg,var(--green-soft),var(--aqua-soft))}
++.post-card-body{padding:18px;display:flex;flex-direction:column;gap:10px;flex:1}
++.post-card h3{margin:0;font-size:1.15rem;line-height:1.3}
++.post-card p{margin:0;color:var(--muted)}
++.post-card .more{margin-top:auto;min-height:44px;display:inline-flex;align-items:center;font-weight:600;color:var(--cyan)}
++.blog-side{display:grid;gap:20px}
++.side-card{border:1px solid var(--line);border-radius:var(--radius);background:var(--card);padding:20px}
++.side-card h2{font-size:1.05rem;margin:0 0 12px}
++.side-card p{margin:0 0 12px;color:var(--muted)}
++.facet{display:grid;gap:4px}
++.facet button{display:flex;justify-content:space-between;align-items:center;gap:8px;width:100%;min-height:44px;padding:0 12px;border-radius:var(--radius-sm);border:1px solid transparent;background:transparent;color:var(--text);font:inherit;text-align:left;cursor:pointer}
++.facet button:hover,.facet button[aria-pressed="true"]{background:var(--green-soft);border-color:var(--line-strong)}
++.facet .count{font-size:.8rem;color:var(--muted)}
++.tag-cloud{display:flex;flex-wrap:wrap;gap:8px}
++.tag-cloud button{min-height:44px;padding:0 12px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--text);font:inherit;font-size:.85rem;cursor:pointer}
++.tag-cloud button:hover,.tag-cloud button[aria-pressed="true"]{background:var(--aqua-soft);border-color:var(--line-strong)}
++.media-links{list-style:none;margin:0 0 8px;padding:0;display:grid;gap:4px}
++.media-links a,.side-card .text-link{min-height:44px;display:inline-flex;align-items:center;color:var(--cyan);font-weight:600}
++.post{max-width:820px;padding:48px 0 72px}
++.crumbs{font-size:.9rem;color:var(--muted);margin-bottom:16px}
++.crumbs a{color:var(--cyan)}
++.post h1{font-size:clamp(1.8rem,4vw,2.6rem);line-height:1.15;margin:12px 0}
++.post-cover-fig{margin:24px 0}
++.post-cover-fig img{width:100%;height:auto;border-radius:var(--radius);display:block}
++.prose{line-height:1.75;font-size:1.05rem;max-width:72ch;margin-top:24px}
++.prose h2{margin:2rem 0 .5rem}
++.prose h3{margin:1.5rem 0 .4rem}
++.prose a{color:var(--cyan);text-decoration:underline}
++.prose img{max-width:100%;height:auto;border-radius:var(--radius-sm)}
++.prose pre{overflow-x:auto;padding:16px;border-radius:var(--radius-sm);background:var(--bg-strong);border:1px solid var(--line)}
++.prose blockquote{margin:1.2rem 0;padding:4px 16px;border-left:4px solid var(--accent);color:var(--muted)}
++.prose table{border-collapse:collapse;display:block;overflow-x:auto}
++.prose th,.prose td{border:1px solid var(--line);padding:8px 12px}
++.post-foot{margin-top:40px;padding-top:20px;border-top:1px solid var(--line);display:grid;gap:16px}
++.post-tags{display:flex;flex-wrap:wrap;gap:8px}
++.post-tags a{min-height:44px;display:inline-flex;align-items:center;padding:0 14px;border-radius:999px;border:1px solid var(--line-strong);color:var(--text);text-decoration:none}
++@media (max-width:980px){.blog-layout{grid-template-columns:1fr}.slide{grid-template-columns:1fr}.post-list{grid-template-columns:1fr}}
+diff --git a/assets/theme.js b/assets/theme.js
+new file mode 100644
+index 0000000..5e7c36b
+--- /dev/null
++++ b/assets/theme.js
+@@ -0,0 +1,13 @@
++// Alternância de tema claro/escuro (a escolha é salva no navegador).
++const themeBtn = document.getElementById("theme-toggle");
++function syncThemeButton() {
++  const light = document.documentElement.getAttribute("data-theme") === "light";
++  if (themeBtn) themeBtn.textContent = light ? "Tema escuro" : "Tema claro";
++}
++themeBtn?.addEventListener("click", () => {
++  const next = document.documentElement.getAttribute("data-theme") === "light" ? "dark" : "light";
++  document.documentElement.setAttribute("data-theme", next);
++  try { localStorage.setItem("theme", next); } catch (e) {}
++  syncThemeButton();
++});
++syncThemeButton();
+diff --git a/blog.html b/blog.html
+new file mode 100644
+index 0000000..f99b48d
+--- /dev/null
++++ b/blog.html
+@@ -0,0 +1,168 @@
++<!DOCTYPE html>
++<html lang="pt-BR">
++  <head>
++    <meta charset="UTF-8" />
++    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
++    <title>Blog | Bio+Tech EduDesign</title>
++    <meta name="description" content="Textos sobre design educacional, BNCC, dados, biotecnologia e acessibilidade digital para professores, estudantes universitários e estagiários." />
++    <meta name="theme-color" content="#071b30" />
++    <link rel="icon" type="image/png" href="assets/favicon.png" />
++    <link rel="alternate" type="application/rss+xml" title="Blog Bio+Tech EduDesign" href="blog/feed.xml" />
++    <script>try{var t=localStorage.getItem("theme");if(!t)t=matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";document.documentElement.setAttribute("data-theme",t)}catch(e){document.documentElement.setAttribute("data-theme","dark")}</script>
++    <link rel="preconnect" href="https://fonts.googleapis.com" />
++    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
++    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
++    <link rel="stylesheet" href="assets/styles.css" />
++  </head>
++  <body>
++    <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
++    <div class="bg-orb orb-one"></div>
++    <div class="bg-orb orb-two"></div>
++    <header class="site-header">
++      <div class="container topbar">
++        <a class="brand" href="index.html#top" aria-label="Bio+Tech EduDesign — início">
++          <img src="assets/favicon.png" alt="" width="44" height="44" />
++          <div>
++            <span class="brand-kicker">Marca</span>
++            <strong>Bio+Tech EduDesign</strong>
++          </div>
++        </a>
++
++        <nav class="nav" aria-label="Navegação principal">
++          <a href="index.html#publico">Para quem é</a>
++          <a href="index.html#projetos">Catálogo</a>
++          <a href="index.html#tipos">Tipos de recurso</a>
++          <a href="index.html#metodologia">Metodologia</a>
++          <a href="blog.html" aria-current="page">Blog</a>
++          <a href="index.html#sobre">Sobre</a>
++          <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Alternar entre tema claro e escuro">Tema claro</button>
++          <a href="https://github.com/Bio-Tech-Edu" target="_blank" rel="noreferrer" class="nav-cta gh-link"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg><span>GitHub</span></a>
++        </nav>
++      </div>
++
++      <div class="container hero" id="top">
++        <div class="hero-copy">
++          <span class="badge">Recursos educacionais abertos</span>
++          <h1>Ciência e tecnologia para aprender fazendo.</h1>
++          <p>
++            Recursos digitais abertos, alinhados à BNCC, para professores planejarem aulas, estudantes universitários
++            aprofundarem conteúdos e estagiários aprenderem na prática como se constrói material educacional de qualidade.
++          </p>
++
++          <div class="cta-row">
++            <a class="btn primary" href="index.html#projetos">Explorar catálogo</a>
++            <a class="btn secondary" href="index.html#publico">Para quem é</a>
++          </div>
++
++          <ul class="hero-metrics" aria-label="Indicadores da marca">
++            <li><strong id="metric-count">8</strong><span>recursos no catálogo</span></li>
++            <li><strong>OAD</strong><span>aprendizagem digital</span></li>
++            <li><strong>REA</strong><span>recursos abertos</span></li>
++          </ul>
++        </div>
++
++        <div class="hero-panel" aria-label="Resumo institucional">
++          <div class="panel-glow"></div>
++          <img class="hero-img" src="assets/hero.png" width="1667" height="584" alt="Livros, caderno aberto, DNA e notebook com ícones de dados, representando biologia, educação e tecnologia." />
++          <div class="panel-card">
++            <span class="panel-label">Marca</span>
++            <h2>Design para aprender com clareza e impacto.</h2>
++            <p>Experiências educacionais pensadas para conectar ciência, tecnologia e aprendizagem significativa.</p>
++          </div>
++          <div class="mini-grid">
++            <div>
++              <strong>Design</strong>
++              <span>institucional</span>
++            </div>
++            <div>
++              <strong>Pedagogia</strong>
++              <span>ativa</span>
++            </div>
++            <div>
++              <strong>Ciência</strong>
++              <span>aplicada</span>
++            </div>
++            <div>
++              <strong>Acesso</strong>
++              <span>aberto</span>
++            </div>
++          </div>
++        </div>
++      </div>
++    </header>
++
++    <main id="conteudo">
++      <section class="container blog-hero">
++        <span class="eyebrow">Blog</span>
++        <h1>Ideias para ensinar e aprender ciência e tecnologia</h1>
++        <p>Design educacional, BNCC, dados, biotecnologia e acessibilidade digital, para professores, estudantes universitários e estagiários.</p>
++      </section>
++
++      <section class="container" aria-labelledby="destaques-titulo">
++        <h2 id="destaques-titulo" class="visually-hidden">Publicações em destaque</h2>
++        <div class="carousel" id="carousel" role="region" aria-roledescription="carrossel" aria-label="Publicações em destaque" hidden>
++          <div id="carousel-slides"></div>
++          <div class="carousel-ctrl">
++            <button class="icon-btn" id="carousel-prev" type="button" aria-label="Publicação anterior">‹</button>
++            <div class="dots" id="carousel-dots"></div>
++            <span class="meta" id="carousel-count" aria-live="polite"></span>
++            <button class="icon-btn" id="carousel-next" type="button" aria-label="Próxima publicação">›</button>
++          </div>
++        </div>
++      </section>
++
++      <div class="container blog-layout">
++        <div class="blog-main">
++          <h2>Publicações</h2>
++          <div class="blog-search">
++            <label for="post-search">Buscar publicação</label>
++            <input id="post-search" type="search" placeholder="Título, tema ou tag" autocomplete="off" />
++          </div>
++          <div id="active-filters" class="active-filters"></div>
++          <p id="result-count" class="result-count" role="status"></p>
++          <div id="post-list" class="post-list"></div>
++          <button id="load-more" class="btn secondary" type="button" hidden>Mostrar mais publicações</button>
++        </div>
++
++        <aside class="blog-side" aria-label="Filtros, comunidade e mídia">
++          <section class="side-card" aria-labelledby="h-area">
++            <h2 id="h-area">Áreas do conhecimento</h2>
++            <div id="facet-area" class="facet"></div>
++          </section>
++          <section class="side-card" aria-labelledby="h-atuacao">
++            <h2 id="h-atuacao">Atuação profissional na educação</h2>
++            <div id="facet-atuacao" class="facet"></div>
++          </section>
++          <section class="side-card" aria-labelledby="h-tags">
++            <h2 id="h-tags">Tags</h2>
++            <div id="tag-cloud" class="tag-cloud"></div>
++          </section>
++          <section class="side-card" id="comunidade" aria-labelledby="h-com">
++            <h2 id="h-com">Comunidade no WhatsApp</h2>
++            <div id="wa-box"></div>
++          </section>
++          <section class="side-card" aria-labelledby="h-midia">
++            <h2 id="h-midia">Mídia e redes</h2>
++            <ul id="media-links" class="media-links"></ul>
++            <a class="text-link" href="blog/feed.xml">Assinar por RSS</a>
++          </section>
++        </aside>
++      </div>
++    </main>
++
++    <footer class="site-footer">
++      <div class="container footer-inner">
++        <p>© 2026 <strong>Pâmella Araújo Balcaçar | Bio+Tech EduDesign</strong>.</p>
++        <p>
++          O conteúdo deste site é distribuído sob a licença
++          <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.pt" target="_blank" rel="noopener">CC BY-SA 4.0</a>.<br />
++          O código-fonte está disponível sob a licença
++          <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener">MIT</a>.
++        </p>
++        <a class="gh-link" href="https://github.com/Bio-Tech-Edu" target="_blank" rel="noreferrer"><svg style="width:40px;height:40px" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg><span>GitHub da Bio-Tech-Edu</span></a>
++      </div>
++    </footer>
++    <script src="assets/theme.js"></script>
++    <script src="assets/blog.js"></script>
++  </body>
++</html>
+diff --git a/blog/acessibilidade-digital-checklist-minimo.html b/blog/acessibilidade-digital-checklist-minimo.html
+new file mode 100644
+index 0000000..74dd6f8
+--- /dev/null
++++ b/blog/acessibilidade-digital-checklist-minimo.html
+@@ -0,0 +1,139 @@
++<!DOCTYPE html>
++<html lang="pt-BR">
++  <head>
++    <meta charset="UTF-8" />
++    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
++    <title>Acessibilidade digital em materiais educacionais: checklist mínimo | Blog Bio+Tech EduDesign</title>
++    <meta name="description" content="Sete verificações rápidas para que um material digital seja utilizável por mais pessoas, antes mesmo de qualquer ferramenta automática." />
++    <meta name="theme-color" content="#071b30" />
++    <meta property="og:type" content="article" />
++    <meta property="og:title" content="Acessibilidade digital em materiais educacionais: checklist mínimo" />
++    <meta property="og:description" content="Sete verificações rápidas para que um material digital seja utilizável por mais pessoas, antes mesmo de qualquer ferramenta automática." />
++    <meta property="og:image" content="https://bio-tech-edu.github.io/assets/hero.png" />
++    <link rel="canonical" href="https://bio-tech-edu.github.io/blog/acessibilidade-digital-checklist-minimo.html" />
++    <link rel="alternate" type="application/rss+xml" title="Blog Bio+Tech EduDesign" href="feed.xml" />
++    <link rel="icon" type="image/png" href="../assets/favicon.png" />
++    <script>try{var t=localStorage.getItem("theme");if(!t)t=matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";document.documentElement.setAttribute("data-theme",t)}catch(e){document.documentElement.setAttribute("data-theme","dark")}</script>
++    <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin /><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
++    <link rel="stylesheet" href="../assets/styles.css" />
++  </head>
++  <body>
++    <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
++    <div class="bg-orb orb-one"></div>
++    <div class="bg-orb orb-two"></div>
++    <header class="site-header">
++      <div class="container topbar">
++        <a class="brand" href="../index.html#top" aria-label="Bio+Tech EduDesign — início">
++          <img src="../assets/favicon.png" alt="" width="44" height="44" />
++          <div>
++            <span class="brand-kicker">Marca</span>
++            <strong>Bio+Tech EduDesign</strong>
++          </div>
++        </a>
++
++        <nav class="nav" aria-label="Navegação principal">
++          <a href="../index.html#publico">Para quem é</a>
++          <a href="../index.html#projetos">Catálogo</a>
++          <a href="../index.html#tipos">Tipos de recurso</a>
++          <a href="../index.html#metodologia">Metodologia</a>
++          <a href="../blog.html">Blog</a>
++          <a href="../index.html#sobre">Sobre</a>
++          <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Alternar entre tema claro e escuro">Tema claro</button>
++          <a href="https://github.com/Bio-Tech-Edu" target="_blank" rel="noreferrer" class="nav-cta gh-link"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg><span>GitHub</span></a>
++        </nav>
++      </div>
++
++      <div class="container hero" id="top">
++        <div class="hero-copy">
++          <span class="badge">Recursos educacionais abertos</span>
++          <h1>Ciência e tecnologia para aprender fazendo.</h1>
++          <p>
++            Recursos digitais abertos, alinhados à BNCC, para professores planejarem aulas, estudantes universitários
++            aprofundarem conteúdos e estagiários aprenderem na prática como se constrói material educacional de qualidade.
++          </p>
++
++          <div class="cta-row">
++            <a class="btn primary" href="../index.html#projetos">Explorar catálogo</a>
++            <a class="btn secondary" href="../index.html#publico">Para quem é</a>
++          </div>
++
++          <ul class="hero-metrics" aria-label="Indicadores da marca">
++            <li><strong id="metric-count">8</strong><span>recursos no catálogo</span></li>
++            <li><strong>OAD</strong><span>aprendizagem digital</span></li>
++            <li><strong>REA</strong><span>recursos abertos</span></li>
++          </ul>
++        </div>
++
++        <div class="hero-panel" aria-label="Resumo institucional">
++          <div class="panel-glow"></div>
++          <img class="hero-img" src="../assets/hero.png" width="1667" height="584" alt="Livros, caderno aberto, DNA e notebook com ícones de dados, representando biologia, educação e tecnologia." />
++          <div class="panel-card">
++            <span class="panel-label">Marca</span>
++            <h2>Design para aprender com clareza e impacto.</h2>
++            <p>Experiências educacionais pensadas para conectar ciência, tecnologia e aprendizagem significativa.</p>
++          </div>
++          <div class="mini-grid">
++            <div>
++              <strong>Design</strong>
++              <span>institucional</span>
++            </div>
++            <div>
++              <strong>Pedagogia</strong>
++              <span>ativa</span>
++            </div>
++            <div>
++              <strong>Ciência</strong>
++              <span>aplicada</span>
++            </div>
++            <div>
++              <strong>Acesso</strong>
++              <span>aberto</span>
++            </div>
++          </div>
++        </div>
++      </div>
++    </header>
++    <main id="conteudo">
++      <article class="container post">
++        <nav class="crumbs" aria-label="Você está em"><a href="../blog.html">Blog</a> / <a href="../blog.html?area=Educa%C3%A7%C3%A3o%20digital">Educação digital</a></nav>
++        <span class="project-tag">Educação digital</span>
++        <h1>Acessibilidade digital em materiais educacionais: checklist mínimo</h1>
++        <p class="meta">12 de outubro de 2026 · 1 min de leitura · Pâmella Araújo Balcaçar · Atuação: Design instrucional</p>
++        
++        <div class="prose">
++<p>Acessibilidade não é uma etapa final: é parte do desenho do material. Este checklist reúne verificações simples que cabem em qualquer revisão.</p>
++<h2 id="checklist">Checklist</h2>
++<ol>
++<li><strong>Contraste.</strong> Texto comum com contraste de pelo menos 4,5:1 em relação ao fundo.</li>
++<li><strong>Texto alternativo.</strong> Toda imagem informativa descreve o conteúdo, não apenas &quot;imagem&quot; ou &quot;captura de tela&quot;.</li>
++<li><strong>Títulos em ordem.</strong> Use h1, h2 e h3 sem pular níveis, porque leitores de tela usam os títulos para navegar.</li>
++<li><strong>Teclado.</strong> Todas as ações funcionam sem mouse e o foco aparece de forma visível.</li>
++<li><strong>Tamanho.</strong> Texto confortável de ler e alvos de toque com pelo menos 44 px.</li>
++<li><strong>Movimento.</strong> Respeite a preferência por menos animação do sistema.</li>
++<li><strong>Linguagem.</strong> Frases curtas, siglas explicadas na primeira vez e links com texto que faz sentido fora do contexto.</li>
++</ol>
++<h2 id="depois-do-checklist">Depois do checklist</h2>
++<p>Teste com leitor de tela e com zoom de 200%. Ferramentas automáticas encontram parte dos problemas, mas não substituem a experiência de uso.</p>
++
++        </div>
++        <footer class="post-foot">
++          <div class="post-tags" aria-label="Tags"><a href="../blog.html?tag=acessibilidade">#acessibilidade</a><a href="../blog.html?tag=design%20educacional">#design educacional</a><a href="../blog.html?tag=WCAG">#WCAG</a></div>
++          <p><a class="btn secondary" href="https://wa.me/?text=Acessibilidade%20digital%20em%20materiais%20educacionais%3A%20checklist%20m%C3%ADnimo%20%E2%80%94%20https%3A%2F%2Fbio-tech-edu.github.io%2Fblog%2Facessibilidade-digital-checklist-minimo.html" target="_blank" rel="noopener noreferrer">Compartilhar no WhatsApp</a> <a class="btn secondary" href="../blog.html">Voltar ao blog</a></p>
++        </footer>
++      </article>
++    </main>
++    <footer class="site-footer">
++      <div class="container footer-inner">
++        <p>© 2026 <strong>Pâmella Araújo Balcaçar | Bio+Tech EduDesign</strong>.</p>
++        <p>
++          O conteúdo deste site é distribuído sob a licença
++          <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.pt" target="_blank" rel="noopener">CC BY-SA 4.0</a>.<br />
++          O código-fonte está disponível sob a licença
++          <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener">MIT</a>.
++        </p>
++        <a class="gh-link" href="https://github.com/Bio-Tech-Edu" target="_blank" rel="noreferrer"><svg style="width:40px;height:40px" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg><span>GitHub da Bio-Tech-Edu</span></a>
++      </div>
++    </footer>
++    <script src="../assets/theme.js"></script>
++  </body>
++</html>
+diff --git a/blog/bncc-computacao-por-onde-comecar.html b/blog/bncc-computacao-por-onde-comecar.html
+new file mode 100644
+index 0000000..e177ee4
+--- /dev/null
++++ b/blog/bncc-computacao-por-onde-comecar.html
+@@ -0,0 +1,155 @@
++<!DOCTYPE html>
++<html lang="pt-BR">
++  <head>
++    <meta charset="UTF-8" />
++    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
++    <title>BNCC Computação, por onde começar | Blog Bio+Tech EduDesign</title>
++    <meta name="description" content="Os três eixos da BNCC Computação e ideias de como conectá-los às aulas de ciências e biologia." />
++    <meta name="theme-color" content="#071b30" />
++    <meta property="og:type" content="article" />
++    <meta property="og:title" content="BNCC Computação, por onde começar" />
++    <meta property="og:description" content="Os três eixos da BNCC Computação e ideias de como conectá-los às aulas de ciências e biologia." />
++    <meta property="og:image" content="https://bio-tech-edu.github.io/assets/hero.png" />
++    <link rel="canonical" href="https://bio-tech-edu.github.io/blog/bncc-computacao-por-onde-comecar.html" />
++    <link rel="alternate" type="application/rss+xml" title="Blog Bio+Tech EduDesign" href="feed.xml" />
++    <link rel="icon" type="image/png" href="../assets/favicon.png" />
++    <script>try{var t=localStorage.getItem("theme");if(!t)t=matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";document.documentElement.setAttribute("data-theme",t)}catch(e){document.documentElement.setAttribute("data-theme","dark")}</script>
++    <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin /><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
++    <link rel="stylesheet" href="../assets/styles.css" />
++  </head>
++  <body>
++    <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
++    <div class="bg-orb orb-one"></div>
++    <div class="bg-orb orb-two"></div>
++    <header class="site-header">
++      <div class="container topbar">
++        <a class="brand" href="../index.html#top" aria-label="Bio+Tech EduDesign — início">
++          <img src="../assets/favicon.png" alt="" width="44" height="44" />
++          <div>
++            <span class="brand-kicker">Marca</span>
++            <strong>Bio+Tech EduDesign</strong>
++          </div>
++        </a>
++
++        <nav class="nav" aria-label="Navegação principal">
++          <a href="../index.html#publico">Para quem é</a>
++          <a href="../index.html#projetos">Catálogo</a>
++          <a href="../index.html#tipos">Tipos de recurso</a>
++          <a href="../index.html#metodologia">Metodologia</a>
++          <a href="../blog.html">Blog</a>
++          <a href="../index.html#sobre">Sobre</a>
++          <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Alternar entre tema claro e escuro">Tema claro</button>
++          <a href="https://github.com/Bio-Tech-Edu" target="_blank" rel="noreferrer" class="nav-cta gh-link"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg><span>GitHub</span></a>
++        </nav>
++      </div>
++
++      <div class="container hero" id="top">
++        <div class="hero-copy">
++          <span class="badge">Recursos educacionais abertos</span>
++          <h1>Ciência e tecnologia para aprender fazendo.</h1>
++          <p>
++            Recursos digitais abertos, alinhados à BNCC, para professores planejarem aulas, estudantes universitários
++            aprofundarem conteúdos e estagiários aprenderem na prática como se constrói material educacional de qualidade.
++          </p>
++
++          <div class="cta-row">
++            <a class="btn primary" href="../index.html#projetos">Explorar catálogo</a>
++            <a class="btn secondary" href="../index.html#publico">Para quem é</a>
++          </div>
++
++          <ul class="hero-metrics" aria-label="Indicadores da marca">
++            <li><strong id="metric-count">8</strong><span>recursos no catálogo</span></li>
++            <li><strong>OAD</strong><span>aprendizagem digital</span></li>
++            <li><strong>REA</strong><span>recursos abertos</span></li>
++          </ul>
++        </div>
++
++        <div class="hero-panel" aria-label="Resumo institucional">
++          <div class="panel-glow"></div>
++          <img class="hero-img" src="../assets/hero.png" width="1667" height="584" alt="Livros, caderno aberto, DNA e notebook com ícones de dados, representando biologia, educação e tecnologia." />
++          <div class="panel-card">
++            <span class="panel-label">Marca</span>
++            <h2>Design para aprender com clareza e impacto.</h2>
++            <p>Experiências educacionais pensadas para conectar ciência, tecnologia e aprendizagem significativa.</p>
++          </div>
++          <div class="mini-grid">
++            <div>
++              <strong>Design</strong>
++              <span>institucional</span>
++            </div>
++            <div>
++              <strong>Pedagogia</strong>
++              <span>ativa</span>
++            </div>
++            <div>
++              <strong>Ciência</strong>
++              <span>aplicada</span>
++            </div>
++            <div>
++              <strong>Acesso</strong>
++              <span>aberto</span>
++            </div>
++          </div>
++        </div>
++      </div>
++    </header>
++    <main id="conteudo">
++      <article class="container post">
++        <nav class="crumbs" aria-label="Você está em"><a href="../blog.html">Blog</a> / <a href="../blog.html?area=Computa%C3%A7%C3%A3o%20e%20dados">Computação e dados</a></nav>
++        <span class="project-tag">Computação e dados</span>
++        <h1>BNCC Computação, por onde começar</h1>
++        <p class="meta">5 de outubro de 2026 · 1 min de leitura · Pâmella Araújo Balcaçar · Atuação: Ensino superior</p>
++        
++        <div class="prose">
++<p>A BNCC Computação organiza o aprendizado da área em três eixos que conversam com qualquer disciplina.</p>
++<h2 id="os-tres-eixos">Os três eixos</h2>
++<ul>
++<li><strong>Pensamento computacional:</strong> decompor problemas, reconhecer padrões, abstrair e criar algoritmos.</li>
++<li><strong>Mundo digital:</strong> entender como a informação é codificada, armazenada e transmitida.</li>
++<li><strong>Cultura digital:</strong> usar e criar tecnologia com responsabilidade, ética e senso crítico.</li>
++</ul>
++<h2 id="conexoes-com-ciencias-e-biologia">Conexões com ciências e biologia</h2>
++<table>
++<thead>
++<tr>
++<th>Eixo</th>
++<th>Exemplo de atividade</th>
++</tr>
++</thead>
++<tbody><tr>
++<td>Pensamento computacional</td>
++<td>Montar o passo a passo de um experimento como um algoritmo</td>
++</tr>
++<tr>
++<td>Mundo digital</td>
++<td>Representar dados de uma coleta em tabelas e gráficos</td>
++</tr>
++<tr>
++<td>Cultura digital</td>
++<td>Discutir a confiabilidade de fontes e de dados abertos</td>
++</tr>
++</tbody></table>
++<p>Comece por uma única habilidade, aplique uma atividade pequena e ajuste a partir do que a turma mostrar.</p>
++
++        </div>
++        <footer class="post-foot">
++          <div class="post-tags" aria-label="Tags"><a href="../blog.html?tag=BNCC%20Computa%C3%A7%C3%A3o">#BNCC Computação</a><a href="../blog.html?tag=pensamento%20computacional">#pensamento computacional</a><a href="../blog.html?tag=ci%C3%AAncia%20de%20dados">#ciência de dados</a></div>
++          <p><a class="btn secondary" href="https://wa.me/?text=BNCC%20Computa%C3%A7%C3%A3o%2C%20por%20onde%20come%C3%A7ar%20%E2%80%94%20https%3A%2F%2Fbio-tech-edu.github.io%2Fblog%2Fbncc-computacao-por-onde-comecar.html" target="_blank" rel="noopener noreferrer">Compartilhar no WhatsApp</a> <a class="btn secondary" href="../blog.html">Voltar ao blog</a></p>
++        </footer>
++      </article>
++    </main>
++    <footer class="site-footer">
++      <div class="container footer-inner">
++        <p>© 2026 <strong>Pâmella Araújo Balcaçar | Bio+Tech EduDesign</strong>.</p>
++        <p>
++          O conteúdo deste site é distribuído sob a licença
++          <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.pt" target="_blank" rel="noopener">CC BY-SA 4.0</a>.<br />
++          O código-fonte está disponível sob a licença
++          <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener">MIT</a>.
++        </p>
++        <a class="gh-link" href="https://github.com/Bio-Tech-Edu" target="_blank" rel="noreferrer"><svg style="width:40px;height:40px" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg><span>GitHub da Bio-Tech-Edu</span></a>
++      </div>
++    </footer>
++    <script src="../assets/theme.js"></script>
++  </body>
++</html>
+diff --git a/blog/config.json b/blog/config.json
+new file mode 100644
+index 0000000..fd8445b
+--- /dev/null
++++ b/blog/config.json
+@@ -0,0 +1,6 @@
++{
++  "whatsapp": "",
++  "midia": [
++    { "titulo": "GitHub Bio-Tech-Edu", "url": "https://github.com/Bio-Tech-Edu" }
++  ]
++}
+diff --git a/blog/feed.xml b/blog/feed.xml
+new file mode 100644
+index 0000000..794ce20
+--- /dev/null
++++ b/blog/feed.xml
+@@ -0,0 +1,8 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<rss version="2.0"><channel>
++<title>Blog Bio+Tech EduDesign</title><link>https://bio-tech-edu.github.io/blog.html</link>
++<description>Ciência, tecnologia e design educacional.</description><language>pt-BR</language>
++<item><title>Como planejar uma aula com recursos digitais abertos</title><link>https://bio-tech-edu.github.io/blog/planejar-aula-com-recursos-digitais-abertos.html</link><guid>https://bio-tech-edu.github.io/blog/planejar-aula-com-recursos-digitais-abertos.html</guid><pubDate>Tue, 20 Oct 2026 12:00:00 GMT</pubDate><description>Um roteiro simples para escolher, testar e aplicar OAD, REA e RED alinhados a uma habilidade da BNCC.</description></item>
++<item><title>Acessibilidade digital em materiais educacionais: checklist mínimo</title><link>https://bio-tech-edu.github.io/blog/acessibilidade-digital-checklist-minimo.html</link><guid>https://bio-tech-edu.github.io/blog/acessibilidade-digital-checklist-minimo.html</guid><pubDate>Mon, 12 Oct 2026 12:00:00 GMT</pubDate><description>Sete verificações rápidas para que um material digital seja utilizável por mais pessoas, antes mesmo de qualquer ferramenta automática.</description></item>
++<item><title>BNCC Computação, por onde começar</title><link>https://bio-tech-edu.github.io/blog/bncc-computacao-por-onde-comecar.html</link><guid>https://bio-tech-edu.github.io/blog/bncc-computacao-por-onde-comecar.html</guid><pubDate>Mon, 05 Oct 2026 12:00:00 GMT</pubDate><description>Os três eixos da BNCC Computação e ideias de como conectá-los às aulas de ciências e biologia.</description></item>
++</channel></rss>
+diff --git a/blog/planejar-aula-com-recursos-digitais-abertos.html b/blog/planejar-aula-com-recursos-digitais-abertos.html
+new file mode 100644
+index 0000000..ff8f993
+--- /dev/null
++++ b/blog/planejar-aula-com-recursos-digitais-abertos.html
+@@ -0,0 +1,144 @@
++<!DOCTYPE html>
++<html lang="pt-BR">
++  <head>
++    <meta charset="UTF-8" />
++    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
++    <title>Como planejar uma aula com recursos digitais abertos | Blog Bio+Tech EduDesign</title>
++    <meta name="description" content="Um roteiro simples para escolher, testar e aplicar OAD, REA e RED alinhados a uma habilidade da BNCC." />
++    <meta name="theme-color" content="#071b30" />
++    <meta property="og:type" content="article" />
++    <meta property="og:title" content="Como planejar uma aula com recursos digitais abertos" />
++    <meta property="og:description" content="Um roteiro simples para escolher, testar e aplicar OAD, REA e RED alinhados a uma habilidade da BNCC." />
++    <meta property="og:image" content="https://bio-tech-edu.github.io/assets/hero.png" />
++    <link rel="canonical" href="https://bio-tech-edu.github.io/blog/planejar-aula-com-recursos-digitais-abertos.html" />
++    <link rel="alternate" type="application/rss+xml" title="Blog Bio+Tech EduDesign" href="feed.xml" />
++    <link rel="icon" type="image/png" href="../assets/favicon.png" />
++    <script>try{var t=localStorage.getItem("theme");if(!t)t=matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";document.documentElement.setAttribute("data-theme",t)}catch(e){document.documentElement.setAttribute("data-theme","dark")}</script>
++    <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin /><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
++    <link rel="stylesheet" href="../assets/styles.css" />
++  </head>
++  <body>
++    <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
++    <div class="bg-orb orb-one"></div>
++    <div class="bg-orb orb-two"></div>
++    <header class="site-header">
++      <div class="container topbar">
++        <a class="brand" href="../index.html#top" aria-label="Bio+Tech EduDesign — início">
++          <img src="../assets/favicon.png" alt="" width="44" height="44" />
++          <div>
++            <span class="brand-kicker">Marca</span>
++            <strong>Bio+Tech EduDesign</strong>
++          </div>
++        </a>
++
++        <nav class="nav" aria-label="Navegação principal">
++          <a href="../index.html#publico">Para quem é</a>
++          <a href="../index.html#projetos">Catálogo</a>
++          <a href="../index.html#tipos">Tipos de recurso</a>
++          <a href="../index.html#metodologia">Metodologia</a>
++          <a href="../blog.html">Blog</a>
++          <a href="../index.html#sobre">Sobre</a>
++          <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Alternar entre tema claro e escuro">Tema claro</button>
++          <a href="https://github.com/Bio-Tech-Edu" target="_blank" rel="noreferrer" class="nav-cta gh-link"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg><span>GitHub</span></a>
++        </nav>
++      </div>
++
++      <div class="container hero" id="top">
++        <div class="hero-copy">
++          <span class="badge">Recursos educacionais abertos</span>
++          <h1>Ciência e tecnologia para aprender fazendo.</h1>
++          <p>
++            Recursos digitais abertos, alinhados à BNCC, para professores planejarem aulas, estudantes universitários
++            aprofundarem conteúdos e estagiários aprenderem na prática como se constrói material educacional de qualidade.
++          </p>
++
++          <div class="cta-row">
++            <a class="btn primary" href="../index.html#projetos">Explorar catálogo</a>
++            <a class="btn secondary" href="../index.html#publico">Para quem é</a>
++          </div>
++
++          <ul class="hero-metrics" aria-label="Indicadores da marca">
++            <li><strong id="metric-count">8</strong><span>recursos no catálogo</span></li>
++            <li><strong>OAD</strong><span>aprendizagem digital</span></li>
++            <li><strong>REA</strong><span>recursos abertos</span></li>
++          </ul>
++        </div>
++
++        <div class="hero-panel" aria-label="Resumo institucional">
++          <div class="panel-glow"></div>
++          <img class="hero-img" src="../assets/hero.png" width="1667" height="584" alt="Livros, caderno aberto, DNA e notebook com ícones de dados, representando biologia, educação e tecnologia." />
++          <div class="panel-card">
++            <span class="panel-label">Marca</span>
++            <h2>Design para aprender com clareza e impacto.</h2>
++            <p>Experiências educacionais pensadas para conectar ciência, tecnologia e aprendizagem significativa.</p>
++          </div>
++          <div class="mini-grid">
++            <div>
++              <strong>Design</strong>
++              <span>institucional</span>
++            </div>
++            <div>
++              <strong>Pedagogia</strong>
++              <span>ativa</span>
++            </div>
++            <div>
++              <strong>Ciência</strong>
++              <span>aplicada</span>
++            </div>
++            <div>
++              <strong>Acesso</strong>
++              <span>aberto</span>
++            </div>
++          </div>
++        </div>
++      </div>
++    </header>
++    <main id="conteudo">
++      <article class="container post">
++        <nav class="crumbs" aria-label="Você está em"><a href="../blog.html">Blog</a> / <a href="../blog.html?area=Educa%C3%A7%C3%A3o%20digital">Educação digital</a></nav>
++        <span class="project-tag">Educação digital</span>
++        <h1>Como planejar uma aula com recursos digitais abertos</h1>
++        <p class="meta">20 de outubro de 2026 · 1 min de leitura · Pâmella Araújo Balcaçar · Atuação: Docência</p>
++        
++        <div class="prose">
++<p>Recursos digitais abertos ajudam a economizar tempo, mas só funcionam bem quando partem de um objetivo claro de aprendizagem.</p>
++<h2 id="entenda-os-tres-tipos">Entenda os três tipos</h2>
++<ul>
++<li><strong>OAD (objeto de aprendizagem digital):</strong> unidade digital pequena e reutilizável, com foco em um objetivo de aprendizagem.</li>
++<li><strong>REA (recurso educacional aberto):</strong> material com licença que permite usar, adaptar e redistribuir.</li>
++<li><strong>RED (recurso educacional digital):</strong> material de ensino em formato digital.</li>
++</ul>
++<h2 id="roteiro-em-cinco-passos">Roteiro em cinco passos</h2>
++<ol>
++<li><strong>Defina a habilidade.</strong> Escolha o código da BNCC (e da BNCC Computação, quando houver) que a aula deve desenvolver.</li>
++<li><strong>Escolha o recurso.</strong> Use o catálogo do site e confira o tipo, o resumo e as habilidades indicadas.</li>
++<li><strong>Teste antes.</strong> Faça a atividade como estudante, no mesmo dispositivo que a turma vai usar.</li>
++<li><strong>Planeje a mediação.</strong> Decida o que será feito antes, durante e depois do recurso.</li>
++<li><strong>Avalie.</strong> Combine o retorno do próprio recurso com uma pergunta de fechamento em sala.</li>
++</ol>
++<blockquote>
++<p>Dica: registre no plano de aula a licença do recurso e o link, para facilitar o reuso por outros colegas.</p>
++</blockquote>
++
++        </div>
++        <footer class="post-foot">
++          <div class="post-tags" aria-label="Tags"><a href="../blog.html?tag=BNCC">#BNCC</a><a href="../blog.html?tag=REA">#REA</a><a href="../blog.html?tag=OAD">#OAD</a><a href="../blog.html?tag=planejamento">#planejamento</a></div>
++          <p><a class="btn secondary" href="https://wa.me/?text=Como%20planejar%20uma%20aula%20com%20recursos%20digitais%20abertos%20%E2%80%94%20https%3A%2F%2Fbio-tech-edu.github.io%2Fblog%2Fplanejar-aula-com-recursos-digitais-abertos.html" target="_blank" rel="noopener noreferrer">Compartilhar no WhatsApp</a> <a class="btn secondary" href="../blog.html">Voltar ao blog</a></p>
++        </footer>
++      </article>
++    </main>
++    <footer class="site-footer">
++      <div class="container footer-inner">
++        <p>© 2026 <strong>Pâmella Araújo Balcaçar | Bio+Tech EduDesign</strong>.</p>
++        <p>
++          O conteúdo deste site é distribuído sob a licença
++          <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.pt" target="_blank" rel="noopener">CC BY-SA 4.0</a>.<br />
++          O código-fonte está disponível sob a licença
++          <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener">MIT</a>.
++        </p>
++        <a class="gh-link" href="https://github.com/Bio-Tech-Edu" target="_blank" rel="noreferrer"><svg style="width:40px;height:40px" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg><span>GitHub da Bio-Tech-Edu</span></a>
++      </div>
++    </footer>
++    <script src="../assets/theme.js"></script>
++  </body>
++</html>
+diff --git a/blog/posts.json b/blog/posts.json
+new file mode 100644
+index 0000000..5ff59cf
+--- /dev/null
++++ b/blog/posts.json
+@@ -0,0 +1,60 @@
++[
++  {
++    "slug": "planejar-aula-com-recursos-digitais-abertos",
++    "title": "Como planejar uma aula com recursos digitais abertos",
++    "date": "2026-10-20",
++    "summary": "Um roteiro simples para escolher, testar e aplicar OAD, REA e RED alinhados a uma habilidade da BNCC.",
++    "area": "Educação digital",
++    "atuacao": "Docência",
++    "tags": [
++      "BNCC",
++      "REA",
++      "OAD",
++      "planejamento"
++    ],
++    "destaque": 2,
++    "cover": "",
++    "coverAlt": "",
++    "autoria": "Pâmella Araújo Balcaçar",
++    "readingTime": 1,
++    "url": "blog/planejar-aula-com-recursos-digitais-abertos.html"
++  },
++  {
++    "slug": "acessibilidade-digital-checklist-minimo",
++    "title": "Acessibilidade digital em materiais educacionais: checklist mínimo",
++    "date": "2026-10-12",
++    "summary": "Sete verificações rápidas para que um material digital seja utilizável por mais pessoas, antes mesmo de qualquer ferramenta automática.",
++    "area": "Educação digital",
++    "atuacao": "Design instrucional",
++    "tags": [
++      "acessibilidade",
++      "design educacional",
++      "WCAG"
++    ],
++    "destaque": 1,
++    "cover": "",
++    "coverAlt": "",
++    "autoria": "Pâmella Araújo Balcaçar",
++    "readingTime": 1,
++    "url": "blog/acessibilidade-digital-checklist-minimo.html"
++  },
++  {
++    "slug": "bncc-computacao-por-onde-comecar",
++    "title": "BNCC Computação, por onde começar",
++    "date": "2026-10-05",
++    "summary": "Os três eixos da BNCC Computação e ideias de como conectá-los às aulas de ciências e biologia.",
++    "area": "Computação e dados",
++    "atuacao": "Ensino superior",
++    "tags": [
++      "BNCC Computação",
++      "pensamento computacional",
++      "ciência de dados"
++    ],
++    "destaque": 0,
++    "cover": "",
++    "coverAlt": "",
++    "autoria": "Pâmella Araújo Balcaçar",
++    "readingTime": 1,
++    "url": "blog/bncc-computacao-por-onde-comecar.html"
++  }
++]
+diff --git a/index.html b/index.html
+index 97fbb82..fdfe758 100644
+--- a/index.html
++++ b/index.html
+@@ -5,6 +5,8 @@
+     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+     <title>Bio+Tech EduDesign | Recursos educacionais abertos em ciência e tecnologia</title>
+     <script>try{var t=localStorage.getItem("theme");if(!t)t=matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";document.documentElement.setAttribute("data-theme",t)}catch(e){document.documentElement.setAttribute("data-theme","dark")}</script>
++    <meta name="theme-color" content="#071b30" />
++    <link rel="alternate" type="application/rss+xml" title="Blog Bio+Tech EduDesign" href="blog/feed.xml" />
+     <link rel="icon" type="image/png" href="assets/favicon.png" />
+     <meta
+       name="description"
+@@ -35,6 +37,7 @@
+           <a href="#projetos">Catálogo</a>
+           <a href="#tipos">Tipos de recurso</a>
+           <a href="#metodologia">Metodologia</a>
++          <a href="blog.html">Blog</a>
+           <a href="#sobre">Sobre</a>
+           <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Alternar entre tema claro e escuro">Tema claro</button>
+           <a href="https://github.com/Bio-Tech-Edu" target="_blank" rel="noreferrer" class="nav-cta gh-link"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg><span>GitHub</span></a>
+@@ -228,6 +231,7 @@
+       </div>
+     </footer>
+ 
++    <script src="assets/theme.js"></script>
+     <script src="assets/script.js"></script>
+   </body>
+ </html>
+diff --git a/package-lock.json b/package-lock.json
+new file mode 100644
+index 0000000..43bb10c
+--- /dev/null
++++ b/package-lock.json
+@@ -0,0 +1,137 @@
++{
++  "name": "bio-tech-edu-site",
++  "lockfileVersion": 3,
++  "requires": true,
++  "packages": {
++    "": {
++      "name": "bio-tech-edu-site",
++      "dependencies": {
++        "gray-matter": "^4.0.3",
++        "marked": "^18.1.2"
++      },
++      "engines": {
++        "node": ">=20"
++      }
++    },
++    "node_modules/argparse": {
++      "version": "1.0.10",
++      "resolved": "https://registry.npmjs.org/argparse/-/argparse-1.0.10.tgz",
++      "integrity": "sha512-o5Roy6tNG4SL/FOkCAN6RzjiakZS25RLYFrcMttJqbdd8BWrnA+fGz57iN5Pb06pvBGvl5gQ0B48dJlslXvoTg==",
++      "license": "MIT",
++      "dependencies": {
++        "sprintf-js": "~1.0.2"
++      }
++    },
++    "node_modules/esprima": {
++      "version": "4.0.1",
++      "resolved": "https://registry.npmjs.org/esprima/-/esprima-4.0.1.tgz",
++      "integrity": "sha512-eGuFFw7Upda+g4p+QHvnW0RyTX/SVeJBDM/gCtMARO0cLuT2HcEKnTPvhjV6aGeqrCB/sbNop0Kszm0jsaWU4A==",
++      "license": "BSD-2-Clause",
++      "bin": {
++        "esparse": "bin/esparse.js",
++        "esvalidate": "bin/esvalidate.js"
++      },
++      "engines": {
++        "node": ">=4"
++      }
++    },
++    "node_modules/extend-shallow": {
++      "version": "2.0.1",
++      "resolved": "https://registry.npmjs.org/extend-shallow/-/extend-shallow-2.0.1.tgz",
++      "integrity": "sha512-zCnTtlxNoAiDc3gqY2aYAWFx7XWWiasuF2K8Me5WbN8otHKTUKBwjPtNpRs/rbUZm7KxWAaNj7P1a/p52GbVug==",
++      "license": "MIT",
++      "dependencies": {
++        "is-extendable": "^0.1.0"
++      },
++      "engines": {
++        "node": ">=0.10.0"
++      }
++    },
++    "node_modules/gray-matter": {
++      "version": "4.0.3",
++      "resolved": "https://registry.npmjs.org/gray-matter/-/gray-matter-4.0.3.tgz",
++      "integrity": "sha512-5v6yZd4JK3eMI3FqqCouswVqwugaA9r4dNZB1wwcmrD02QkV5H0y7XBQW8QwQqEaZY1pM9aqORSORhJRdNK44Q==",
++      "license": "MIT",
++      "dependencies": {
++        "js-yaml": "^3.13.1",
++        "kind-of": "^6.0.2",
++        "section-matter": "^1.0.0",
++        "strip-bom-string": "^1.0.0"
++      },
++      "engines": {
++        "node": ">=6.0"
++      }
++    },
++    "node_modules/is-extendable": {
++      "version": "0.1.1",
++      "resolved": "https://registry.npmjs.org/is-extendable/-/is-extendable-0.1.1.tgz",
++      "integrity": "sha512-5BMULNob1vgFX6EjQw5izWDxrecWK9AM72rugNr0TFldMOi0fj6Jk+zeKIt0xGj4cEfQIJth4w3OKWOJ4f+AFw==",
++      "license": "MIT",
++      "engines": {
++        "node": ">=0.10.0"
++      }
++    },
++    "node_modules/js-yaml": {
++      "version": "3.15.2",
++      "resolved": "https://registry.npmjs.org/js-yaml/-/js-yaml-3.15.2.tgz",
++      "integrity": "sha512-6EuL879VkRA+1Cz578mKMiKvjPNEuk6+r1JaFzoSWejZmtf7xWbIyw1e3KkxlkzTIt9Taw6JBhEppG7utc1P+w==",
++      "license": "MIT",
++      "dependencies": {
++        "argparse": "^1.0.7",
++        "esprima": "^4.0.0"
++      },
++      "bin": {
++        "js-yaml": "bin/js-yaml.js"
++      }
++    },
++    "node_modules/kind-of": {
++      "version": "6.0.3",
++      "resolved": "https://registry.npmjs.org/kind-of/-/kind-of-6.0.3.tgz",
++      "integrity": "sha512-dcS1ul+9tmeD95T+x28/ehLgd9mENa3LsvDTtzm3vyBEO7RPptvAD+t44WVXaUjTBRcrpFeFlC8WCruUR456hw==",
++      "license": "MIT",
++      "engines": {
++        "node": ">=0.10.0"
++      }
++    },
++    "node_modules/marked": {
++      "version": "18.1.2",
++      "resolved": "https://registry.npmjs.org/marked/-/marked-18.1.2.tgz",
++      "integrity": "sha512-DfOnvLAQ6WYeWxWO1u4RyFOeqyHup6dks5PPqnoFiooU7ipRvidO/2j8plhAHIiZg574E9ZlzSjUiPMLAzFkgg==",
++      "license": "MIT",
++      "bin": {
++        "marked": "bin/marked.js"
++      },
++      "engines": {
++        "node": ">= 20"
++      }
++    },
++    "node_modules/section-matter": {
++      "version": "1.0.0",
++      "resolved": "https://registry.npmjs.org/section-matter/-/section-matter-1.0.0.tgz",
++      "integrity": "sha512-vfD3pmTzGpufjScBh50YHKzEu2lxBWhVEHsNGoEXmCmn2hKGfeNLYMzCJpe8cD7gqX7TJluOVpBkAequ6dgMmA==",
++      "license": "MIT",
++      "dependencies": {
++        "extend-shallow": "^2.0.1",
++        "kind-of": "^6.0.0"
++      },
++      "engines": {
++        "node": ">=4"
++      }
++    },
++    "node_modules/sprintf-js": {
++      "version": "1.0.3",
++      "resolved": "https://registry.npmjs.org/sprintf-js/-/sprintf-js-1.0.3.tgz",
++      "integrity": "sha512-D9cPgkvLlV3t3IzL0D0YLvGA9Ahk4PcvVwUbN0dSGr1aP0Nrt4AEnTUbuGvquEC0mA64Gqt1fzirlRs5ibXx8g==",
++      "license": "BSD-3-Clause"
++    },
++    "node_modules/strip-bom-string": {
++      "version": "1.0.0",
++      "resolved": "https://registry.npmjs.org/strip-bom-string/-/strip-bom-string-1.0.0.tgz",
++      "integrity": "sha512-uCC2VHvQRYu+lMh4My/sFNmF2klFymLX1wHJeXnbEJERpV/ZsVuonzerjfrGpIGF7LBVa1O7i9kjiWvJiFck8g==",
++      "license": "MIT",
++      "engines": {
++        "node": ">=0.10.0"
++      }
++    }
++  }
++}
+diff --git a/package.json b/package.json
+new file mode 100644
+index 0000000..ee8f7fa
+--- /dev/null
++++ b/package.json
+@@ -0,0 +1,9 @@
++{
++  "name": "bio-tech-edu-site",
++  "private": true,
++  "type": "module",
++  "description": "Site estático Bio+Tech EduDesign com blog gerado a partir de arquivos markdown.",
++  "scripts": { "build:blog": "node scripts/build-blog.mjs" },
++  "dependencies": { "gray-matter": "^4.0.3", "marked": "^18.1.2" },
++  "engines": { "node": ">=20" }
++}
+diff --git a/posts/2026-10-05-bncc-computacao-por-onde-comecar.md b/posts/2026-10-05-bncc-computacao-por-onde-comecar.md
+new file mode 100644
+index 0000000..30cbd2c
+--- /dev/null
++++ b/posts/2026-10-05-bncc-computacao-por-onde-comecar.md
+@@ -0,0 +1,27 @@
++---
++title: BNCC Computação, por onde começar
++date: 2026-10-05
++summary: Os três eixos da BNCC Computação e ideias de como conectá-los às aulas de ciências e biologia.
++area: Computação e dados
++atuacao: Ensino superior
++tags: [BNCC Computação, pensamento computacional, ciência de dados]
++destaque: 0
++---
++
++A BNCC Computação organiza o aprendizado da área em três eixos que conversam com qualquer disciplina.
++
++## Os três eixos
++
++- **Pensamento computacional:** decompor problemas, reconhecer padrões, abstrair e criar algoritmos.
++- **Mundo digital:** entender como a informação é codificada, armazenada e transmitida.
++- **Cultura digital:** usar e criar tecnologia com responsabilidade, ética e senso crítico.
++
++## Conexões com ciências e biologia
++
++| Eixo | Exemplo de atividade |
++|---|---|
++| Pensamento computacional | Montar o passo a passo de um experimento como um algoritmo |
++| Mundo digital | Representar dados de uma coleta em tabelas e gráficos |
++| Cultura digital | Discutir a confiabilidade de fontes e de dados abertos |
++
++Comece por uma única habilidade, aplique uma atividade pequena e ajuste a partir do que a turma mostrar.
+diff --git a/posts/2026-10-12-acessibilidade-digital-checklist-minimo.md b/posts/2026-10-12-acessibilidade-digital-checklist-minimo.md
+new file mode 100644
+index 0000000..d892a6c
+--- /dev/null
++++ b/posts/2026-10-12-acessibilidade-digital-checklist-minimo.md
+@@ -0,0 +1,25 @@
++---
++title: "Acessibilidade digital em materiais educacionais: checklist mínimo"
++date: 2026-10-12
++summary: Sete verificações rápidas para que um material digital seja utilizável por mais pessoas, antes mesmo de qualquer ferramenta automática.
++area: Educação digital
++atuacao: Design instrucional
++tags: [acessibilidade, design educacional, WCAG]
++destaque: 1
++---
++
++Acessibilidade não é uma etapa final: é parte do desenho do material. Este checklist reúne verificações simples que cabem em qualquer revisão.
++
++## Checklist
++
++1. **Contraste.** Texto comum com contraste de pelo menos 4,5:1 em relação ao fundo.
++2. **Texto alternativo.** Toda imagem informativa descreve o conteúdo, não apenas "imagem" ou "captura de tela".
++3. **Títulos em ordem.** Use h1, h2 e h3 sem pular níveis, porque leitores de tela usam os títulos para navegar.
++4. **Teclado.** Todas as ações funcionam sem mouse e o foco aparece de forma visível.
++5. **Tamanho.** Texto confortável de ler e alvos de toque com pelo menos 44 px.
++6. **Movimento.** Respeite a preferência por menos animação do sistema.
++7. **Linguagem.** Frases curtas, siglas explicadas na primeira vez e links com texto que faz sentido fora do contexto.
++
++## Depois do checklist
++
++Teste com leitor de tela e com zoom de 200%. Ferramentas automáticas encontram parte dos problemas, mas não substituem a experiência de uso.
+diff --git a/posts/2026-10-20-planejar-aula-com-recursos-digitais-abertos.md b/posts/2026-10-20-planejar-aula-com-recursos-digitais-abertos.md
+new file mode 100644
+index 0000000..096aa39
+--- /dev/null
++++ b/posts/2026-10-20-planejar-aula-com-recursos-digitais-abertos.md
+@@ -0,0 +1,27 @@
++---
++title: Como planejar uma aula com recursos digitais abertos
++date: 2026-10-20
++summary: Um roteiro simples para escolher, testar e aplicar OAD, REA e RED alinhados a uma habilidade da BNCC.
++area: Educação digital
++atuacao: Docência
++tags: [BNCC, REA, OAD, planejamento]
++destaque: 2
++---
++
++Recursos digitais abertos ajudam a economizar tempo, mas só funcionam bem quando partem de um objetivo claro de aprendizagem.
++
++## Entenda os três tipos
++
++- **OAD (objeto de aprendizagem digital):** unidade digital pequena e reutilizável, com foco em um objetivo de aprendizagem.
++- **REA (recurso educacional aberto):** material com licença que permite usar, adaptar e redistribuir.
++- **RED (recurso educacional digital):** material de ensino em formato digital.
++
++## Roteiro em cinco passos
++
++1. **Defina a habilidade.** Escolha o código da BNCC (e da BNCC Computação, quando houver) que a aula deve desenvolver.
++2. **Escolha o recurso.** Use o catálogo do site e confira o tipo, o resumo e as habilidades indicadas.
++3. **Teste antes.** Faça a atividade como estudante, no mesmo dispositivo que a turma vai usar.
++4. **Planeje a mediação.** Decida o que será feito antes, durante e depois do recurso.
++5. **Avalie.** Combine o retorno do próprio recurso com uma pergunta de fechamento em sala.
++
++> Dica: registre no plano de aula a licença do recurso e o link, para facilitar o reuso por outros colegas.
+diff --git a/posts/_modelo.md b/posts/_modelo.md
+new file mode 100644
+index 0000000..da9e533
+--- /dev/null
++++ b/posts/_modelo.md
+@@ -0,0 +1,20 @@
++---
++title: Título da publicação
++date: 2026-01-31            # AAAA-MM-DD (obrigatório)
++summary: Uma ou duas frases que aparecem no carrossel e nos cards.
++area: Educação digital      # área do conhecimento (menu lateral)
++atuacao: Docência           # atuação profissional na educação (menu lateral)
++tags: [BNCC, REA]           # lista de tags
++destaque: 0                 # 0 = normal; maior número = mais destaque no carrossel
++cover: assets/blog/capa.png # opcional (imagem em assets/blog/)
++cover_alt: Descrição da imagem de capa
++# rascunho: true            # descomente para não publicar
++---
++
++Escreva em **markdown**. Para imagens no texto use o caminho a partir da raiz do repositório:
++
++![Descrição da imagem](assets/blog/figura.png)
++
++## Subtítulo
++
++Listas, tabelas, citações e blocos de código funcionam normalmente.
+diff --git a/scripts/blog.template.html b/scripts/blog.template.html
+new file mode 100644
+index 0000000..e27ca33
+--- /dev/null
++++ b/scripts/blog.template.html
+@@ -0,0 +1,86 @@
++<!DOCTYPE html>
++<html lang="pt-BR">
++  <head>
++    <meta charset="UTF-8" />
++    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
++    <title>Blog | Bio+Tech EduDesign</title>
++    <meta name="description" content="Textos sobre design educacional, BNCC, dados, biotecnologia e acessibilidade digital para professores, estudantes universitários e estagiários." />
++    <meta name="theme-color" content="#071b30" />
++    <link rel="icon" type="image/png" href="assets/favicon.png" />
++    <link rel="alternate" type="application/rss+xml" title="Blog Bio+Tech EduDesign" href="blog/feed.xml" />
++    <!--THEME-->
++    <link rel="preconnect" href="https://fonts.googleapis.com" />
++    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
++    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
++    <link rel="stylesheet" href="assets/styles.css" />
++  </head>
++  <body>
++    <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
++    <div class="bg-orb orb-one"></div>
++    <div class="bg-orb orb-two"></div>
++    <!--HEADER-->
++
++    <main id="conteudo">
++      <section class="container blog-hero">
++        <span class="eyebrow">Blog</span>
++        <h1>Ideias para ensinar e aprender ciência e tecnologia</h1>
++        <p>Design educacional, BNCC, dados, biotecnologia e acessibilidade digital, para professores, estudantes universitários e estagiários.</p>
++      </section>
++
++      <section class="container" aria-labelledby="destaques-titulo">
++        <h2 id="destaques-titulo" class="visually-hidden">Publicações em destaque</h2>
++        <div class="carousel" id="carousel" role="region" aria-roledescription="carrossel" aria-label="Publicações em destaque" hidden>
++          <div id="carousel-slides"></div>
++          <div class="carousel-ctrl">
++            <button class="icon-btn" id="carousel-prev" type="button" aria-label="Publicação anterior">‹</button>
++            <div class="dots" id="carousel-dots"></div>
++            <span class="meta" id="carousel-count" aria-live="polite"></span>
++            <button class="icon-btn" id="carousel-next" type="button" aria-label="Próxima publicação">›</button>
++          </div>
++        </div>
++      </section>
++
++      <div class="container blog-layout">
++        <div class="blog-main">
++          <h2>Publicações</h2>
++          <div class="blog-search">
++            <label for="post-search">Buscar publicação</label>
++            <input id="post-search" type="search" placeholder="Título, tema ou tag" autocomplete="off" />
++          </div>
++          <div id="active-filters" class="active-filters"></div>
++          <p id="result-count" class="result-count" role="status"></p>
++          <div id="post-list" class="post-list"></div>
++          <button id="load-more" class="btn secondary" type="button" hidden>Mostrar mais publicações</button>
++        </div>
++
++        <aside class="blog-side" aria-label="Filtros, comunidade e mídia">
++          <section class="side-card" aria-labelledby="h-area">
++            <h2 id="h-area">Áreas do conhecimento</h2>
++            <div id="facet-area" class="facet"></div>
++          </section>
++          <section class="side-card" aria-labelledby="h-atuacao">
++            <h2 id="h-atuacao">Atuação profissional na educação</h2>
++            <div id="facet-atuacao" class="facet"></div>
++          </section>
++          <section class="side-card" aria-labelledby="h-tags">
++            <h2 id="h-tags">Tags</h2>
++            <div id="tag-cloud" class="tag-cloud"></div>
++          </section>
++          <section class="side-card" id="comunidade" aria-labelledby="h-com">
++            <h2 id="h-com">Comunidade no WhatsApp</h2>
++            <div id="wa-box"></div>
++          </section>
++          <section class="side-card" aria-labelledby="h-midia">
++            <h2 id="h-midia">Mídia e redes</h2>
++            <ul id="media-links" class="media-links"></ul>
++            <a class="text-link" href="blog/feed.xml">Assinar por RSS</a>
++          </section>
++        </aside>
++      </div>
++    </main>
++
++    <!--FOOTER-->
++    <script src="assets/theme.js"></script>
++    <script src="assets/blog.js"></script>
++  </body>
++</html>
+diff --git a/scripts/build-blog.mjs b/scripts/build-blog.mjs
+new file mode 100644
+index 0000000..b76f880
+--- /dev/null
++++ b/scripts/build-blog.mjs
+@@ -0,0 +1,164 @@
++// Converte posts/*.md em páginas HTML, blog/posts.json, blog/feed.xml e blog.html.
++// Uso: npm ci && node scripts/build-blog.mjs
++import fs from "node:fs";
++import path from "node:path";
++import { fileURLToPath } from "node:url";
++import matter from "gray-matter";
++import { marked } from "marked";
++
++const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
++const POSTS_DIR = path.join(ROOT, "posts");
++const OUT_DIR = path.join(ROOT, "blog");
++const SITE = "https://bio-tech-edu.github.io";
++const AUTOR_PADRAO = "Pâmella Araújo Balcaçar";
++
++const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
++const slugify = (s) => String(s).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
++const toList = (v) => (Array.isArray(v) ? v : typeof v === "string" ? v.split(",") : []).map((x) => String(x).trim()).filter(Boolean);
++const isoDate = (d) => (d instanceof Date ? d.toISOString().slice(0, 10) : String(d ?? "").slice(0, 10));
++const fmtDate = (iso) => new Date(iso + "T12:00:00").toLocaleDateString("pt-BR", { day: "numeric", month: "long", year: "numeric" });
++
++marked.use({
++  renderer: {
++    heading({ tokens, depth }) {
++      const inner = this.parser.parseInline(tokens);
++      const id = slugify(inner.replace(/<[^>]+>/g, ""));
++      return `<h${depth} id="${id}">${inner}</h${depth}>\n`;
++    },
++  },
++});
++
++const THEME_SCRIPT = `<script>try{var t=localStorage.getItem("theme");if(!t)t=matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";document.documentElement.setAttribute("data-theme",t)}catch(e){document.documentElement.setAttribute("data-theme","dark")}</script>`;
++const FONTS = `<link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin /><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />`;
++
++// Cabeçalho e rodapé vêm do index.html (fonte única) e têm os caminhos ajustados.
++const indexHtml = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
++const grab = (re, nome) => {
++  const m = indexHtml.match(re);
++  if (!m) { console.error(`index.html: não encontrei ${nome}`); process.exit(1); }
++  return m[0];
++};
++const HEADER = grab(/<header class="site-header">[\s\S]*?<\/header>/, "<header>");
++const FOOTER = grab(/<footer class="site-footer">[\s\S]*?<\/footer>/, "<footer>");
++function fragment(html, depth) {
++  if (depth === 0) {
++    return html.replace(/href="#/g, 'href="index.html#').replace('<a href="blog.html">Blog</a>', '<a href="blog.html" aria-current="page">Blog</a>');
++  }
++  return html.replace(/href="#/g, 'href="../index.html#').replace(/(href|src)="(?!https?:|mailto:|\.\.\/|#)/g, '$1="../');
++}
++
++// ---------- leitura dos posts ----------
++const files = fs.existsSync(POSTS_DIR) ? fs.readdirSync(POSTS_DIR).filter((f) => f.endsWith(".md") && !f.startsWith("_")) : [];
++const posts = [];
++const slugs = new Set();
++let erro = false;
++for (const f of files) {
++  const { data, content } = matter(fs.readFileSync(path.join(POSTS_DIR, f), "utf8"));
++  if (data.rascunho === true) continue;
++  const date = isoDate(data.date);
++  if (!data.title || !/^\d{4}-\d{2}-\d{2}$/.test(date)) {
++    console.warn(`⚠ ${f}: faltam "title" e/ou "date" (AAAA-MM-DD). Arquivo ignorado.`);
++    continue;
++  }
++  const slug = slugify(data.slug || f.replace(/\.md$/, "").replace(/^\d{4}-\d{2}-\d{2}-/, ""));
++  if (slugs.has(slug)) { console.error(`✖ ${f}: slug repetido "${slug}".`); erro = true; continue; }
++  slugs.add(slug);
++  const plain = content.replace(/```[\s\S]*?```/g, " ").replace(/[#>*_`\[\]()!|-]/g, " ").replace(/\s+/g, " ").trim();
++  posts.push({
++    slug,
++    title: String(data.title),
++    date,
++    summary: String(data.summary || plain.slice(0, 160).trim() + "…"),
++    area: String(data.area || "Geral"),
++    atuacao: String(data.atuacao || "Geral"),
++    tags: toList(data.tags),
++    destaque: data.destaque === true ? 1 : Number(data.destaque) || 0,
++    cover: data.cover ? String(data.cover) : "",
++    coverAlt: String(data.cover_alt || ""),
++    autoria: String(data.autoria || AUTOR_PADRAO),
++    readingTime: Math.max(1, Math.round(plain.split(" ").filter(Boolean).length / 200)),
++    url: `blog/${slug}.html`,
++    _html: marked.parse(content).replace(/src="assets\//g, 'src="../assets/'),
++  });
++}
++if (erro) process.exit(1);
++posts.sort((a, b) => b.date.localeCompare(a.date));
++
++// ---------- saída ----------
++fs.mkdirSync(OUT_DIR, { recursive: true });
++for (const f of fs.readdirSync(OUT_DIR)) {
++  if (f.endsWith(".html") || f === "posts.json" || f === "feed.xml") fs.unlinkSync(path.join(OUT_DIR, f));
++}
++
++function postPage(p) {
++  const cover = p.cover ? `<figure class="post-cover-fig"><img src="../${esc(p.cover)}" alt="${esc(p.coverAlt)}" /></figure>` : "";
++  const tags = p.tags.map((t) => `<a href="../blog.html?tag=${encodeURIComponent(t)}">#${esc(t)}</a>`).join("");
++  const wa = `https://wa.me/?text=${encodeURIComponent(`${p.title} — ${SITE}/${p.url}`)}`;
++  return `<!DOCTYPE html>
++<html lang="pt-BR">
++  <head>
++    <meta charset="UTF-8" />
++    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
++    <title>${esc(p.title)} | Blog Bio+Tech EduDesign</title>
++    <meta name="description" content="${esc(p.summary)}" />
++    <meta name="theme-color" content="#071b30" />
++    <meta property="og:type" content="article" />
++    <meta property="og:title" content="${esc(p.title)}" />
++    <meta property="og:description" content="${esc(p.summary)}" />
++    <meta property="og:image" content="${SITE}/${esc(p.cover || "assets/hero.png")}" />
++    <link rel="canonical" href="${SITE}/${p.url}" />
++    <link rel="alternate" type="application/rss+xml" title="Blog Bio+Tech EduDesign" href="feed.xml" />
++    <link rel="icon" type="image/png" href="../assets/favicon.png" />
++    ${THEME_SCRIPT}
++    ${FONTS}
++    <link rel="stylesheet" href="../assets/styles.css" />
++  </head>
++  <body>
++    <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
++    <div class="bg-orb orb-one"></div>
++    <div class="bg-orb orb-two"></div>
++    ${fragment(HEADER, 1)}
++    <main id="conteudo">
++      <article class="container post">
++        <nav class="crumbs" aria-label="Você está em"><a href="../blog.html">Blog</a> / <a href="../blog.html?area=${encodeURIComponent(p.area)}">${esc(p.area)}</a></nav>
++        <span class="project-tag">${esc(p.area)}</span>
++        <h1>${esc(p.title)}</h1>
++        <p class="meta">${esc(fmtDate(p.date))} · ${p.readingTime} min de leitura · ${esc(p.autoria)} · Atuação: ${esc(p.atuacao)}</p>
++        ${cover}
++        <div class="prose">
++${p._html}
++        </div>
++        <footer class="post-foot">
++          <div class="post-tags" aria-label="Tags">${tags}</div>
++          <p><a class="btn secondary" href="${wa}" target="_blank" rel="noopener noreferrer">Compartilhar no WhatsApp</a> <a class="btn secondary" href="../blog.html">Voltar ao blog</a></p>
++        </footer>
++      </article>
++    </main>
++    ${fragment(FOOTER, 1)}
++    <script src="../assets/theme.js"></script>
++  </body>
++</html>
++`;
++}
++
++for (const p of posts) fs.writeFileSync(path.join(OUT_DIR, `${p.slug}.html`), postPage(p));
++
++const publico = posts.map(({ _html, ...rest }) => rest);
++fs.writeFileSync(path.join(OUT_DIR, "posts.json"), JSON.stringify(publico, null, 2) + "\n");
++
++const rss = `<?xml version="1.0" encoding="UTF-8"?>
++<rss version="2.0"><channel>
++<title>Blog Bio+Tech EduDesign</title><link>${SITE}/blog.html</link>
++<description>Ciência, tecnologia e design educacional.</description><language>pt-BR</language>
++${posts.slice(0, 20).map((p) => `<item><title>${esc(p.title)}</title><link>${SITE}/${p.url}</link><guid>${SITE}/${p.url}</guid><pubDate>${new Date(p.date + "T12:00:00Z").toUTCString()}</pubDate><description>${esc(p.summary)}</description></item>`).join("\n")}
++</channel></rss>
++`;
++fs.writeFileSync(path.join(OUT_DIR, "feed.xml"), rss);
++
++const tpl = fs.readFileSync(path.join(ROOT, "scripts", "blog.template.html"), "utf8");
++fs.writeFileSync(
++  path.join(ROOT, "blog.html"),
++  tpl.replace("<!--THEME-->", THEME_SCRIPT).replace("<!--HEADER-->", fragment(HEADER, 0)).replace("<!--FOOTER-->", fragment(FOOTER, 0)),
++);
++
++console.log(`✔ ${posts.length} publicação(ões) gerada(s) em blog/ e blog.html atualizado.`);
+-- 
+2.43.0
+
+
+From 3aff7134e07bb94c4abe89743b8167d2dcc7aeef Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Wed, 28 Oct 2026 20:57:22 +0000
+Subject: [PATCH 3/3] =?UTF-8?q?chore:=20remove=20arquivo=20de=20patch=20da?=
+ =?UTF-8?q?=20raiz=20do=20reposit=C3=B3rio?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ bio-tech-edu-v2.patch | 1106 -----------------------------------------
+ 1 file changed, 1106 deletions(-)
+ delete mode 100644 bio-tech-edu-v2.patch
+
+diff --git a/bio-tech-edu-v2.patch b/bio-tech-edu-v2.patch
+deleted file mode 100644
+index 30e4db9..0000000
+--- a/bio-tech-edu-v2.patch
++++ /dev/null
+@@ -1,1106 +0,0 @@
+-From 6023c97e107a11a05bad36719bcc7ff6a3292e39 Mon Sep 17 00:00:00 2001
+-From: Claude <noreply@anthropic.com>
+-Date: Fri, 23 Oct 2026 14:43:40 +0000
+-Subject: [PATCH] =?UTF-8?q?Design=20v2:=20restaura=20CSS=20completo,=20ace?=
+- =?UTF-8?q?ssibilidade,=20busca/contagem=20no=20cat=C3=A1logo=20e=20cards?=
+- =?UTF-8?q?=20enxutos?=
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+----
+- README.md         |   9 +-
+- assets/script.js  | 116 ++++----
+- assets/styles.css | 731 ++++++++++++++++++++++++++++++++++++++++++++++
+- index.html        |  63 ++--
+- 4 files changed, 830 insertions(+), 89 deletions(-)
+-
+-diff --git a/README.md b/README.md
+-index 9a33bd3..7fdf344 100644
+---- a/README.md
+-+++ b/README.md
+-@@ -4,4 +4,11 @@ Site estático que reúne os Objetos de Aprendizagem Digital (OAD), Recursos Edu
+- 
+- Este repositório publica o site em https://bio-tech-edu.github.io/
+- 
+--Conteúdo criado automaticamente via Copilot — inclui páginas, estilos e imagens placeholder (SVG). Substitua os SVGs por screenshots reais quando disponíveis.
+-+## Estrutura
+-+
+-+- `index.html` — página única (hero, tipos de recurso, catálogo com busca e filtros, metodologia, sobre).
+-+- `assets/styles.css` — tema escuro verde/aqua, com foco visível, `prefers-reduced-motion` e textos a partir de 12 px.
+-+- `assets/script.js` — lista `projects` e renderização do catálogo. Para cada recurso, o campo opcional `alt` define o texto alternativo da captura.
+-+- `assets/screenshots/` — capturas reais dos recursos.
+-+
+-+Versão inicial gerada via Copilot; revisada e redesenhada na v2 (wireframes + correções de acessibilidade).
+-diff --git a/assets/script.js b/assets/script.js
+-index 5798584..cbe8069 100644
+---- a/assets/script.js
+-+++ b/assets/script.js
+-@@ -84,102 +84,92 @@ const projects = [
+- 
+- const projectGrid = document.getElementById("project-grid");
+- const filterButtons = document.querySelectorAll(".filter");
+-+const searchInput = document.getElementById("search");
+-+let currentFilter = "all";
+- 
+- function renderSkillTags(skills, label, variant) {
+--  if (!Array.isArray(skills) || !skills.length) {
+--    return "";
+--  }
+--
+--  const tags = skills
+--    .map((skill) => `<span class="skill-chip ${variant}">${skill}</span>`)
+--    .join("");
+--
+--  return `
+--    <div class="skill-group">
+--      <span class="skill-label">${label}</span>
+--      <div class="skill-list">${tags}</div>
+--    </div>
+--  `;
+-+  if (!Array.isArray(skills) || !skills.length) return "";
+-+  const tags = skills.map((skill) => `<span class="skill-chip ${variant}">${skill}</span>`).join("");
+-+  return `<div class="skill-group"><span class="skill-label">${label}</span><div class="skill-list">${tags}</div></div>`;
+- }
+- 
+- function getActionButtons(project) {
+-   const buttons = [];
+--
+--  if (project.repo) {
+--    buttons.push(`<a class="link-btn primary" href="${project.repo}" target="_blank" rel="noreferrer">Repositório</a>`);
+--  }
+--
+-   if (project.link) {
+--    buttons.push(`<a class="link-btn secondary" href="${project.link}" target="_blank" rel="noreferrer">Acesso</a>`);
+--  }
+--
+--  if (!buttons.length) {
+-+    buttons.push(`<a class="link-btn primary" href="${project.link}" target="_blank" rel="noreferrer">Abrir recurso</a>`);
+-+    if (project.repo) buttons.push(`<a class="link-btn secondary" href="${project.repo}" target="_blank" rel="noreferrer">Código</a>`);
+-+  } else if (project.repo) {
+-+    buttons.push(`<a class="link-btn primary" href="${project.repo}" target="_blank" rel="noreferrer">Ver no GitHub</a>`);
+-+  } else {
+-     buttons.push('<span class="link-btn muted">Em breve</span>');
+-   }
+--
+-   return buttons.join("");
+- }
+- 
+--function renderProjects(filter = "all") {
+--  projectGrid.innerHTML = "";
+-+function matches(project, query) {
+-+  if (!query) return true;
+-+  const hay = [project.title, project.type, project.summary, project.description, ...(project.bncc || []), ...(project.bnccComputacao || [])]
+-+    .join(" ").toLowerCase();
+-+  return hay.includes(query);
+-+}
+-+
+-+function updateCounts(query) {
+-+  filterButtons.forEach((btn) => {
+-+    const f = btn.dataset.filter;
+-+    const n = projects.filter((p) => (f === "all" || p.type === f) && matches(p, query)).length;
+-+    btn.textContent = `${btn.dataset.label} (${n})`;
+-+  });
+-+}
+- 
+--  const filteredProjects = filter === "all"
+--    ? projects
+--    : projects.filter((project) => project.type === filter);
+-+function renderProjects() {
+-+  const query = (searchInput?.value || "").trim().toLowerCase();
+-+  updateCounts(query);
+-+  projectGrid.innerHTML = "";
+-+  const list = projects.filter((p) => (currentFilter === "all" || p.type === currentFilter) && matches(p, query));
+- 
+--  if (!filteredProjects.length) {
+--    projectGrid.innerHTML = `
+--      <div class="empty-state">
+--        <h3>Nenhum projeto encontrado</h3>
+--        <p>Experimente outro filtro para visualizar outros materiais educacionais.</p>
+--      </div>
+--    `;
+-+  if (!list.length) {
+-+    projectGrid.innerHTML = `<div class="empty-state"><h3>Nenhum recurso encontrado</h3><p>Tente outro termo ou outro tipo de recurso.</p></div>`;
+-     return;
+-   }
+- 
+--  filteredProjects.forEach((project) => {
+-+  list.forEach((project) => {
+-     const card = document.createElement("article");
+-     card.className = "project-card";
+-+    const alt = project.alt || `Captura de tela do recurso ${project.title}`;
+-     card.innerHTML = `
+--      <div class="project-thumb">
+--        <img src="${project.screenshot}" alt="${project.title} screenshot" />
+--      </div>
+-+      <div class="project-thumb"><img src="${project.screenshot}" alt="${alt}" loading="lazy" /></div>
+-       <div class="project-content">
+-         <span class="project-tag">${project.type}</span>
+-         <h3>${project.title}</h3>
+-         <p>${project.summary}</p>
+--        <p>${project.description}</p>
+--
+--        <div class="project-skills">
+--          ${renderSkillTags(project.bncc, "BNCC", "bncc")}
+--          ${renderSkillTags(project.bnccComputacao, "BNCC Computação", "computacao")}
+--        </div>
+--
+--        <div class="project-actions">
+--          ${getActionButtons(project)}
+--        </div>
+--      </div>
+--    `;
+-+        <details class="project-details">
+-+          <summary>Detalhes pedagógicos e BNCC</summary>
+-+          <p>${project.description}</p>
+-+          <div class="project-skills">
+-+            ${renderSkillTags(project.bncc, "BNCC", "bncc")}
+-+            ${renderSkillTags(project.bnccComputacao, "BNCC Computação", "computacao")}
+-+          </div>
+-+        </details>
+-+        <div class="project-actions">${getActionButtons(project)}</div>
+-+      </div>`;
+-     projectGrid.appendChild(card);
+-   });
+- }
+- 
+- filterButtons.forEach((button) => {
+-+  button.setAttribute("aria-pressed", String(button.classList.contains("active")));
+-   button.addEventListener("click", () => {
+--    const selectedFilter = button.dataset.filter;
+--
+-+    currentFilter = button.dataset.filter;
+-     filterButtons.forEach((btn) => {
+--      const isActive = btn === button;
+--      btn.classList.toggle("active", isActive);
+--      btn.setAttribute("aria-pressed", String(isActive));
+-+      const on = btn === button;
+-+      btn.classList.toggle("active", on);
+-+      btn.setAttribute("aria-pressed", String(on));
+-     });
+--
+--    renderProjects(selectedFilter);
+-+    renderProjects();
+-   });
+- });
+- 
+--filterButtons.forEach((button) => {
+--  button.setAttribute("aria-pressed", String(button.classList.contains("active")));
+--});
+--
+-+searchInput?.addEventListener("input", renderProjects);
+-+const metric = document.getElementById("metric-count");
+-+if (metric) metric.textContent = String(projects.length);
+- renderProjects();
+-diff --git a/assets/styles.css b/assets/styles.css
+-index d90130c..9e26494 100644
+---- a/assets/styles.css
+-+++ b/assets/styles.css
+-@@ -1,3 +1,713 @@
+-+:root {
+-+  --bg: #061810;
+-+  --bg-strong: #030d09;
+-+  --bg-alt: #0d1f1a;
+-+  --panel: rgba(12, 27, 23, 0.78);
+-+  --panel-alt: rgba(16, 35, 31, 0.96);
+-+  --card: rgba(15, 31, 28, 0.9);
+-+  --card-strong: rgba(18, 38, 34, 0.96);
+-+  --line: rgba(173, 229, 213, 0.15);
+-+  --line-strong: rgba(120, 220, 186, 0.28);
+-+  --text: #ecfff8;
+-+  --muted: #cfe9df;
+-+  --green: #49d9a0;
+-+  --green-soft: rgba(73, 217, 160, 0.14);
+-+  --aqua: #78dfff;
+-+  --aqua-soft: rgba(120, 223, 255, 0.12);
+-+  --cyan: #9de5ff;
+-+  --shadow: 0 28px 70px rgba(0, 0, 0, 0.38);
+-+  --shadow-soft: 0 18px 40px rgba(6, 20, 16, 0.35);
+-+  --radius: 22px;
+-+  --radius-sm: 14px;
+-+  --container: 1180px;
+-+}
+-+
+-+* {
+-+  box-sizing: border-box;
+-+}
+-+
+-+html {
+-+  scroll-behavior: smooth;
+-+}
+-+
+-+body {
+-+  margin: 0;
+-+  min-height: 100vh;
+-+  font-family: "Inter", sans-serif;
+-+  color: var(--text);
+-+  background:
+-+    radial-gradient(circle at 10% 10%, rgba(73, 217, 160, 0.12), transparent 18%),
+-+    radial-gradient(circle at 88% 12%, rgba(120, 223, 255, 0.12), transparent 22%),
+-+    linear-gradient(180deg, var(--bg) 0%, #0a1c18 100%);
+-+  position: relative;
+-+  overflow-x: hidden;
+-+}
+-+
+-+body::before {
+-+  content: "";
+-+  position: fixed;
+-+  inset: 0;
+-+  pointer-events: none;
+-+  background-image: linear-gradient(rgba(255,255,255,0.01) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.01) 1px, transparent 1px);
+-+  background-size: 22px 22px;
+-+  mask-image: radial-gradient(circle at center, black 28%, transparent 100%);
+-+}
+-+
+-+img {
+-+  display: block;
+-+  max-width: 100%;
+-+}
+-+
+-+button {
+-+  font: inherit;
+-+}
+-+
+-+a {
+-+  color: inherit;
+-+  text-decoration: none;
+-+}
+-+
+-+.container {
+-+  width: min(var(--container), calc(100% - 36px));
+-+  margin: 0 auto;
+-+}
+-+
+-+.bg-orb {
+-+  position: fixed;
+-+  border-radius: 50%;
+-+  filter: blur(80px);
+-+  opacity: 0.5;
+-+  pointer-events: none;
+-+  z-index: 0;
+-+}
+-+
+-+.orb-one {
+-+  width: 430px;
+-+  height: 430px;
+-+  background: rgba(73, 217, 160, 0.16);
+-+  top: 80px;
+-+  left: -120px;
+-+}
+-+
+-+.orb-two {
+-+  width: 540px;
+-+  height: 540px;
+-+  background: rgba(120, 223, 255, 0.12);
+-+  right: -150px;
+-+  top: 200px;
+-+}
+-+
+-+.site-header,
+-+main,
+-+.site-footer {
+-+  position: relative;
+-+  z-index: 1;
+-+}
+-+
+-+.site-header {
+-+  padding: 26px 0 14px;
+-+}
+-+
+-+.topbar {
+-+  display: flex;
+-+  align-items: center;
+-+  justify-content: space-between;
+-+  gap: 18px;
+-+  padding: 10px 0 18px;
+-+  border-bottom: 1px solid var(--line);
+-+}
+-+
+-+.brand {
+-+  display: inline-flex;
+-+  align-items: center;
+-+  gap: 14px;
+-+  transition: transform 0.2s ease;
+-+}
+-+
+-+.brand:hover {
+-+  transform: translateY(-1px);
+-+}
+-+
+-+.brand img {
+-+  width: 54px;
+-+  height: 54px;
+-+  border-radius: 16px;
+-+  box-shadow: 0 12px 24px rgba(120, 223, 255, 0.18);
+-+  border: 1px solid rgba(255,255,255,0.08);
+-+}
+-+
+-+.brand strong {
+-+  display: block;
+-+  font-size: 1.1rem;
+-+  letter-spacing: 0.02em;
+-+}
+-+
+-+.brand-kicker {
+-+  display: block;
+-+  font-size: 0.64rem;
+-+  letter-spacing: 0.15em;
+-+  text-transform: uppercase;
+-+  color: var(--green);
+-+  opacity: 0.9;
+-+}
+-+
+-+.nav {
+-+  display: flex;
+-+  align-items: center;
+-+  gap: 18px;
+-+  color: var(--muted);
+-+  font-size: 0.95rem;
+-+}
+-+
+-+.nav a {
+-+  transition: color 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+-+}
+-+
+-+.nav a:hover {
+-+  color: var(--text);
+-+  transform: translateY(-1px);
+-+}
+-+
+-+.nav-cta {
+-+  display: inline-flex;
+-+  align-items: center;
+-+  justify-content: center;
+-+  padding: 10px 15px;
+-+  border-radius: 999px;
+-+  border: 1px solid var(--line);
+-+  background: rgba(255,255,255,0.02);
+-+}
+-+
+-+.hero {
+-+  display: grid;
+-+  grid-template-columns: 1.2fr 0.8fr;
+-+  gap: 30px;
+-+  align-items: center;
+-+  padding: 54px 0 10px;
+-+}
+-+
+-+.badge {
+-+  display: inline-flex;
+-+  align-items: center;
+-+  padding: 8px 12px;
+-+  border-radius: 999px;
+-+  background: rgba(73, 217, 160, 0.1);
+-+  border: 1px solid rgba(73, 217, 160, 0.28);
+-+  color: var(--green);
+-+  font-size: 0.72rem;
+-+  letter-spacing: 0.14em;
+-+  text-transform: uppercase;
+-+  font-weight: 700;
+-+}
+-+
+-+.hero-copy h1 {
+-+  margin: 20px 0 16px;
+-+  font-size: clamp(2.8rem, 4.9vw, 4.8rem);
+-+  line-height: 0.98;
+-+  letter-spacing: -0.065em;
+-+  max-width: 720px;
+-+  text-wrap: balance;
+-+}
+-+
+-+.hero-copy p {
+-+  max-width: 640px;
+-+  font-size: 1.05rem;
+-+  line-height: 1.8;
+-+  color: var(--muted);
+-+}
+-+
+-+.cta-row {
+-+  display: flex;
+-+  flex-wrap: wrap;
+-+  gap: 14px;
+-+  margin-top: 30px;
+-+}
+-+
+-+.btn {
+-+  display: inline-flex;
+-+  align-items: center;
+-+  justify-content: center;
+-+  min-height: 52px;
+-+  padding: 0 22px;
+-+  border: 1px solid var(--line);
+-+  border-radius: 14px;
+-+  font-weight: 700;
+-+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+-+}
+-+
+-+.btn:hover {
+-+  transform: translateY(-2px);
+-+}
+-+
+-+.btn.primary {
+-+  background: linear-gradient(135deg, var(--green), var(--aqua));
+-+  color: #061b16;
+-+  box-shadow: 0 18px 34px rgba(73, 217, 160, 0.2);
+-+}
+-+
+-+.btn.secondary {
+-+  background: rgba(255,255,255,0.02);
+-+  color: var(--text);
+-+}
+-+
+-+.hero-metrics {
+-+  list-style: none;
+-+  padding: 0;
+-+  margin: 32px 0 0;
+-+  display: grid;
+-+  grid-template-columns: repeat(3, minmax(120px, 1fr));
+-+  gap: 16px;
+-+  max-width: 560px;
+-+}
+-+
+-+.hero-metrics li {
+-+  background: rgba(255, 255, 255, 0.02);
+-+  border: 1px solid var(--line);
+-+  border-radius: 18px;
+-+  padding: 18px 14px;
+-+  box-shadow: var(--shadow-soft);
+-+  transition: transform 0.2s ease, border-color 0.2s ease;
+-+}
+-+
+-+.hero-metrics li:hover {
+-+  transform: translateY(-2px);
+-+  border-color: rgba(120, 223, 255, 0.28);
+-+}
+-+
+-+.hero-metrics strong {
+-+  display: block;
+-+  font-size: 1.25rem;
+-+  margin-bottom: 8px;
+-+}
+-+
+-+.hero-metrics span {
+-+  color: var(--muted);
+-+  font-size: 0.78rem;
+-+}
+-+
+-+.hero-panel {
+-+  position: relative;
+-+  min-height: 420px;
+-+  padding: 18px;
+-+  border-radius: calc(var(--radius) + 12px);
+-+  background: linear-gradient(180deg, rgba(12, 24, 21, 0.97), rgba(7, 17, 15, 0.94));
+-+  border: 1px solid var(--line);
+-+  box-shadow: var(--shadow);
+-+  overflow: hidden;
+-+}
+-+
+-+.panel-glow {
+-+  position: absolute;
+-+  inset: 0;
+-+  background:
+-+    radial-gradient(circle at top right, rgba(120, 223, 255, 0.18), transparent 28%),
+-+    radial-gradient(circle at bottom left, rgba(73, 217, 160, 0.17), transparent 34%);
+-+}
+-+
+-+.panel-card {
+-+  position: relative;
+-+  z-index: 1;
+-+  background: rgba(9, 20, 17, 0.75);
+-+  border: 1px solid var(--line);
+-+  border-radius: var(--radius);
+-+  padding: 26px 22px;
+-+  margin-top: 18px;
+-+}
+-+
+-+.panel-label {
+-+  display: inline-flex;
+-+  padding: 8px 10px;
+-+  border-radius: 999px;
+-+  background: rgba(120,223,255,0.08);
+-+  border: 1px solid rgba(120,223,255,0.18);
+-+  color: var(--aqua);
+-+  font-size: 0.68rem;
+-+  letter-spacing: 0.12em;
+-+  text-transform: uppercase;
+-+  font-weight: 700;
+-+}
+-+
+-+.panel-card h2 {
+-+  margin: 18px 0 10px;
+-+  line-height: 1.1;
+-+  font-size: clamp(1.8rem, 3vw, 2.5rem);
+-+}
+-+
+-+.panel-card p {
+-+  margin: 0;
+-+  color: var(--muted);
+-+  line-height: 1.8;
+-+}
+-+
+-+.mini-grid {
+-+  position: relative;
+-+  z-index: 1;
+-+  margin-top: 20px;
+-+  display: grid;
+-+  grid-template-columns: repeat(2, minmax(0, 1fr));
+-+  gap: 14px;
+-+}
+-+
+-+.mini-grid div {
+-+  background: rgba(255,255,255,0.02);
+-+  border: 1px solid var(--line);
+-+  border-radius: 16px;
+-+  padding: 18px 16px;
+-+  transition: transform 0.2s ease, border-color 0.2s ease;
+-+}
+-+
+-+.mini-grid div:hover {
+-+  transform: translateY(-2px);
+-+  border-color: rgba(73, 217, 160, 0.24);
+-+}
+-+
+-+.mini-grid strong {
+-+  display: block;
+-+  font-size: 1rem;
+-+  margin-bottom: 6px;
+-+}
+-+
+-+.mini-grid span {
+-+  color: var(--muted);
+-+  font-size: 0.8rem;
+-+}
+-+
+-+.section {
+-+  padding: 100px 0;
+-+}
+-+
+-+.section-head {
+-+  margin-bottom: 28px;
+-+}
+-+
+-+.section-head.center {
+-+  text-align: center;
+-+}
+-+
+-+.eyebrow {
+-+  display: inline-block;
+-+  font-size: 0.72rem;
+-+  letter-spacing: 0.14em;
+-+  text-transform: uppercase;
+-+  color: var(--green);
+-+  font-weight: 700;
+-+  margin-bottom: 16px;
+-+}
+-+
+-+.section-head h2,
+-+.section-head h3 {
+-+  margin: 0;
+-+  font-size: clamp(2rem, 4vw, 3.1rem);
+-+  letter-spacing: -0.05em;
+-+  line-height: 1.1;
+-+  max-width: 760px;
+-+}
+-+
+-+.about-grid {
+-+  display: grid;
+-+  grid-template-columns: repeat(3, minmax(0, 1fr));
+-+  gap: 22px;
+-+}
+-+
+-+.info-card {
+-+  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+-+  border: 1px solid var(--line);
+-+  border-radius: var(--radius);
+-+  padding: 22px 20px;
+-+  box-shadow: var(--shadow-soft);
+-+  transition: transform 0.2s ease, border-color 0.2s ease;
+-+}
+-+
+-+.info-card:hover {
+-+  transform: translateY(-4px);
+-+  border-color: rgba(73, 217, 160, 0.25);
+-+}
+-+
+-+.card-icon {
+-+  display: inline-flex;
+-+  align-items: center;
+-+  justify-content: center;
+-+  width: 44px;
+-+  height: 44px;
+-+  border-radius: 12px;
+-+  background: linear-gradient(135deg, var(--green-soft), var(--aqua-soft));
+-+  border: 1px solid rgba(255,255,255,0.06);
+-+  color: var(--green);
+-+  font-weight: 700;
+-+}
+-+
+-+.info-card h3 {
+-+  margin: 18px 0 12px;
+-+  font-size: 1.3rem;
+-+}
+-+
+-+.info-card p {
+-+  margin: 0;
+-+  color: var(--muted);
+-+  line-height: 1.8;
+-+}
+-+
+-+.filters {
+-+  display: flex;
+-+  flex-wrap: wrap;
+-+  gap: 10px;
+-+  margin: 28px 0 24px;
+-+}
+-+
+-+.filter {
+-+  padding: 10px 18px;
+-+  border-radius: 999px;
+-+  border: 1px solid var(--line);
+-+  background: rgba(255,255,255,0.02);
+-+  color: var(--muted);
+-+  cursor: pointer;
+-+  transition: 0.2s ease;
+-+}
+-+
+-+.filter.active,
+-+.filter:hover {
+-+  background: linear-gradient(135deg, rgba(73,217,160,0.12), rgba(120,223,255,0.08));
+-+  border-color: rgba(73,217,160,0.28);
+-+  color: var(--text);
+-+}
+-+
+-+.project-grid {
+-+  display: grid;
+-+  grid-template-columns: repeat(3, minmax(0, 1fr));
+-+  gap: 22px;
+-+}
+-+
+-+.project-card {
+-+  display: flex;
+-+  flex-direction: column;
+-+  min-height: 100%;
+-+  border-radius: var(--radius);
+-+  overflow: hidden;
+-+  background: linear-gradient(180deg, rgba(20, 35, 32, 0.96), rgba(11, 24, 22, 0.96));
+-+  border: 1px solid var(--line);
+-+  box-shadow: var(--shadow-soft);
+-+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+-+}
+-+
+-+.project-card:hover {
+-+  transform: translateY(-5px);
+-+  border-color: rgba(73,217,160,0.28);
+-+  box-shadow: 0 28px 54px rgba(0, 0, 0, 0.26);
+-+}
+-+
+-+.project-thumb {
+-+  position: relative;
+-+  aspect-ratio: 16 / 10;
+-+  background: linear-gradient(135deg, rgba(73, 217, 160, 0.14), rgba(120, 223, 255, 0.1), rgba(8, 20, 18, 1));
+-+  border-bottom: 1px solid var(--line);
+-+}
+-+
+-+.project-thumb::after {
+-+  content: "";
+-+  position: absolute;
+-+  inset: 0;
+-+  background: linear-gradient(180deg, rgba(6, 24, 16, 0) 0%, rgba(6, 24, 16, 0.28) 100%);
+-+}
+-+
+-+.project-thumb img {
+-+  width: 100%;
+-+  height: 100%;
+-+  object-fit: cover;
+-+}
+-+
+-+.project-content {
+-+  display: flex;
+-+  flex: 1;
+-+  flex-direction: column;
+-+  gap: 12px;
+-+  padding: 20px 18px 18px;
+-+}
+-+
+-+.project-tag {
+-+  display: inline-flex;
+-+  align-self: flex-start;
+-+  padding: 7px 10px;
+-+  border-radius: 999px;
+-+  background: rgba(120,223,255,0.08);
+-+  border: 1px solid rgba(120,223,255,0.18);
+-+  color: var(--aqua);
+-+  font-size: 0.7rem;
+-+  text-transform: uppercase;
+-+  letter-spacing: 0.12em;
+-+  font-weight: 700;
+-+}
+-+
+-+.project-content h3 {
+-+  margin: 0;
+-+  font-size: 1.32rem;
+-+}
+-+
+-+.project-content p {
+-+  margin: 0;
+-+  color: var(--muted);
+-+  line-height: 1.7;
+-+}
+-+
+-+.project-actions {
+-+  margin-top: auto;
+-+  display: flex;
+-+  gap: 10px;
+-+  flex-wrap: wrap;
+-+  padding-top: 10px;
+-+}
+-+
+-+.link-btn {
+-+  display: inline-flex;
+-+  align-items: center;
+-+  justify-content: center;
+-+  min-height: 40px;
+-+  padding: 0 14px;
+-+  border-radius: 10px;
+-+  border: 1px solid var(--line);
+-+  font-size: 0.87rem;
+-+  font-weight: 600;
+-+  transition: transform 0.2s ease, border-color 0.2s ease;
+-+}
+-+
+-+.link-btn.primary {
+-+  background: linear-gradient(135deg, rgba(73,217,160,0.16), rgba(120,223,255,0.08));
+-+  border-color: rgba(73,217,160,0.24);
+-+}
+-+
+-+.link-btn.secondary {
+-+  background: rgba(255,255,255,0.02);
+-+}
+-+
+-+.link-btn.muted {
+-+  background: rgba(255,255,255,0.02);
+-+  color: var(--muted);
+-+  cursor: default;
+-+}
+-+
+-+.link-btn:hover {
+-+  transform: translateY(-1px);
+-+}
+-+
+-+.empty-state {
+-+  grid-column: 1 / -1;
+-+  padding: 36px 24px;
+-+  text-align: center;
+-+  border: 1px dashed rgba(173, 229, 213, 0.22);
+-+  border-radius: var(--radius);
+-+  background: rgba(255,255,255,0.02);
+-+}
+-+
+-+.empty-state h3 {
+-+  margin: 0 0 10px;
+-+  font-size: 1.5rem;
+-+}
+-+
+-+.empty-state p {
+-+  margin: 0;
+-+  color: var(--muted);
+-+}
+-+
+-+.method-grid {
+-+  display: grid;
+-+  grid-template-columns: repeat(4, minmax(0, 1fr));
+-+  gap: 18px;
+-+}
+-+
+-+.method-item {
+-+  background: linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.01));
+-+  border-radius: var(--radius);
+-+  border: 1px solid var(--line);
+-+  padding: 22px 18px;
+-+  box-shadow: var(--shadow-soft);
+-+  transition: transform 0.2s ease, border-color 0.2s ease;
+-+}
+-+
+-+.method-item:hover {
+-+  transform: translateY(-2px);
+-+  border-color: rgba(73, 217, 160, 0.22);
+-+}
+-+
+-+.method-item span {
+-+  display: inline-flex;
+-+  align-items: center;
+-+  justify-content: center;
+-+  width: 42px;
+-+  height: 42px;
+-+  border-radius: 12px;
+-+  background: rgba(73,217,160,0.12);
+-+  border: 1px solid rgba(73,217,160,0.18);
+-+  color: var(--green);
+-+  font-weight: 800;
+-+  margin-bottom: 16px;
+-+}
+-+
+-+.method-item h3 {
+-+  margin: 0 0 10px;
+-+  font-size: 1.15rem;
+-+}
+-+
+-+.method-item p {
+-+  margin: 0;
+-+  color: var(--muted);
+-+  line-height: 1.8;
+-+}
+-+
+-+.site-footer {
+-+  border-top: 1px solid var(--line);
+-+  background: rgba(3, 13, 11, 0.88);
+-+}
+-+
+-+.footer-inner {
+-+  display: flex;
+-+  align-items: center;
+-+  justify-content: space-between;
+-+  gap: 18px;
+-+  min-height: 78px;
+-+  color: var(--muted);
+-+}
+-+
+-+@media (max-width: 980px) {
+-+  .hero,
+-+  .about-grid,
+-+  .project-grid,
+-+  .method-grid {
+-+    grid-template-columns: 1fr 1fr;
+-+  }
+-+
+-+  .hero {
+-+    grid-template-columns: 1fr;
+-+  }
+-+}
+-+
+-+@media (max-width: 720px) {
+-+  .topbar {
+-+    flex-direction: column;
+-+    align-items: flex-start;
+-+  }
+-+
+-+  .nav {
+-+    flex-wrap: wrap;
+-+  }
+-+
+-+  .about-grid,
+-+  .project-grid,
+-+  .method-grid {
+-+    grid-template-columns: 1fr;
+-+  }
+-+
+-+  .hero-metrics {
+-+    grid-template-columns: 1fr;
+-+  }
+-+
+-+  .footer-inner {
+-+    flex-direction: column;
+-+    justify-content: center;
+-+    text-align: center;
+-+    padding: 18px 0;
+-+  }
+-+}
+-+
+-+/* --- chips de competências (versão atual) --- */
+- .project-skills {
+-   display: grid;
+-   gap: 10px;
+-@@ -76,3 +786,24 @@
+-     padding: 4px 7px;
+-   }
+- }
+-+
+-+/* --- v2: acessibilidade e novos componentes --- */
+-+.skip-link{position:absolute;left:12px;top:-60px;z-index:100;padding:12px 18px;border-radius:10px;background:var(--green);color:#03150e;font-weight:700;text-decoration:none}
+-+.skip-link:focus{top:12px}
+-+a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--aqua);outline-offset:3px}
+-+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+-+.gh-link{display:inline-flex;align-items:center;gap:8px;min-height:44px}
+-+.gh-link svg{width:24px;height:24px;fill:currentColor}
+-+.hero-img{width:100%;height:auto;border-radius:var(--radius-sm);margin-bottom:16px}
+-+.types{padding-top:0}
+-+.toolbar{display:grid;gap:6px;max-width:420px;margin:0 0 16px}
+-+.toolbar label{font-size:.85rem;font-weight:600;color:var(--muted)}
+-+.toolbar input{min-height:44px;padding:0 14px;border-radius:var(--radius-sm);border:1px solid var(--line-strong);background:var(--card);color:var(--text);font:inherit}
+-+.filter{min-height:44px}
+-+.project-details{margin-top:4px}
+-+.project-details summary{cursor:pointer;min-height:44px;display:flex;align-items:center;font-weight:600;color:var(--cyan)}
+-+.project-details p{margin:8px 0}
+-+.skill-label{font-size:.75rem}
+-+.skill-chip{font-size:.75rem;min-height:28px;padding:5px 9px}
+-+.project-tag{font-size:.75rem}
+-+.link-btn{min-height:44px;display:inline-flex;align-items:center}
+-diff --git a/index.html b/index.html
+-index a03dc08..890ac50 100644
+---- a/index.html
+-+++ b/index.html
+-@@ -3,26 +3,26 @@
+-   <head>
+-     <meta charset="UTF-8" />
+-     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+--    <title>Bio+Tech EduDesign | Educação digital aplicada à ciência e tecnologia</title>
+-+    <title>Bio+Tech EduDesign | Recursos educacionais abertos em ciência e tecnologia</title>
+-     <link rel="icon" type="image/png" href="assets/favicon.png" />
+-     <meta
+-       name="description"
+-       content="Bio+Tech EduDesign cria recursos educacionais digitais, objetos de aprendizagem e materiais abertos para ciência, tecnologia e educação."
+-     />
+--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+-     <link rel="preconnect" href="https://fonts.googleapis.com" />
+-     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+-     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+-     <link rel="stylesheet" href="assets/styles.css" />
+-   </head>
+-   <body>
+-+    <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+-     <div class="bg-orb orb-one"></div>
+-     <div class="bg-orb orb-two"></div>
+- 
+-     <header class="site-header">
+-       <div class="container topbar">
+--        <a class="brand" href="#top" aria-label="Bio-Tech-Edu home">
+--          <img src="assets/favicon.png" alt="Bio-Tech-Edu" />
+-+        <a class="brand" href="#top" aria-label="Bio+Tech EduDesign — início">
+-+          <img src="assets/favicon.png" alt="" width="44" height="44" />
+-           <div>
+-             <span class="brand-kicker">Marca</span>
+-             <strong>Bio+Tech EduDesign</strong>
+-@@ -31,28 +31,29 @@
+- 
+-         <nav class="nav" aria-label="Navegação principal">
+-           <a href="#sobre">Sobre</a>
+--          <a href="#projetos">Projetos</a>
+-+          <a href="#projetos">Catálogo</a>
+-+          <a href="#tipos">Tipos de recurso</a>
+-           <a href="#metodologia">Metodologia</a>
+--          <a href="https://github.com/Bio-Tech-Edu" target="_blank" rel="noreferrer" class="nav-cta" aria-label="GitHub da Bio-Tech-Edu"><i class="fa fa-github" style="font-size:24px"></i></a>
+-+          <a href="https://github.com/Bio-Tech-Edu" target="_blank" rel="noreferrer" class="nav-cta gh-link"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg><span>GitHub</span></a>
+-         </nav>
+-       </div>
+- 
+-       <div class="container hero" id="top">
+-         <div class="hero-copy">
+--          <span class="badge">OAD • REA • RED</span>
+--          <h1>Educação digital aplicada à ciência, tecnologia e inovação.</h1>
+-+          <span class="badge">Recursos educacionais abertos</span>
+-+          <h1>Ciência e tecnologia para aprender fazendo.</h1>
+-           <p>
+-             Bio+Tech EduDesign reúne design educacional, rigor científico e tecnologia para criar materiais
+-             digitais acessíveis, pedagógicos e inspiradores em educação em ciências, biotecnologia e aprendizagem aberta.
+-           </p>
+- 
+-           <div class="cta-row">
+--            <a class="btn primary" href="#projetos">Ver catálogo</a>
+--            <a class="btn secondary" href="https://github.com/Bio-Tech-Edu" target="_blank" rel="noreferrer">Comunidade GitHub</a>
+-+            <a class="btn primary" href="#projetos">Explorar catálogo</a>
+-+            <a class="btn secondary" href="#metodologia">Usar em sala de aula</a>
+-           </div>
+- 
+-           <ul class="hero-metrics" aria-label="Indicadores da marca">
+--            <li><strong>12+</strong><span>repositórios</span></li>
+-+            <li><strong id="metric-count">8</strong><span>recursos no catálogo</span></li>
+-             <li><strong>OAD</strong><span>aprendizagem digital</span></li>
+-             <li><strong>REA</strong><span>recursos abertos</span></li>
+-           </ul>
+-@@ -60,6 +61,7 @@
+- 
+-         <div class="hero-panel" aria-label="Resumo institucional">
+-           <div class="panel-glow"></div>
+-+          <img class="hero-img" src="assets/hero.png" width="1667" height="584" alt="Livros, caderno aberto, DNA e notebook com ícones de dados, representando biologia, educação e tecnologia." />
+-           <div class="panel-card">
+-             <span class="panel-label">Marca</span>
+-             <h2>Design para aprender com clareza e impacto.</h2>
+-@@ -87,12 +89,12 @@
+-       </div>
+-     </header>
+- 
+--    <main>
+-+    <main id="conteudo">
+-       <section id="sobre" class="section intro">
+-         <div class="container">
+-           <div class="section-head center">
+-             <span class="eyebrow">Sobre</span>
+--            <h3>A marca Bio+Tech EduDesign nasce na interseção entre biologia, computação, educação digital, ciência de dados e biotecnologia.</h3>
+-+            <h2>A marca Bio+Tech EduDesign nasce na interseção entre biologia, computação, educação digital, ciência de dados e biotecnologia.</h2>
+-           </div>
+- 
+-           <div class="about-grid">
+-@@ -129,6 +131,18 @@
+-         </div>
+-       </section>
+- 
+-+      <section id="tipos" class="section types">
+-+        <div class="container">
+-+          <div class="section-head"><span class="eyebrow">Glossário</span><h2>Tipos de recurso</h2></div>
+-+
+-+          <div class="catalog-intro">
+-+            <p><strong>RED</strong> — Recurso Educacional Digital, material de ensino em formato eletrônico.</p>
+-+            <p><strong>REA</strong> — Recurso Educacional Aberto, conteúdo pedagógico com licença livre ou domínio público.</p>
+-+            <p><strong>OAD</strong> — Objeto de Aprendizagem Digital, unidade menor, interativa e reutilizável.</p>
+-+          </div>
+-+        </div>
+-+      </section>
+-+
+-       <section id="projetos" class="section portfolio">
+-         <div class="container">
+-           <div class="section-head">
+-@@ -136,17 +150,16 @@
+-             <h2>Produtos educacionais selecionados</h2>
+-           </div>
+- 
+--          <div class="catalog-intro">
+--            <p><strong>RED</strong> — Recurso Educacional Digital, material de ensino em formato eletrônico.</p>
+--            <p><strong>REA</strong> — Recurso Educacional Aberto, conteúdo pedagógico com licença livre ou domínio público.</p>
+--            <p><strong>OAD</strong> — Objeto de Aprendizagem Digital, unidade menor, interativa e reutilizável.</p>
+-+          <div class="toolbar">
+-+            <label for="search">Buscar por tema ou habilidade</label>
+-+            <input id="search" type="search" placeholder="Ex.: equilíbrio, EM13CN01" autocomplete="off" />
+-           </div>
+- 
+--          <div class="filters" aria-label="Filtros de projetos">
+--            <button class="filter active" data-filter="all">Todos</button>
+--            <button class="filter" data-filter="OAD">OAD</button>
+--            <button class="filter" data-filter="REA">REA</button>
+--            <button class="filter" data-filter="RED">RED</button>
+-+          <div class="filters" role="group" aria-label="Filtrar por tipo de recurso">
+-+            <button class="filter active" data-filter="all" data-label="Todos">Todos</button>
+-+            <button class="filter" data-filter="OAD" data-label="OAD">OAD</button>
+-+            <button class="filter" data-filter="REA" data-label="REA">REA</button>
+-+            <button class="filter" data-filter="RED" data-label="RED">RED</button>
+-           </div>
+- 
+-           <div id="project-grid" class="project-grid" aria-live="polite"></div>
+-@@ -157,7 +170,7 @@
+-         <div class="container">
+-           <div class="section-head center">
+-             <span class="eyebrow">Metodologia</span>
+--            <h3>Fundamentos do design educacional</h3>
+-+            <h2>Fundamentos do design educacional</h2>
+-           </div>
+- 
+-           <div class="method-grid">
+-@@ -191,14 +204,14 @@
+- 
+-     <footer class="site-footer">
+-       <div class="container footer-inner">
+--        <p>© 2026 <strong>Pâmella Araújo Balcaçar | Bio + Tech EduDesign</strong>.</p>
+-+        <p>© 2026 <strong>Pâmella Araújo Balcaçar | Bio+Tech EduDesign</strong>.</p>
+-         <p>
+-           O conteúdo deste site é distribuído sob a licença
+-           <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.pt" target="_blank" rel="noopener">CC BY-SA 4.0</a>.<br />
+-           O código-fonte está disponível sob a licença
+-           <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener">MIT</a>.
+-         </p>
+--        <a href="https://github.com/Bio-Tech-Edu" target="_blank" rel="noreferrer" aria-label="GitHub da Bio-Tech-Edu"><i class="fa fa-github" style="font-size:48px"></i></a>
+-+        <a class="gh-link" href="https://github.com/Bio-Tech-Edu" target="_blank" rel="noreferrer"><svg style="width:40px;height:40px" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg><span>GitHub da Bio-Tech-Edu</span></a>
+-       </div>
+-     </footer>
+- 
+--- 
+-2.43.0
+-
+-- 
+2.43.0
+

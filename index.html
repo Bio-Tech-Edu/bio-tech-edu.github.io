@@ -4,10 +4,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Bio+Tech EduDesign | Recursos educacionais abertos em ciência e tecnologia</title>
+    <script>try{var t=localStorage.getItem("theme");if(!t)t=matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";document.documentElement.setAttribute("data-theme",t)}catch(e){document.documentElement.setAttribute("data-theme","dark")}</script>
+    <meta name="theme-color" content="#071b30" />
+    <link rel="alternate" type="application/rss+xml" title="Blog Bio+Tech EduDesign" href="blog/feed.xml" />
     <link rel="icon" type="image/png" href="assets/favicon.png" />
     <meta
       name="description"
-      content="Bio+Tech EduDesign cria recursos educacionais digitais, objetos de aprendizagem e materiais abertos para ciência, tecnologia e educação."
+      content="Recursos educacionais abertos em ciência e tecnologia para professores, estudantes universitários e estagiários. Alinhados à BNCC, com código aberto."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -30,10 +33,13 @@
         </a>
 
         <nav class="nav" aria-label="Navegação principal">
-          <a href="#sobre">Sobre</a>
+          <a href="#publico">Para quem é</a>
           <a href="#projetos">Catálogo</a>
           <a href="#tipos">Tipos de recurso</a>
           <a href="#metodologia">Metodologia</a>
+          <a href="blog.html">Blog</a>
+          <a href="#sobre">Sobre</a>
+          <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Alternar entre tema claro e escuro">Tema claro</button>
           <a href="https://github.com/Bio-Tech-Edu" target="_blank" rel="noreferrer" class="nav-cta gh-link"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg><span>GitHub</span></a>
         </nav>
       </div>
@@ -43,13 +49,13 @@
           <span class="badge">Recursos educacionais abertos</span>
           <h1>Ciência e tecnologia para aprender fazendo.</h1>
           <p>
-            Bio+Tech EduDesign reúne design educacional, rigor científico e tecnologia para criar materiais
-            digitais acessíveis, pedagógicos e inspiradores em educação em ciências, biotecnologia e aprendizagem aberta.
+            Recursos digitais abertos, alinhados à BNCC, para professores planejarem aulas, estudantes universitários
+            aprofundarem conteúdos e estagiários aprenderem na prática como se constrói material educacional de qualidade.
           </p>
 
           <div class="cta-row">
             <a class="btn primary" href="#projetos">Explorar catálogo</a>
-            <a class="btn secondary" href="#metodologia">Usar em sala de aula</a>
+            <a class="btn secondary" href="#publico">Para quem é</a>
           </div>
 
           <ul class="hero-metrics" aria-label="Indicadores da marca">
@@ -90,43 +96,13 @@
     </header>
 
     <main id="conteudo">
-      <section id="sobre" class="section intro">
+      <section id="publico" class="section audience">
         <div class="container">
-          <div class="section-head center">
-            <span class="eyebrow">Sobre</span>
-            <h2>A marca Bio+Tech EduDesign nasce na interseção entre biologia, computação, educação digital, ciência de dados e biotecnologia.</h2>
-          </div>
-
-          <div class="about-grid">
-            <article class="info-card">
-              <span class="card-icon">01</span>
-              <h3>Missão</h3>
-              <p>Transformar temas complexos da ciência e da tecnologia em recursos visuais, pedagógicos e acessíveis, com rigor acadêmico e linguagem clara.</p>
-            </article>
-
-            <article class="info-card">
-              <span class="card-icon">02</span>
-              <h3>Visão</h3>
-              <p>Construir um ecossistema de aprendizagem colaborativa e aberta, com experiência digital inspiradora para estudantes, professores e criadores de conteúdo.</p>
-            </article>
-
-            <article class="info-card">
-              <span class="card-icon">03</span>
-              <h3>Valores</h3>
-              <p>Acessibilidade digital, inclusão, rigor científico, inovação tecnológica, empatia docente e cultura aberta.</p>
-            </article>
-
-            <article class="info-card">
-              <span class="card-icon">04</span>
-              <h3>Origem</h3>
-              <p>O movimento começou com pesquisas, tutoriais, atividades em ciência de dados e projetos acadêmicos que evoluíram para recursos digitais aplicados à educação.</p>
-            </article>
-
-            <article class="info-card">
-              <span class="card-icon">05</span>
-              <h3>Futuro</h3>
-              <p>Consolidar uma biblioteca de materiais digitais e abertos que ampliem o acesso ao conhecimento em biologia, dados, tecnologia e educação.</p>
-            </article>
+          <div class="section-head center"><span class="eyebrow">Para quem é</span><h2>Um recurso, três jeitos de usar</h2></div>
+          <div class="audience-grid">
+            <article class="audience-card"><h3>Professores</h3><p>Planeje aulas com recursos prontos, organizados por habilidades da BNCC e BNCC Computação.</p><a href="#projetos">Ver recursos por habilidade</a></article>
+            <article class="audience-card"><h3>Estudantes universitários</h3><p>Revise conceitos, explore simulações e estude o código aberto como referência para trabalhos e projetos.</p><a href="#projetos">Explorar o catálogo</a></article>
+            <article class="audience-card"><h3>Estagiários</h3><p>Conheça a estrutura dos recursos, a metodologia de design educacional e o código no GitHub.</p><a href="#metodologia">Ver a metodologia</a></article>
           </div>
         </div>
       </section>
@@ -200,6 +176,46 @@
           </div>
         </div>
       </section>
+      <section id="sobre" class="section intro">
+        <div class="container">
+          <div class="section-head center">
+            <span class="eyebrow">Sobre</span>
+            <h2>A marca Bio+Tech EduDesign nasce na interseção entre biologia, computação, educação digital, ciência de dados e biotecnologia.</h2>
+          </div>
+
+          <div class="about-grid">
+            <article class="info-card">
+              <span class="card-icon">01</span>
+              <h3>Missão</h3>
+              <p>Transformar temas complexos da ciência e da tecnologia em recursos visuais, pedagógicos e acessíveis, com rigor acadêmico e linguagem clara.</p>
+            </article>
+
+            <article class="info-card">
+              <span class="card-icon">02</span>
+              <h3>Visão</h3>
+              <p>Construir um ecossistema de aprendizagem colaborativa e aberta, com experiência digital inspiradora para estudantes, professores e criadores de conteúdo.</p>
+            </article>
+
+            <article class="info-card">
+              <span class="card-icon">03</span>
+              <h3>Valores</h3>
+              <p>Acessibilidade digital, inclusão, rigor científico, inovação tecnológica, empatia docente e cultura aberta.</p>
+            </article>
+
+            <article class="info-card">
+              <span class="card-icon">04</span>
+              <h3>Origem</h3>
+              <p>O movimento começou com pesquisas, tutoriais, atividades em ciência de dados e projetos acadêmicos que evoluíram para recursos digitais aplicados à educação.</p>
+            </article>
+
+            <article class="info-card">
+              <span class="card-icon">05</span>
+              <h3>Futuro</h3>
+              <p>Consolidar uma biblioteca de materiais digitais e abertos que ampliem o acesso ao conhecimento em biologia, dados, tecnologia e educação.</p>
+            </article>
+          </div>
+        </div>
+      </section>
     </main>
 
     <footer class="site-footer">
@@ -211,10 +227,11 @@
           O código-fonte está disponível sob a licença
           <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener">MIT</a>.
         </p>
-        <a class="gh-link" href="https://github.com/Bio-Tech-Edu" target="_blank" rel="noreferrer"><svg style="width:40px;height:40px" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg><span>GitHub da Bio-Tech-Edu</span></a>
+        <a class="gh-link" href="https://github.com/Bio-Tech-Edu" target="_blank" rel="noreferrer"><svg style="width:40px;height:40px" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg><span>GitHub</span></a>
       </div>
     </footer>
 
+    <script src="assets/theme.js"></script>
     <script src="assets/script.js"></script>
   </body>
 </html>

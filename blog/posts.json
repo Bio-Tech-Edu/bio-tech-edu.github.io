@@ -1,0 +1,60 @@
+[
+  {
+    "slug": "planejar-aula-com-recursos-digitais-abertos",
+    "title": "Como planejar uma aula com recursos digitais abertos",
+    "date": "2026-10-20",
+    "summary": "Um roteiro simples para escolher, testar e aplicar OAD, REA e RED alinhados a uma habilidade da BNCC.",
+    "area": "Educação digital",
+    "atuacao": "Docência",
+    "tags": [
+      "BNCC",
+      "REA",
+      "OAD",
+      "planejamento"
+    ],
+    "destaque": 2,
+    "cover": "",
+    "coverAlt": "",
+    "autoria": "Pâmella Araújo Balcaçar",
+    "readingTime": 1,
+    "url": "blog/planejar-aula-com-recursos-digitais-abertos.html"
+  },
+  {
+    "slug": "acessibilidade-digital-checklist-minimo",
+    "title": "Acessibilidade digital em materiais educacionais: checklist mínimo",
+    "date": "2026-10-12",
+    "summary": "Sete verificações rápidas para que um material digital seja utilizável por mais pessoas, antes mesmo de qualquer ferramenta automática.",
+    "area": "Educação digital",
+    "atuacao": "Design instrucional",
+    "tags": [
+      "acessibilidade",
+      "design educacional",
+      "WCAG"
+    ],
+    "destaque": 1,
+    "cover": "",
+    "coverAlt": "",
+    "autoria": "Pâmella Araújo Balcaçar",
+    "readingTime": 1,
+    "url": "blog/acessibilidade-digital-checklist-minimo.html"
+  },
+  {
+    "slug": "bncc-computacao-por-onde-comecar",
+    "title": "BNCC Computação, por onde começar",
+    "date": "2026-10-05",
+    "summary": "Os três eixos da BNCC Computação e ideias de como conectá-los às aulas de ciências e biologia.",
+    "area": "Computação e dados",
+    "atuacao": "Ensino superior",
+    "tags": [
+      "BNCC Computação",
+      "pensamento computacional",
+      "ciência de dados"
+    ],
+    "destaque": 0,
+    "cover": "",
+    "coverAlt": "",
+    "autoria": "Pâmella Araújo Balcaçar",
+    "readingTime": 1,
+    "url": "blog/bncc-computacao-por-onde-comecar.html"
+  }
+]
