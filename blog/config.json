@@ -1,6 +1,19 @@
 {
-  "whatsapp": "",
+  "whatsapp": "https://chat.whatsapp.com/Fzi4OJkWyMq4qjGdjovfiZ",
+  "whatsappRotulo": "Acessar à Educação 5.0",
+  "comentarios": {
+    "provedor": "giscus",
+    "giscus": {
+      "repo": "Bio-Tech-Edu/bio-tech-edu.github.io",
+      "repoId": "",
+      "category": "Comentários",
+      "categoryId": ""
+    },
+    "disqus": { "shortname": "" }
+  },
   "midia": [
-    { "titulo": "GitHub Bio-Tech-Edu", "url": "https://github.com/Bio-Tech-Edu" }
+    { "titulo": "Wiki da comunidade (GitHub)", "url": "https://github.com/Bio-Tech-Edu/.github/wiki", "descricao": "Guias, boas práticas e documentação da comunidade" },
+    { "titulo": "Organização Bio-Tech-Edu", "url": "https://github.com/Bio-Tech-Edu", "descricao": "Repositórios dos recursos educacionais" },
+    { "titulo": "Sugestões e contribuições", "url": "https://github.com/Bio-Tech-Edu/bio-tech-edu.github.io/issues", "descricao": "Abra uma issue para sugerir temas ou melhorias" }
   ]
 }

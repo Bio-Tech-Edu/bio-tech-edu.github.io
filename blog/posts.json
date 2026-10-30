@@ -1,11 +1,49 @@
 [
   {
+    "slug": "desafios-do-eca-digital-e-bncc-computacao",
+    "title": "Além das Telas: Os Desafios do ECA Digital e da BNCC da Computação na Prática Docente",
+    "date": "2026-10-28",
+    "atualizado": "",
+    "summary": "Como integrar a BNCC da Computação e garantir a segurança digital do ECA Digital nas aulas de Ciências da Natureza com intencionalidade pedagógica.",
+    "area": "Educação digital",
+    "atuacao": "Docência",
+    "formato": "Artigo",
+    "publico": [
+      "Professores",
+      "Gestores Escolares",
+      "Coodernadores Pedagógicos"
+    ],
+    "habilidades": [],
+    "tags": [
+      "BNCC",
+      "BNCC da Computação",
+      "ECA Digital",
+      "DUA",
+      "STHEAM",
+      "Ciências da Natureza"
+    ],
+    "destaque": 1,
+    "cover": "assets/blog/capa_eca_bncc.png",
+    "coverAlt": "Professor orientando estudantes com recursos digitais em ambiente escolar de forma presencial e integrada.",
+    "autoria": "Pâmella Araújo Balcaçar",
+    "comentarios": true,
+    "readingTime": 6,
+    "url": "blog/desafios-do-eca-digital-e-bncc-computacao.html"
+  },
+  {
     "slug": "planejar-aula-com-recursos-digitais-abertos",
     "title": "Como planejar uma aula com recursos digitais abertos",
     "date": "2026-10-20",
+    "atualizado": "",
     "summary": "Um roteiro simples para escolher, testar e aplicar OAD, REA e RED alinhados a uma habilidade da BNCC.",
     "area": "Educação digital",
     "atuacao": "Docência",
+    "formato": "Guia",
+    "publico": [
+      "Professores",
+      "Estagiários"
+    ],
+    "habilidades": [],
     "tags": [
       "BNCC",
       "REA",
@@ -16,6 +54,7 @@
     "cover": "",
     "coverAlt": "",
     "autoria": "Pâmella Araújo Balcaçar",
+    "comentarios": true,
     "readingTime": 1,
     "url": "blog/planejar-aula-com-recursos-digitais-abertos.html"
   },
@@ -23,9 +62,17 @@
     "slug": "acessibilidade-digital-checklist-minimo",
     "title": "Acessibilidade digital em materiais educacionais: checklist mínimo",
     "date": "2026-10-12",
+    "atualizado": "",
     "summary": "Sete verificações rápidas para que um material digital seja utilizável por mais pessoas, antes mesmo de qualquer ferramenta automática.",
     "area": "Educação digital",
     "atuacao": "Design instrucional",
+    "formato": "Checklist",
+    "publico": [
+      "Professores",
+      "Estudantes universitários",
+      "Estagiários"
+    ],
+    "habilidades": [],
     "tags": [
       "acessibilidade",
       "design educacional",
@@ -35,6 +82,7 @@
     "cover": "",
     "coverAlt": "",
     "autoria": "Pâmella Araújo Balcaçar",
+    "comentarios": true,
     "readingTime": 1,
     "url": "blog/acessibilidade-digital-checklist-minimo.html"
   },
@@ -42,9 +90,16 @@
     "slug": "bncc-computacao-por-onde-comecar",
     "title": "BNCC Computação, por onde começar",
     "date": "2026-10-05",
+    "atualizado": "",
     "summary": "Os três eixos da BNCC Computação e ideias de como conectá-los às aulas de ciências e biologia.",
     "area": "Computação e dados",
     "atuacao": "Ensino superior",
+    "formato": "Artigo",
+    "publico": [
+      "Professores",
+      "Estudantes universitários"
+    ],
+    "habilidades": [],
     "tags": [
       "BNCC Computação",
       "pensamento computacional",
@@ -54,6 +109,7 @@
     "cover": "",
     "coverAlt": "",
     "autoria": "Pâmella Araújo Balcaçar",
+    "comentarios": true,
     "readingTime": 1,
     "url": "blog/bncc-computacao-por-onde-comecar.html"
   }

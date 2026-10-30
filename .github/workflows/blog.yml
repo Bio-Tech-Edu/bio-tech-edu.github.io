@@ -1,21 +1,24 @@
-name: Gerar blog
+name: Gerar blog e validar site
 
 on:
   push:
     branches: [main]
     paths:
       - "posts/**"
-      - "assets/blog/**"
+      - "assets/img/blog/**"
+      - "data/**"
       - "scripts/**"
       - "index.html"
       - "package.json"
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
   contents: write
 
 concurrency:
-  group: blog-build
+  group: blog-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -28,10 +31,14 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - run: node scripts/build-blog.mjs
+      - name: Converter posts (markdown → HTML)
+        run: node scripts/build-blog.mjs
+      - name: Validar links, imagens e IDs
+        run: node scripts/check-links.mjs
       - name: Publicar arquivos gerados
+        if: github.event_name != 'pull_request'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add blog blog.html
+          git add blog blog.html 404.html sitemap.xml
           git diff --cached --quiet || (git commit -m "chore(blog): atualiza publicações geradas" && git push)

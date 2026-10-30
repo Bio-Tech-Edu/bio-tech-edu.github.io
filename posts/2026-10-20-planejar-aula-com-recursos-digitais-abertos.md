@@ -6,6 +6,8 @@ area: Educação digital
 atuacao: Docência
 tags: [BNCC, REA, OAD, planejamento]
 destaque: 2
+formato: Guia
+publico: [Professores, Estagiários]
 ---
 
 Recursos digitais abertos ajudam a economizar tempo, mas só funcionam bem quando partem de um objetivo claro de aprendizagem.

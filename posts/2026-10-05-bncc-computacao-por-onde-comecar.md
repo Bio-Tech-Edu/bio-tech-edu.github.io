@@ -6,6 +6,8 @@ area: Computação e dados
 atuacao: Ensino superior
 tags: [BNCC Computação, pensamento computacional, ciência de dados]
 destaque: 0
+formato: Artigo
+publico: [Professores, Estudantes universitários]
 ---
 
 A BNCC Computação organiza o aprendizado da área em três eixos que conversam com qualquer disciplina.

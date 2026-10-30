@@ -147,3 +147,7 @@ vite.config.ts.timestamp-*
 
 # Turbo Repo
 .turbo
+
+# Artefatos de entrega (não versionar patches/zips na raiz)
+.patch
+.zip

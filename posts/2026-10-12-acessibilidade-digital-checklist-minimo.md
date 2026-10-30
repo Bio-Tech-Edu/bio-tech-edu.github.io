@@ -6,6 +6,8 @@ area: Educação digital
 atuacao: Design instrucional
 tags: [acessibilidade, design educacional, WCAG]
 destaque: 1
+formato: Checklist
+publico: [Professores, Estudantes universitários, Estagiários]
 ---
 
 Acessibilidade não é uma etapa final: é parte do desenho do material. Este checklist reúne verificações simples que cabem em qualquer revisão.

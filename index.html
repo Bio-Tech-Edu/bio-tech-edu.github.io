@@ -6,8 +6,14 @@
     <title>Bio+Tech EduDesign | Recursos educacionais abertos em ciência e tecnologia</title>
     <script>try{var t=localStorage.getItem("theme");if(!t)t=matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";document.documentElement.setAttribute("data-theme",t)}catch(e){document.documentElement.setAttribute("data-theme","dark")}</script>
     <meta name="theme-color" content="#071b30" />
+    <link rel="canonical" href="https://bio-tech-edu.github.io/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Bio+Tech EduDesign | Recursos educacionais abertos em ciência e tecnologia" />
+    <meta property="og:description" content="Recursos digitais abertos alinhados à BNCC para professores, estudantes universitários e estagiários." />
+    <meta property="og:image" content="https://bio-tech-edu.github.io/assets/img/hero.png" />
+    <link rel="apple-touch-icon" href="assets/img/favicon.png" />
     <link rel="alternate" type="application/rss+xml" title="Blog Bio+Tech EduDesign" href="blog/feed.xml" />
-    <link rel="icon" type="image/png" href="assets/favicon.png" />
+    <link rel="icon" type="image/png" href="assets/img/favicon.png" />
     <meta
       name="description"
       content="Recursos educacionais abertos em ciência e tecnologia para professores, estudantes universitários e estagiários. Alinhados à BNCC, com código aberto."
@@ -15,7 +21,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="assets/styles.css" />
+    <link rel="stylesheet" href="assets/css/styles.css" />
   </head>
   <body>
     <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
@@ -25,7 +31,7 @@
     <header class="site-header">
       <div class="container topbar">
         <a class="brand" href="#top" aria-label="Bio+Tech EduDesign — início">
-          <img src="assets/favicon.png" alt="" width="44" height="44" />
+          <img src="assets/img/favicon.png" alt="" width="44" height="44" />
           <div>
             <span class="brand-kicker">Marca</span>
             <strong>Bio+Tech EduDesign</strong>
@@ -67,7 +73,7 @@
 
         <div class="hero-panel" aria-label="Resumo institucional">
           <div class="panel-glow"></div>
-          <img class="hero-img" src="assets/hero.png" width="1667" height="584" alt="Livros, caderno aberto, DNA e notebook com ícones de dados, representando biologia, educação e tecnologia." />
+          <img class="hero-img" src="assets/img/hero.webp" width="1280" height="448" fetchpriority="high" decoding="async" alt="Livros, caderno aberto, DNA e notebook com ícones de dados, representando biologia, educação e tecnologia." />
           <div class="panel-card">
             <span class="panel-label">Marca</span>
             <h2>Design para aprender com clareza e impacto.</h2>
@@ -231,7 +237,8 @@
       </div>
     </footer>
 
-    <script src="assets/theme.js"></script>
-    <script src="assets/script.js"></script>
+    <script src="assets/js/lib.js"></script>
+    <script src="assets/js/theme.js"></script>
+    <script src="assets/js/catalog.js"></script>
   </body>
 </html>
