@@ -39,7 +39,7 @@ Por exemplo, ao investigar a biodiversidade local ou o ciclo da água, os estuda
 
 Existe um mito recorrente de que incorporar as Tecnologias Digitais de Informação e Comunicação (TDICs) exige telas individuais para todos os alunos ou o domínio de softwares complexos de programação. Essa visão gera frustração nos professores e perpetua a desigualdade nas escolas com recursos limitados. A renovação do processo de ensino-aprendizagem ocorre na **intencionalidade pedagógica**, e não na sofisticação do dispositivo utilizado.
 
-As TDICs, sob a ótica do Desenho Universal para a Aprendizagem (DUA), devem servir como amplificadores de acessibilidade e autoria. O pensamento computacional pode ser trabalhado perfeitamente por meio de atividades "desconectadas" (*unplugged*), jogos analógicos de lógica e modelagens físicas. Quando o digital é utilizado, ele deve atuar como uma ferramenta de mediação cultural e expressão — permitindo que estudantes atípicos, com diferentes ritmos e estilos de aprendizagem, encontrem múltiplos caminhos para explorar e demonstrar seu conhecimento.
+As TDICs, sob a ótica do Desenho Universal para a Aprendizagem (DUA), devem servir como amplificadores de acessibilidade e autoria. O pensamento computacional pode ser trabalhado perfeitamente por meio de atividades "desplugadas" (*unplugged*), jogos analógicos de lógica e modelagens físicas. Quando o digital é utilizado, ele deve atuar como uma ferramenta de mediação cultural e expressão — permitindo que estudantes atípicos, com diferentes ritmos e estilos de aprendizagem, encontrem múltiplos caminhos para explorar e demonstrar seu conhecimento.
 
 ## Um Caminho para Suavizar a Sua Rotina Docente
 

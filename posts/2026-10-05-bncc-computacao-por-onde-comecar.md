@@ -2,8 +2,7 @@
 title: "BNCC Computação nas Ciências da Natureza: Por Onde Começar sem Sobregar a Rotina Docente"
 date: 2026-10-05
 summary: "Um guia prático para conectar os três eixos da BNCC Computação ao ensino de ciências e biologia, utilizando Recursos Educacionais Abertos (REA) com foco na aprendizagem ativa."
-area: Computação e dados
-<<<<<<< HEAD
+area: [Ciências da Natureza e Computação]
 atuacao: Docência
 tags: [BNCC Computação, Pensamento Computacional, REA, Ciências da Natureza, STHEAM]
 destaque: 1
@@ -12,13 +11,11 @@ publico: [Professores, Estudantes universitários, Estagiários]
 cover: assets/blog/capa_stheam_cnt.png
 cover_alt: Professora em sala de aula explorando robótica e projetos interdisciplinares da computação nas ciências da natureza
 rascunho: false
-=======
 atuacao: Ensino superior
 tags: [BNCC Computação, pensamento computacional, ciência de dados]
 destaque: 0
 formato: Artigo
 publico: [Professores, Estudantes universitários]
->>>>>>> refactor(site): reorganiza assets, converte imagens para WebP e separa dados do catálogo
 ---
 
 A homologação do Parecer CNE/CP nº 2/2022 marcou um divisor de águas na Educação Básica brasileira ao incluir as normas sobre Computação na Educação Básica como um complemento essencial à Base Nacional Comum Curricular (BRASIL, 2022). Para os professores que já lidam com jornadas extensas, turmas heterogêneas e escassez de recursos, a exigência de integrar lógica, algoritmos e cultura digital parece, à primeira vista, mais um fardo burocrático. No entanto, quando despida de modismos e abordada sob a perspectiva das Ciências da Natureza, a BNCC Computação revela-se uma poderosa aliada para ressignificar o ensino investigativo.

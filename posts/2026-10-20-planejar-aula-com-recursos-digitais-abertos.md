@@ -7,14 +7,11 @@ atuacao: Docência
 tags: [BNCC, REA, OAD, RED, Planejamento, Metodologias Ativas]
 destaque: 2
 formato: Guia
-<<<<<<< HEAD
 publico: [Professores, Estagiários, Licenciados]
 cover: capa_rea_plano_aula.png
 cover_alt: Há uma professora realizando o planejamento pedagógico estruturado e o uso inteligente de mídias digitais como REA.
 rascunho: false
-=======
 publico: [Professores, Estagiários]
->>>>>>> refactor(site): reorganiza assets, converte imagens para WebP e separa dados do catálogo
 ---
 
 A abundância de conteúdos digitais disponíveis na internet cria um falso paradoxo para os educadores: embora existam milhares de vídeos, simulações, jogos e apostilas a um clique de distância, o tempo gasto para garimpar, filtrar e adaptar esses materiais ao currículo da Educação Básica é frequentemente exaustivo. Sem um roteiro pedagógico claro, o uso de mídias digitais em sala de aula corre o risco de se tornar mera recreação ou fragmentação de conteúdo, frustrando professores e estudantes.
