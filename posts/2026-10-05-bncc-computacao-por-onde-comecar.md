@@ -50,7 +50,7 @@ Estudos sobre tecnologia educacional mostram que atividades "desplugadas" (*unpl
 
 Quando integramos a abordagem **STHEAM** (Ciência, Tecnologia, Humanidades, Engenharia, Artes e Matemática), a tecnologia deixa de ser um fim instrumental e passa a ser uma ferramenta humanizada de leitura de mundo. O "H" de Humanidades garante que a construção de um algoritmo ou o uso de uma simulação digital considere dilemas éticos, impactos socioambientais e a diversidade cultural do território escolar. 
 
-👉 **[Conheça mais a Jornada STREAM]**(https://go.hotmart.com/H108219234R?dp=1)
+👉 **Conheça mais a [Jornada STREAM](https://go.hotmart.com/H108219234R?dp=1)**
 
 ## O Papel Transformador dos Recursos Educacionais Abertos (REA)
 
@@ -67,9 +67,9 @@ Na **Bio+Tech EduDesign**, acreditamos que o professor não deve caminhar sozinh
 1. **Baixe Nosso Catálogo de REAs Gratuitos:** Acesse sequências didáticas, guias de atividades desconectadas e planos de aula prontos e alinhados à BNCC e BNCC da Computação para as Ciências da Natureza.
 2. **Consultoria em Design de REA e Formação Docente:** Oferecemos mentoria e consultoria para redes de ensino, escolas e grupos de professores que desejam desenhar seus próprios materiais pedagógicos abertos, acessíveis e alinhados às metodologias ativas e à abordagem STHEAM.
 
-👉 **[Acesse o Repositório de REAs da Bio+Tech EduDesign e baixe seu primeiro kit de atividades]**(https://bio-tech-edu.github.io/)
+👉 **[Acesse o Repositório de REAs da Bio+Tech EduDesign e baixe seu primeiro kit de atividades](https://bio-tech-edu.github.io/)**
 
-👉 **Precisa de apoio para sua escola ou projeto de extensão?** [Agende uma conversa com nossa equipe de consultoria em Design Instrucional Acessível e REA!]
+👉 **Precisa de apoio para sua escola ou projeto de extensão?** Agende uma conversa com nossa equipe de consultoria em [Design Instrucional Acessível e REA](mailto:pamellabiotec@gmail.com)
 
 ---
 

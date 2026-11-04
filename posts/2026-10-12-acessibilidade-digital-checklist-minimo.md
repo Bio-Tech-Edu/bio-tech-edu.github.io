@@ -84,7 +84,7 @@ Garantir que todos os seus Recursos Educacionais Abertos (REA) sigam os padrões
 
 👉 **[Explore nossos REAs com validação de acessibilidade e DUA](https://bio-tech-edu.github.io/)**
 
-👉 **Sua instituição precisa adequar materiais pedagógicos às normas de acessibilidade?** **[Solicite um orçamento para nossa Consultoria em Design Instrucional Acessível e REA!](https://bio-tech-edu.github.io/)**
+👉 **Sua instituição precisa adequar materiais pedagógicos às normas de acessibilidade?** **[Solicite um orçamento para nossa Consultoria em Design Instrucional Acessível e REA!](mailto:pamellabiotec@gmail.com)**
 
 ---
 
