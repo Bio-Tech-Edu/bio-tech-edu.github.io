@@ -10,6 +10,7 @@ on:
       - "scripts/**"
       - "index.html"
       - "package.json"
+      - "package-lock.json"
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -32,7 +33,9 @@ jobs:
           cache: npm
       - run: npm ci
       - name: Converter posts (markdown → HTML)
+        id: build
         run: node scripts/build-blog.mjs
+        continue-on-error: true   # um texto com erro não impede a publicação dos demais
       - name: Validar links, imagens e IDs
         run: node scripts/check-links.mjs
       - name: Publicar arquivos gerados
@@ -42,3 +45,8 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add blog blog.html 404.html sitemap.xml
           git diff --cached --quiet || (git commit -m "chore(blog): atualiza publicações geradas" && git push)
+      - name: Falhar se algum texto tiver erro (veja as anotações com arquivo e linha)
+        if: always() && steps.build.outcome == 'failure'
+        run: |
+          echo "::error::Há texto(s) em posts/ com erro. Os demais foram publicados. Corrija o(s) arquivo(s) indicado(s) nas anotações."
+          exit 1

@@ -1,9 +1,10 @@
 ---
+# ATENÇÃO: cada campo só pode aparecer UMA vez neste cabeçalho (chave repetida = texto não publicado).
 title: Título da publicação
 date: 2026-01-31            # AAAA-MM-DD (obrigatório)
 summary: Uma ou duas frases que aparecem no carrossel e nos cards.
-area: Educação digital      # área do conhecimento (menu lateral)
-atuacao: Docência           # atuação profissional na educação (menu lateral)
+area: [Educação digital]    # uma ou mais áreas do conhecimento: [A, B] (menu lateral)
+atuacao: [Docência]         # uma ou mais atuações profissionais: [A, B] (menu lateral)
 tags: [BNCC, REA]           # lista de tags
 destaque: 0                 # 0 = normal; maior número = mais destaque no carrossel
 formato: Artigo            # Artigo, Guia, Tutorial, Relato de experiência, Checklist...

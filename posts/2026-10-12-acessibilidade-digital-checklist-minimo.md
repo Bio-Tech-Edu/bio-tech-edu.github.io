@@ -7,12 +7,10 @@ atuacao: Design instrucional
 tags: [Acessibilidade, DUA, WCAG, REA, Inclusão, Design Educacional]
 destaque: 1
 formato: Guia
-publico: [Professores, Estudantes universitários, Estagiários, Pais atípicos]
-cover: assets/blog/capa_dua_rea.png
+publico: [Professores, Estudantes universitários, Estagiários, Pais atípicos, Coordenação pedagógica]
+cover: assets/img/blog/capa_dua_rea.webp
 cover_alt: Professores diversos analisam e debatem entusiasmados sobre acessibilidade digital em materiais educacionais ao redor de um Chromebook.
 rascunho: false
-formato: Checklist
-publico: [Professores, Coordenação pedagógica, Estudantes universitários, Estagiários]
 ---
 
 A democratização do acesso aos recursos digitais trouxe uma oportunidade sem precedentes para a produção e o compartilhamento de materiais pedagógicos na Educação Básica e no Ensino Superior. Contudo, a simples disponibilização de um arquivo em formato PDF ou de um vídeo em uma plataforma online não garante que todos os estudantes consigam aprender. Quando um recurso pedagógico ignora as diretrizes de acessibilidade digital, ele cria barreiras intransponíveis para estudantes com deficiência visual, auditiva, motora ou neurodivergentes (como autistas, disléxicos e pessoas com TDAH), além de dificultar o acompanhamento por parte de pais e mães atípicos no contexto familiar.

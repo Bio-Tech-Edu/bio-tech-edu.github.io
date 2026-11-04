@@ -12,7 +12,7 @@ Vitrine de **recursos educacionais abertos** em ciência e tecnologia, com desig
 | Público | Professores, estudantes universitários e estagiários |
 | Tipos de recurso | OAD (objeto de aprendizagem digital), REA (recurso educacional aberto) e RED (recurso educacional digital) |
 | Alinhamento curricular | Habilidades da BNCC e da BNCC Computação indicadas em cada recurso |
-| Blog | Publicações em markdown convertidas automaticamente, com busca, categorias, tags, citação ABNT e comentários |
+| Blog | Publicações em markdown convertidas automaticamente (com diagnóstico de erros por arquivo e linha), busca, categorias, tags, citação ABNT e comentários |
 | Licenças | Conteúdo em CC BY-SA 4.0; código-fonte em MIT |
 
 ## Arquitetura
@@ -88,14 +88,14 @@ Edite `data/projects.json` e inclua um objeto (a ordem da lista é a ordem do ca
 As publicações são arquivos markdown em `posts/`. A cada push na `main` que altere `posts/`, a automação converte os textos em páginas HTML e publica o resultado.
 
 1. Copie `posts/_modelo.md` para `posts/AAAA-MM-DD-titulo.md` e preencha o cabeçalho.
-2. Escreva o texto em markdown. Imagens ficam em `assets/img/blog/` e são citadas como `assets/img/blog/arquivo.webp`.
+2. Escreva o texto em markdown. Imagens (capas e figuras) ficam em `assets/img/blog/`, em **WebP com até 1200 px de largura** (ex.: `cwebp -q 80 -resize 1200 0 capa.png -o capa.webp`, ou https://squoosh.app), e são citadas como `assets/img/blog/arquivo.webp`.
 3. Faça o commit na `main` (ou abra um *pull request*, que roda as validações). Em cerca de um minuto, a publicação aparece em `blog.html`.
 
 | Campo do cabeçalho | Função |
 |---|---|
 | `title`, `date` | Obrigatórios (data no formato AAAA-MM-DD) |
 | `summary` | Texto do carrossel e dos cards |
-| `area`, `atuacao`, `formato` | Categorias do menu lateral (área do conhecimento, atuação profissional, formato do texto) |
+| `area`, `atuacao`, `formato` | Categorias do menu lateral. `area` e `atuacao` aceitam um valor ou uma lista (`[A, B]`); o primeiro é o principal. `formato` é um valor (Artigo, Guia, Checklist...) |
 | `publico` | Professores, Estudantes universitários e/ou Estagiários |
 | `tags` | Lista de tags |
 | `habilidades` | Códigos BNCC trabalhados (opcional) |
@@ -106,6 +106,21 @@ As publicações são arquivos markdown em `posts/`. A cada push na `main` que a
 | `rascunho: true` | Não publica |
 
 Cada publicação inclui sumário, tempo de leitura, bloco **Como citar** (ABNT, com data de acesso preenchida no navegador), publicações relacionadas, navegação entre textos, dados estruturados (JSON-LD) e botão para compartilhar no WhatsApp.
+
+### Solução de problemas do blog
+
+O conversor não para por causa de um texto com problema: ele publica os demais, **não publica o texto com erro** e deixa o workflow vermelho em *Actions*, com uma anotação indicando **arquivo e linha**. Para ver o mesmo diagnóstico no seu computador, rode `npm test`.
+
+| Mensagem | Causa e correção |
+|---|---|
+| `a chave "tags" aparece duas vezes` | Campo repetido no cabeçalho (comum ao colar um cabeçalho novo sem apagar o antigo). Mantenha só uma linha de cada campo. |
+| `cabeçalho YAML inválido` | Aspas sem fechar, `:` solto ou recuo errado. Use aspas duplas em títulos e resumos que tenham `:` ou `#`. |
+| `cabeçalho ausente` | O arquivo precisa começar com `---` e fechar o cabeçalho com outro `---`. |
+| `data inválida ou ausente` | Use `AAAA-MM-DD` (ex.: `2026-10-28`). |
+| `campo desconhecido "..."` (aviso) | Erro de grafia no nome do campo (ex.: `atuaçao`); o campo é ignorado. |
+| `capa não encontrada` / `capa com NNN KB` (aviso) | Coloque a imagem em `assets/img/blog/` e converta para WebP. |
+
+Dois lembretes: os arquivos gerados (`blog/*.html`, `blog/posts.json`, `blog/feed.xml`, `blog.html`, `404.html`, `sitemap.xml`) não devem ser editados nem apagados à mão, pois são recriados a cada build; e a publicação só aparece no site depois que o workflow termina (cerca de um minuto).
 
 ### Comentários
 

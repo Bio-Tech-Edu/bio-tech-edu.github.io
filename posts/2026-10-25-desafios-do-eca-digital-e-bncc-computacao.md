@@ -7,8 +7,8 @@ atuacao: Docência           # atuação profissional na educação (menu latera
 tags: [BNCC, BNCC da Computação, ECA Digital, DUA, STHEAM, Ciências da Natureza]
 destaque: 1                 # 1 = destaque no carrossel
 formato: Artigo            # Artigo, Guia, Tutorial, Relato de experiência, Checklist...
-publico: [Professores, Gestores Escolares, Coodernadores Pedagógicos]
-cover: assets/blog/capa_eca_bncc.png
+publico: [Professores, Gestores Escolares, Coordenadores Pedagógicos]
+cover: assets/img/blog/capa_eca_bncc.webp
 cover_alt: Professor orientando estudantes com recursos digitais em ambiente escolar de forma presencial e integrada.
 rascunho: false
 ---

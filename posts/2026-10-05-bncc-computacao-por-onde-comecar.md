@@ -8,14 +8,9 @@ tags: [BNCC Computação, Pensamento Computacional, REA, Ciências da Natureza, 
 destaque: 1
 formato: Artigo
 publico: [Professores, Estudantes universitários, Estagiários]
-cover: assets/blog/capa_stheam_cnt.png
+cover: assets/img/blog/capa_stheam_cnt.webp
 cover_alt: Professora em sala de aula explorando robótica e projetos interdisciplinares da computação nas ciências da natureza
 rascunho: false
-atuacao: Ensino superior
-tags: [BNCC Computação, pensamento computacional, ciência de dados]
-destaque: 0
-formato: Artigo
-publico: [Professores, Estudantes universitários]
 ---
 
 A homologação do Parecer CNE/CP nº 2/2022 marcou um divisor de águas na Educação Básica brasileira ao incluir as normas sobre Computação na Educação Básica como um complemento essencial à Base Nacional Comum Curricular (BRASIL, 2022). Para os professores que já lidam com jornadas extensas, turmas heterogêneas e escassez de recursos, a exigência de integrar lógica, algoritmos e cultura digital parece, à primeira vista, mais um fardo burocrático. No entanto, quando despida de modismos e abordada sob a perspectiva das Ciências da Natureza, a BNCC Computação revela-se uma poderosa aliada para ressignificar o ensino investigativo.
@@ -51,9 +46,11 @@ Para visualizar como essa convergência ocorre sem sobrecarregar seu plano de au
 
 Um equívoco recorrente no ambiente escolar é associar a BNCC da Computação exclusivamente ao ensino de linguagens de programação complexas ou à aquisição de robôs educacionais caros. Essa visão distorcida gera ansiedade docente e aprofunda a desigualdade entre escolas públicas e privadas.
 
-Estudos sobre tecnologia educacional mostram que atividades "desconectadas" (*unplugged*) possuem a mesma eficácia pedagógica na consolidação de esquemas lógicos e estruturais de pensamento do que atividades mediadas por telas (BELL et al., 2012). A renovação do processo de ensino-aprendizagem não reside na tecnologia em si, mas na **intencionalidade pedagógica** com a qual o professor media a investigação. 
+Estudos sobre tecnologia educacional mostram que atividades "desplugadas" (*unplugged*) possuem a mesma eficácia pedagógica na consolidação de esquemas lógicos e estruturais de pensamento do que atividades mediadas por telas (BELL et al., 2012). A renovação do processo de ensino-aprendizagem não reside na tecnologia em si, mas na **intencionalidade pedagógica** com a qual o professor media a investigação. 
 
-Quando integramos a abordagem **STHEAM** (Ciência, Tecnologia, Humanidades, Engenharia, Artes e Matemática), a tecnologia deixa de ser um fim instrumental e passa a ser uma ferramenta humanizada de leitura de mundo. O "H" de Humanidades garante que a construção de um algoritmo ou o uso de uma simulação digital considere dilemas éticos, impactos socioambientais e a diversidade cultural do território escolar.
+Quando integramos a abordagem **STHEAM** (Ciência, Tecnologia, Humanidades, Engenharia, Artes e Matemática), a tecnologia deixa de ser um fim instrumental e passa a ser uma ferramenta humanizada de leitura de mundo. O "H" de Humanidades garante que a construção de um algoritmo ou o uso de uma simulação digital considere dilemas éticos, impactos socioambientais e a diversidade cultural do território escolar. 
+
+👉 **[Conheça mais a Jornada STREAM]**(https://go.hotmart.com/H108219234R?dp=1)
 
 ## O Papel Transformador dos Recursos Educacionais Abertos (REA)
 

@@ -82,9 +82,9 @@
   }
   const filtered = () =>
     posts.filter((p) =>
-      (!state.q || norm([p.title, p.summary, p.area, p.atuacao, p.formato, ...p.tags].join(" ")).includes(norm(state.q))) &&
-      (!state.area || p.area === state.area) &&
-      (!state.atuacao || p.atuacao === state.atuacao) &&
+      (!state.q || norm([p.title, p.summary, ...(p.areas || [p.area]), ...(p.atuacoes || [p.atuacao]), p.formato, ...p.tags].join(" ")).includes(norm(state.q))) &&
+      (!state.area || (p.areas || [p.area]).includes(state.area)) &&
+      (!state.atuacao || (p.atuacoes || [p.atuacao]).includes(state.atuacao)) &&
       (!state.formato || p.formato === state.formato) &&
       (!state.tag || p.tags.includes(state.tag)));
   const count = (get) => {
@@ -122,8 +122,8 @@
   }
   function render() {
     syncUrl();
-    renderFacet("facet-area", "area", count((p) => p.area));
-    renderFacet("facet-atuacao", "atuacao", count((p) => p.atuacao));
+    renderFacet("facet-area", "area", count((p) => p.areas || [p.area]));
+    renderFacet("facet-atuacao", "atuacao", count((p) => p.atuacoes || [p.atuacao]));
     renderFacet("facet-formato", "formato", count((p) => p.formato));
     $("tag-cloud").replaceChildren(...count((p) => p.tags).slice(0, 30).map(([t, n]) =>
       el("button", { type: "button", "aria-pressed": String(state.tag === t), onclick: () => toggle("tag", t), text: `#${t} (${n})` })));

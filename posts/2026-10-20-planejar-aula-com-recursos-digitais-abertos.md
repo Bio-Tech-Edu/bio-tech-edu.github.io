@@ -8,10 +8,9 @@ tags: [BNCC, REA, OAD, RED, Planejamento, Metodologias Ativas]
 destaque: 2
 formato: Guia
 publico: [Professores, Estagiários, Licenciados]
-cover: capa_rea_plano_aula.png
+cover: assets/img/blog/capa_rea_plano_aula.webp
 cover_alt: Há uma professora realizando o planejamento pedagógico estruturado e o uso inteligente de mídias digitais como REA.
 rascunho: false
-publico: [Professores, Estagiários]
 ---
 
 A abundância de conteúdos digitais disponíveis na internet cria um falso paradoxo para os educadores: embora existam milhares de vídeos, simulações, jogos e apostilas a um clique de distância, o tempo gasto para garimpar, filtrar e adaptar esses materiais ao currículo da Educação Básica é frequentemente exaustivo. Sem um roteiro pedagógico claro, o uso de mídias digitais em sala de aula corre o risco de se tornar mera recreação ou fragmentação de conteúdo, frustrando professores e estudantes.
@@ -59,7 +58,7 @@ Combine a avaliação formativa integrada ao próprio recurso com uma pergunta r
 
 ## A Solução Bio+Tech EduDesign: REAs Prontos e Consultoria em Design Educacional
 
-No portal **Bio+Tech EduDesign**, nos dedicamos a criar e curar Recursos Educacionais Abertos que conectam o ensino de Ciências da Natureza ao Pensamento Computacional, às Metodologias Ativas e às Humanidades (STHEAM).
+No portal **Bio+Tech EduDesign**, nos dedicamos a criar e curar Recursos Educacionais Abertos que conectam o ensino de Ciências da Natureza ao Pensamento Computacional, às Metodologias Ativas e às Humanidades por meio da [Jornada STHEAM](https://go.hotmart.com/H108219234R?dp=1).
 
 Se você deseja economizar tempo no seu planejamento ou quer capacitar sua equipe para produzir REAs institucionais com alto padrão pedagógico e acessibilidade:
 

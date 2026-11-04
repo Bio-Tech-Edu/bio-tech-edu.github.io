@@ -1,17 +1,61 @@
 [
   {
+    "slug": "jornada-stheam-conecta-a-escola-a-realidade",
+    "title": "Muito Além da Teoria: Como a Jornada STHEAM Conecta a Escola à Realidade",
+    "date": "2026-10-29",
+    "atualizado": "",
+    "summary": "Descubra como transformar o ensino de Ciências da Natureza com a abordagem STHEAM, robótica educacional e metodologias ativas com o apoio do Prof. Fábio Fialho e Kenya Nunes.",
+    "area": "Ciências da Natureza",
+    "areas": [
+      "Ciências da Natureza",
+      "Linguagem",
+      "Matemática",
+      "Ciências Humanas"
+    ],
+    "atuacao": "Docência",
+    "atuacoes": [
+      "Docência"
+    ],
+    "formato": "Artigo",
+    "publico": [
+      "Professores",
+      "Coordenadores Pedagógicos"
+    ],
+    "habilidades": [],
+    "tags": [
+      "STHEAM",
+      "Robótica Educacional",
+      "Metodologias Ativas",
+      "BNCC",
+      "Prática Docente"
+    ],
+    "destaque": 2,
+    "cover": "assets/img/blog/capa_stheam_m.webp",
+    "coverAlt": "Professora negra sentada com colegas diversos aponta com entusiasmo para a tela de um dispositivo em oficina colaborativa entre pares.",
+    "autoria": "Pâmella Araújo Balcaçar",
+    "comentarios": true,
+    "readingTime": 4,
+    "url": "blog/jornada-stheam-conecta-a-escola-a-realidade.html"
+  },
+  {
     "slug": "desafios-do-eca-digital-e-bncc-computacao",
     "title": "Além das Telas: Os Desafios do ECA Digital e da BNCC da Computação na Prática Docente",
     "date": "2026-10-28",
     "atualizado": "",
     "summary": "Como integrar a BNCC da Computação e garantir a segurança digital do ECA Digital nas aulas de Ciências da Natureza com intencionalidade pedagógica.",
     "area": "Educação digital",
+    "areas": [
+      "Educação digital"
+    ],
     "atuacao": "Docência",
+    "atuacoes": [
+      "Docência"
+    ],
     "formato": "Artigo",
     "publico": [
       "Professores",
       "Gestores Escolares",
-      "Coodernadores Pedagógicos"
+      "Coordenadores Pedagógicos"
     ],
     "habilidades": [],
     "tags": [
@@ -23,7 +67,7 @@
       "Ciências da Natureza"
     ],
     "destaque": 1,
-    "cover": "assets/blog/capa_eca_bncc.png",
+    "cover": "assets/img/blog/capa_eca_bncc.webp",
     "coverAlt": "Professor orientando estudantes com recursos digitais em ambiente escolar de forma presencial e integrada.",
     "autoria": "Pâmella Araújo Balcaçar",
     "comentarios": true,
@@ -32,41 +76,95 @@
   },
   {
     "slug": "planejar-aula-com-recursos-digitais-abertos",
-    "title": "Como planejar uma aula com recursos digitais abertos",
+    "title": "Como Planejar Aulas Investigativas Utilizando Recursos Educacionais Abertos (REA)",
     "date": "2026-10-20",
     "atualizado": "",
-    "summary": "Um roteiro simples para escolher, testar e aplicar OAD, REA e RED alinhados a uma habilidade da BNCC.",
+    "summary": "Um roteiro metodológico em 5 passos para selecionar, testar e integrar REA, OAD e RED às habilidades da BNCC e BNCC da Computação nas Ciências da Natureza.",
     "area": "Educação digital",
+    "areas": [
+      "Educação digital"
+    ],
     "atuacao": "Docência",
+    "atuacoes": [
+      "Docência"
+    ],
     "formato": "Guia",
     "publico": [
       "Professores",
-      "Estagiários"
+      "Estagiários",
+      "Licenciados"
     ],
     "habilidades": [],
     "tags": [
       "BNCC",
       "REA",
       "OAD",
-      "planejamento"
+      "RED",
+      "Planejamento",
+      "Metodologias Ativas"
     ],
     "destaque": 2,
-    "cover": "",
-    "coverAlt": "",
+    "cover": "assets/img/blog/capa_rea_plano_aula.webp",
+    "coverAlt": "Há uma professora realizando o planejamento pedagógico estruturado e o uso inteligente de mídias digitais como REA.",
     "autoria": "Pâmella Araújo Balcaçar",
     "comentarios": true,
-    "readingTime": 1,
+    "readingTime": 4,
     "url": "blog/planejar-aula-com-recursos-digitais-abertos.html"
   },
   {
     "slug": "acessibilidade-digital-checklist-minimo",
-    "title": "Acessibilidade digital em materiais educacionais: checklist mínimo",
+    "title": "Acessibilidade Digital em Materiais Educacionais: Como Aplicar o DUA e Garantir Educação Inclusiva",
     "date": "2026-10-12",
     "atualizado": "",
-    "summary": "Sete verificações rápidas para que um material digital seja utilizável por mais pessoas, antes mesmo de qualquer ferramenta automática.",
+    "summary": "Um guia prático sobre Desenho Universal para a Aprendizagem (DUA) e um checklist completo de acessibilidade para tornar seus materiais digitais e REAs verdadeiramente inclusivos.",
     "area": "Educação digital",
+    "areas": [
+      "Educação digital"
+    ],
     "atuacao": "Design instrucional",
-    "formato": "Checklist",
+    "atuacoes": [
+      "Design instrucional"
+    ],
+    "formato": "Guia",
+    "publico": [
+      "Professores",
+      "Estudantes universitários",
+      "Estagiários",
+      "Pais atípicos",
+      "Coordenação pedagógica"
+    ],
+    "habilidades": [],
+    "tags": [
+      "Acessibilidade",
+      "DUA",
+      "WCAG",
+      "REA",
+      "Inclusão",
+      "Design Educacional"
+    ],
+    "destaque": 1,
+    "cover": "assets/img/blog/capa_dua_rea.webp",
+    "coverAlt": "Professores diversos analisam e debatem entusiasmados sobre acessibilidade digital em materiais educacionais ao redor de um Chromebook.",
+    "autoria": "Pâmella Araújo Balcaçar",
+    "comentarios": true,
+    "readingTime": 5,
+    "url": "blog/acessibilidade-digital-checklist-minimo.html"
+  },
+  {
+    "slug": "bncc-computacao-por-onde-comecar",
+    "title": "BNCC Computação nas Ciências da Natureza: Por Onde Começar sem Sobregar a Rotina Docente",
+    "date": "2026-10-05",
+    "atualizado": "",
+    "summary": "Um guia prático para conectar os três eixos da BNCC Computação ao ensino de ciências e biologia, utilizando Recursos Educacionais Abertos (REA) com foco na aprendizagem ativa.",
+    "area": "Ciências da Natureza e Computação",
+    "areas": [
+      "Ciências da Natureza e Computação"
+    ],
+    "atuacao": "Docência",
+    "atuacoes": [
+      "Docência"
+    ],
+    "formato": "Artigo",
     "publico": [
       "Professores",
       "Estudantes universitários",
@@ -74,43 +172,18 @@
     ],
     "habilidades": [],
     "tags": [
-      "acessibilidade",
-      "design educacional",
-      "WCAG"
+      "BNCC Computação",
+      "Pensamento Computacional",
+      "REA",
+      "Ciências da Natureza",
+      "STHEAM"
     ],
     "destaque": 1,
-    "cover": "",
-    "coverAlt": "",
+    "cover": "assets/img/blog/capa_stheam_cnt.webp",
+    "coverAlt": "Professora em sala de aula explorando robótica e projetos interdisciplinares da computação nas ciências da natureza",
     "autoria": "Pâmella Araújo Balcaçar",
     "comentarios": true,
-    "readingTime": 1,
-    "url": "blog/acessibilidade-digital-checklist-minimo.html"
-  },
-  {
-    "slug": "bncc-computacao-por-onde-comecar",
-    "title": "BNCC Computação, por onde começar",
-    "date": "2026-10-05",
-    "atualizado": "",
-    "summary": "Os três eixos da BNCC Computação e ideias de como conectá-los às aulas de ciências e biologia.",
-    "area": "Computação e dados",
-    "atuacao": "Ensino superior",
-    "formato": "Artigo",
-    "publico": [
-      "Professores",
-      "Estudantes universitários"
-    ],
-    "habilidades": [],
-    "tags": [
-      "BNCC Computação",
-      "pensamento computacional",
-      "ciência de dados"
-    ],
-    "destaque": 0,
-    "cover": "",
-    "coverAlt": "",
-    "autoria": "Pâmella Araújo Balcaçar",
-    "comentarios": true,
-    "readingTime": 1,
+    "readingTime": 6,
     "url": "blog/bncc-computacao-por-onde-comecar.html"
   }
 ]

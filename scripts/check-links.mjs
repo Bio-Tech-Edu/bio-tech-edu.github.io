@@ -35,6 +35,25 @@ const exigeImagens = (arquivo, campos) => {
 exigeImagens("data/projects.json", ["screenshot"]);
 exigeImagens("blog/posts.json", ["cover"]);
 
+// Toda publicação listada em posts.json precisa ter sua página HTML (pega "build que não gerou")
+const pj = path.join(ROOT, "blog/posts.json");
+if (fs.existsSync(pj)) {
+  for (const p of JSON.parse(fs.readFileSync(pj, "utf8"))) {
+    if (!fs.existsSync(path.join(ROOT, p.url))) problemas.push(`blog/posts.json: a publicação "${p.slug}" não tem página (${p.url}). Rode o build.`);
+  }
+}
+
+// Avisos (não bloqueiam): imagens acima de 500 KB
+const pesadas = [];
+(function varrer(dir) {
+  for (const e of fs.existsSync(dir) ? fs.readdirSync(dir, { withFileTypes: true }) : []) {
+    const p = path.join(dir, e.name);
+    if (e.isDirectory()) { if (e.name !== "brand") varrer(p); continue; }
+    if (/\.(png|jpe?g|webp)$/i.test(e.name) && fs.statSync(p).size > 500 * 1024 && e.name !== "hero.png") pesadas.push(`${path.relative(ROOT, p)} (${Math.round(fs.statSync(p).size / 1024)} KB)`);
+  }
+})(path.join(ROOT, "assets"));
+if (pesadas.length) console.warn("⚠ imagens acima de 500 KB (converta para WebP):\n  - " + pesadas.join("\n  - "));
+
 // IDs que os scripts consultam diretamente (evita erro silencioso em tempo de execução)
 const IDS = {
   "blog.html": ["carousel", "carousel-slides", "carousel-dots", "carousel-prev", "carousel-next", "carousel-count", "post-list", "post-search", "active-filters", "result-count", "load-more", "facet-area", "facet-atuacao", "tag-cloud"],

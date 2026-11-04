@@ -60,40 +60,84 @@ function fragment(html, mode) {
   return html.replace(/href="#/g, 'href="/index.html#').replace(/(href|src)="(?!https?:|mailto:|\/|#)/g, '$1="/');
 }
 
-// ---------- leitura dos posts ----------
+// ---------- diagnóstico (mensagens legíveis e anotações do GitHub Actions) ----------
+const problemas = [];
+const noActions = process.env.GITHUB_ACTIONS === "true";
+function avisar(nivel, file, line, msg) {
+  problemas.push({ nivel, file, line, msg });
+  if (noActions) console.log(`::${nivel === "erro" ? "error" : "warning"} file=posts/${file}${line ? `,line=${line}` : ""}::${msg.replace(/\n/g, " ")}`);
+  else console.error(`${nivel === "erro" ? "✖" : "⚠"} posts/${file}${line ? `:${line}` : ""} — ${msg}`);
+}
+const CHAVES = new Set(["title", "date", "slug", "summary", "area", "atuacao", "formato", "publico", "habilidades", "tags", "destaque", "cover", "cover_alt", "atualizado", "comentarios", "autoria", "rascunho"]);
+
+// Aceita o caminho como escrito, a pasta atual (assets/img/blog) e a versão .webp; avisa se ajustou ou se pesa demais.
+function resolveCover(raw, file) {
+  const alvo = String(raw).trim().replace(/^\.?\//, "");
+  const base = path.basename(alvo);
+  const sem = base.replace(/\.[^.]+$/, "");
+  const achado = [alvo, `assets/img/blog/${base}`, `assets/img/blog/${sem}.webp`, `assets/blog/${base}`].find((c) => fs.existsSync(path.join(ROOT, c)));
+  if (!achado) { avisar("aviso", file, 0, `capa não encontrada: "${raw}". Coloque o arquivo em assets/img/blog/. A publicação sai sem capa.`); return ""; }
+  if (achado !== alvo) avisar("aviso", file, 0, `capa "${raw}" resolvida como "${achado}". Atualize o campo cover.`);
+  const kb = fs.statSync(path.join(ROOT, achado)).size / 1024;
+  if (kb > 400) avisar("aviso", file, 0, `capa com ${Math.round(kb)} KB. Converta para WebP (até 1200 px de largura) para a página carregar mais rápido.`);
+  return achado;
+}
+
+// ---------- leitura dos posts (um post com erro não derruba os demais) ----------
 const files = fs.existsSync(POSTS_DIR) ? fs.readdirSync(POSTS_DIR).filter((f) => f.endsWith(".md") && !f.startsWith("_")) : [];
 const posts = [];
 const slugs = new Set();
-let erro = false;
 for (const f of files) {
-  const { data, content } = matter(fs.readFileSync(path.join(POSTS_DIR, f), "utf8"));
+  const texto = fs.readFileSync(path.join(POSTS_DIR, f), "utf8");
+  const m = texto.match(/^---\r?\n([\s\S]*?)\r?\n---/);
+  if (!m) { avisar("erro", f, 1, 'cabeçalho ausente. O arquivo deve começar com "---", ter os campos e fechar com outro "---".'); continue; }
+
+  // chaves repetidas e campos desconhecidos (apontando a linha do arquivo)
+  const vistas = new Map();
+  let repetida = false;
+  m[1].split(/\r?\n/).forEach((ln, i) => {
+    const k = ln.match(/^([^\s#:][^:]*?):(?:\s|$)/)?.[1];
+    if (!k) return;
+    if (vistas.has(k)) { repetida = true; avisar("erro", f, i + 2, `a chave "${k}" aparece duas vezes (linhas ${vistas.get(k)} e ${i + 2}). Mantenha só uma.`); }
+    else { vistas.set(k, i + 2); if (!CHAVES.has(k)) avisar("aviso", f, i + 2, `campo desconhecido "${k}" (será ignorado). Confira a grafia.`); }
+  });
+  if (repetida) continue;
+
+  let data, content;
+  try { ({ data, content } = matter(texto)); }
+  catch (e) { avisar("erro", f, e.mark ? e.mark.line + 1 : 1, `cabeçalho YAML inválido: ${e.reason || e.message}`); continue; }
+
   if (data.rascunho === true) continue;
   const date = isoDate(data.date);
-  if (!data.title || !/^\d{4}-\d{2}-\d{2}$/.test(date)) {
-    console.warn(`⚠ ${f}: faltam "title" e/ou "date" (AAAA-MM-DD). Arquivo ignorado.`);
-    continue;
-  }
+  if (!data.title) { avisar("erro", f, 0, 'falta o campo "title".'); continue; }
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) { avisar("erro", f, 0, `data inválida ou ausente (use AAAA-MM-DD). Valor lido: "${data.date ?? ""}".`); continue; }
   const slug = slugify(data.slug || f.replace(/\.md$/, "").replace(/^\d{4}-\d{2}-\d{2}-/, ""));
-  if (slugs.has(slug)) { console.error(`✖ ${f}: slug repetido "${slug}".`); erro = true; continue; }
+  if (slugs.has(slug)) { avisar("erro", f, 0, `endereço repetido "${slug}" (outro arquivo gera a mesma página).`); continue; }
   slugs.add(slug);
+  if (data.destaque !== undefined && data.destaque !== true && Number.isNaN(Number(data.destaque))) avisar("aviso", f, 0, `"destaque" deve ser um número (valor lido: "${data.destaque}"). Será tratado como 0.`);
+
   const plain = content.replace(/```[\s\S]*?```/g, " ").replace(/[#>*_`\[\]()!|-]/g, " ").replace(/\s+/g, " ").trim();
   toc = []; seenIds = new Map();
   const html = marked.parse(content).replace(/src="assets\//g, 'src="../assets/');
   const atualizado = data.atualizado ? isoDate(data.atualizado) : "";
+  const areas = toList(data.area);
+  const atuacoes = toList(data.atuacao);
   posts.push({
     slug,
     title: String(data.title),
     date,
     atualizado: /^\d{4}-\d{2}-\d{2}$/.test(atualizado) ? atualizado : "",
     summary: String(data.summary || plain.slice(0, 160).trim() + "…"),
-    area: String(data.area || "Geral"),
-    atuacao: String(data.atuacao || "Geral"),
+    area: areas[0] || "Geral",
+    areas: areas.length ? areas : ["Geral"],
+    atuacao: atuacoes[0] || "Geral",
+    atuacoes: atuacoes.length ? atuacoes : ["Geral"],
     formato: String(data.formato || "Artigo"),
     publico: toList(data.publico),
     habilidades: toList(data.habilidades),
     tags: toList(data.tags),
     destaque: data.destaque === true ? 1 : Number(data.destaque) || 0,
-    cover: data.cover ? String(data.cover) : "",
+    cover: data.cover ? resolveCover(data.cover, f) : "",
     coverAlt: String(data.cover_alt || ""),
     autoria: String(data.autoria || AUTOR_PADRAO),
     comentarios: data.comentarios !== false,
@@ -103,7 +147,6 @@ for (const f of files) {
     _toc: toc,
   });
 }
-if (erro) process.exit(1);
 posts.sort((a, b) => b.date.localeCompare(a.date));
 
 // ---------- saída ----------
@@ -113,7 +156,7 @@ for (const f of fs.readdirSync(OUT_DIR)) {
 }
 
 function related(p) {
-  const score = (q) => 3 * q.tags.filter((t) => p.tags.includes(t)).length + 2 * (q.area === p.area) + (q.atuacao === p.atuacao) + (q.formato === p.formato);
+  const score = (q) => 3 * q.tags.filter((t) => p.tags.includes(t)).length + 2 * q.areas.filter((a) => p.areas.includes(a)).length + q.atuacoes.filter((a) => p.atuacoes.includes(a)).length + (q.formato === p.formato);
   return posts.filter((q) => q.slug !== p.slug).map((q) => ({ q, s: score(q) })).sort((a, b) => b.s - a.s || b.q.date.localeCompare(a.q.date)).slice(0, 3).map((x) => x.q);
 }
 const miniCard = (q) => `<article class="post-card"><div class="post-card-body"><div class="card-tags"><span class="project-tag">${esc(q.area)}</span><span class="format-tag">${esc(q.formato)}</span></div><h3><a href="${q.slug}.html">${esc(q.title)}</a></h3><p>${esc(q.summary)}</p></div></article>`;
@@ -129,7 +172,7 @@ function postPage(p, i) {
   const skills = p.habilidades.length
     ? `<div class="post-aside"><span class="skill-label">Habilidades trabalhadas</span><div class="skill-list inline">${p.habilidades.map((h) => `<span class="skill-chip bncc">${esc(h)}</span>`).join("")}</div></div>`
     : "";
-  const meta = [fmtDate(p.date) + (p.atualizado ? ` (atualizado em ${fmtDate(p.atualizado)})` : ""), `${p.readingTime} min de leitura`, p.autoria, `Atuação: ${p.atuacao}`, p.publico.length ? `Para: ${p.publico.join(", ")}` : ""].filter(Boolean).map(esc).join(" · ");
+  const meta = [fmtDate(p.date) + (p.atualizado ? ` (atualizado em ${fmtDate(p.atualizado)})` : ""), `${p.readingTime} min de leitura`, p.autoria, `Atuação: ${p.atuacoes.join(", ")}`, p.publico.length ? `Para: ${p.publico.join(", ")}` : ""].filter(Boolean).map(esc).join(" · ");
   const title = p.title + (/[.?!]$/.test(p.title) ? "" : ".");
   const cite = `<aside class="cite" aria-labelledby="h-cite"><h2 id="h-cite">Como citar</h2><p id="cite-text">${esc(abntAuthor(p.autoria))}. ${esc(title)} <strong>Bio+Tech EduDesign</strong>, ${abntDate(p.date)}. Disponível em: ${url}. Acesso em: <span data-acesso>[data de acesso]</span>.</p><button class="btn secondary" id="copy-cite" type="button">Copiar citação</button> <span id="cite-status" role="status"></span></aside>`;
   const comments = p.comentarios
@@ -143,7 +186,7 @@ function postPage(p, i) {
     : "";
   const ld = jsonLd({
     "@context": "https://schema.org", "@type": "BlogPosting", headline: p.title, description: p.summary, inLanguage: "pt-BR",
-    datePublished: p.date, dateModified: p.atualizado || p.date, mainEntityOfPage: url, articleSection: p.area, keywords: p.tags.join(", "),
+    datePublished: p.date, dateModified: p.atualizado || p.date, mainEntityOfPage: url, articleSection: p.areas.join(", "), keywords: p.tags.join(", "),
     image: `${SITE}/${p.cover || "assets/img/hero.png"}`, author: { "@type": "Person", name: p.autoria },
     publisher: { "@type": "Organization", name: "Bio+Tech EduDesign", logo: { "@type": "ImageObject", url: `${SITE}/assets/img/favicon.png` } },
   });
@@ -176,7 +219,7 @@ function postPage(p, i) {
     <main id="conteudo">
       <article class="container post">
         <nav class="crumbs" aria-label="Você está em"><a href="../blog.html">Blog</a> / <a href="../blog.html?area=${encodeURIComponent(p.area)}">${esc(p.area)}</a></nav>
-        <div class="card-tags"><span class="project-tag">${esc(p.area)}</span><span class="format-tag">${esc(p.formato)}</span></div>
+        <div class="card-tags">${p.areas.map((a) => `<span class="project-tag">${esc(a)}</span>`).join("")}<span class="format-tag">${esc(p.formato)}</span></div>
         <h1>${esc(p.title)}</h1>
         <p class="meta">${meta}</p>
         ${cover}
@@ -260,4 +303,10 @@ fs.writeFileSync(path.join(ROOT, "404.html"), `<!DOCTYPE html>
 </html>
 `);
 
-console.log(`✔ ${posts.length} publicação(ões) gerada(s); blog.html, 404.html e sitemap.xml atualizados.`);
+const nErros = problemas.filter((p) => p.nivel === "erro").length;
+const nAvisos = problemas.length - nErros;
+console.log(`${nErros ? "⚠" : "✔"} ${posts.length} de ${files.length} publicação(ões) gerada(s); blog.html, 404.html e sitemap.xml atualizados.${nAvisos ? ` ${nAvisos} aviso(s).` : ""}`);
+if (nErros) {
+  console.error(`✖ ${nErros} erro(s) encontrados: as publicações com erro NÃO foram geradas. Corrija o(s) arquivo(s) indicado(s) acima.`);
+  process.exit(1);
+}
