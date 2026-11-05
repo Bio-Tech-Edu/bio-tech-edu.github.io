@@ -48,7 +48,7 @@
     const g = c.giscus || {};
     const d = c.disqus || {};
     const giscusOk = c.provedor === "giscus" && g.repo && g.repoId && g.categoryId;
-    const disqusOk = c.provedor === "disqus" && d.shortname;
+    const disqusOk = c.provedor === "disqus" && d.biotechedu;
     if (!giscusOk && !disqusOk) {
       status.textContent = "Os comentários serão ativados em breve. Enquanto isso, participe da comunidade pela página do blog.";
       return;
@@ -59,7 +59,7 @@
     btn.hidden = false;
     btn.addEventListener("click", () => {
       btn.hidden = true;
-      if (giscusOk) loadGiscus(g); else loadDisqus(d.shortname);
+      if (giscusOk) loadGiscus(g); else loadDisqus(d.biotechedu);
     }, { once: true });
   });
 })();
