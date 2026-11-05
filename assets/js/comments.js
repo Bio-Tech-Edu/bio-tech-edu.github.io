@@ -29,7 +29,7 @@
     }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
   }
 
-  function loadDisqus(shortname) {
+  function loadDisqus(biotechedu) {
     embed.id = "disqus_thread";
     window.disqus_config = function () {
       this.page.url = url;
@@ -37,7 +37,7 @@
       this.page.title = title;
     };
     const s = document.createElement("script");
-    s.src = `https://${shortname}.disqus.com/embed.js`;
+    s.src = `https://biotechedu.disqus.com/embed.js`;
     s.setAttribute("data-timestamp", String(Date.now()));
     s.async = true;
     document.body.append(s);
