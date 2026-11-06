@@ -29,7 +29,7 @@
     }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
   }
 
-  function loadDisqus(biotechedu) {
+  function loadDisqus(shortname) {
     embed.id = "disqus_thread";
     window.disqus_config = function () {
       this.page.url = url;
@@ -37,7 +37,7 @@
       this.page.title = title;
     };
     const s = document.createElement("script");
-    s.src = `https://biotechedu.disqus.com/embed.js`;
+    s.src = `https://${shortname}.disqus.com/embed.js`;
     s.setAttribute("data-timestamp", String(Date.now()));
     s.async = true;
     document.body.append(s);
@@ -48,7 +48,7 @@
     const g = c.giscus || {};
     const d = c.disqus || {};
     const giscusOk = c.provedor === "giscus" && g.repo && g.repoId && g.categoryId;
-    const disqusOk = c.provedor === "disqus" && d.biotechedu;
+    const disqusOk = c.provedor === "disqus" && d.shortname;
     if (!giscusOk && !disqusOk) {
       status.textContent = "Os comentários serão ativados em breve. Enquanto isso, participe da comunidade pela página do blog.";
       return;
@@ -59,7 +59,7 @@
     btn.hidden = false;
     btn.addEventListener("click", () => {
       btn.hidden = true;
-      if (giscusOk) loadGiscus(g); else loadDisqus(d.biotechedu);
+      if (giscusOk) loadGiscus(g); else loadDisqus(d.shortname);
     }, { once: true });
   });
 })();

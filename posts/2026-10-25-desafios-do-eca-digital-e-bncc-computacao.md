@@ -11,7 +11,6 @@ publico: [Professores, Gestores Escolares, Coordenadores Pedagógicos]
 cover: assets/img/blog/capa_eca_bncc.webp
 cover_alt: Professor orientando estudantes com recursos digitais em ambiente escolar de forma presencial e integrada.
 rascunho: false
-comentarios: true
 ---
 
 Planejar aulas alinhadas às exigências da Base Nacional Comum Curricular (BNCC), integrar as Tecnologias Digitais de Informação e Comunicação (TDICs) e ainda adaptar conteúdos para a diversidade da sala de aula é uma rotina exaustiva para qualquer educador. Com a chegada da BNCC da Computação e a vigência do ECA Digital (Lei nº 15.211/2025), a pressão sobre o trabalho docente aumentou exponencialmente. Como garantir uma aprendizagem ativa e segura em Ciências da Natureza sem transformar o professor em um mero gestor de riscos e burocracias virtuais? A resposta exige ressignificar a nossa intencionalidade pedagógica.
@@ -48,7 +47,7 @@ Sabemos que a sensação de estar sempre correndo contra o tempo para dar conta 
 
 A abordagem STHEAM oferece justamente o suporte metodológico necessário para transformar essas exigências em projetos vivos e prazerosos de ensinar e aprender. Quer dar o próximo passo e ver como levar essa transdisciplinaridade para a sua realidade escolar de forma descomplicada?
 
-👉 **Leia a seguir:** *[Muito Além da Teoria: Como a Jornada STHEAM Conecta a Escola à Realidade](https://bio-tech-edu.github.io/blog/jornada-stheam-conecta-a-escola-a-realidade.html)* e descubra estratégias práticas para tirar os projetos autorais do papel com os recursos que você já tem disponíveis!
+👉 **Leia a seguir:** *Muito Além da Teoria: Como a Jornada STHEAM Conecta a Escola à Realidade* e descubra estratégias práticas para tirar os projetos autorais do papel com os recursos que você já tem disponíveis!
 
 ## Referências
 
