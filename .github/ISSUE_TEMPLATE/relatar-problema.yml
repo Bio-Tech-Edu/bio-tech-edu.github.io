@@ -1,0 +1,44 @@
+name: Relatar problema
+description: Algo não funciona no site ou no blog (erro, conteúdo, layout ou acessibilidade).
+title: "[Problema] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: "Obrigado por nos ajudar. Esta issue é **pública**: não inclua dados pessoais seus ou de outras pessoas."
+  - type: input
+    id: pagina
+    attributes:
+      label: Endereço da página
+      placeholder: "https://bio-tech-edu.github.io/..."
+    validations:
+      required: true
+  - type: dropdown
+    id: tipo
+    attributes:
+      label: Tipo de problema
+      options:
+        - Erro ao carregar ou funcionar
+        - Conteúdo ou texto
+        - Layout ou visual
+        - Acessibilidade (leitor de tela, teclado, contraste)
+        - Outro
+    validations:
+      required: true
+  - type: textarea
+    id: passos
+    attributes:
+      label: O que aconteceu e como reproduzir
+      description: Descreva o passo a passo e o resultado esperado.
+    validations:
+      required: true
+  - type: input
+    id: dispositivo
+    attributes:
+      label: Dispositivo e navegador
+      placeholder: "Ex.: Android 14 · Chrome 130"
+  - type: textarea
+    id: assistiva
+    attributes:
+      label: Tecnologia assistiva usada (opcional)
+      placeholder: "Ex.: NVDA 2024 com Firefox"

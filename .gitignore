@@ -149,5 +149,7 @@ vite.config.ts.timestamp-*
 .turbo
 
 # Artefatos de entrega (não versionar patches/zips na raiz)
-.patch
-.zip
+
+# Artefatos de entrega (nunca versionar patches/zips na raiz)
+/*.patch
+/*.zip

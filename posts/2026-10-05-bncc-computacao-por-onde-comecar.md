@@ -46,9 +46,11 @@ Para visualizar como essa convergência ocorre sem sobrecarregar seu plano de au
 
 Um equívoco recorrente no ambiente escolar é associar a BNCC da Computação exclusivamente ao ensino de linguagens de programação complexas ou à aquisição de robôs educacionais caros. Essa visão distorcida gera ansiedade docente e aprofunda a desigualdade entre escolas públicas e privadas.
 
-Estudos sobre tecnologia educacional mostram que atividades "desconectadas" (*unplugged*) possuem a mesma eficácia pedagógica na consolidação de esquemas lógicos e estruturais de pensamento do que atividades mediadas por telas (BELL et al., 2012). A renovação do processo de ensino-aprendizagem não reside na tecnologia em si, mas na **intencionalidade pedagógica** com a qual o professor media a investigação. 
+Estudos sobre tecnologia educacional mostram que atividades "desplugadas" (*unplugged*) possuem a mesma eficácia pedagógica na consolidação de esquemas lógicos e estruturais de pensamento do que atividades mediadas por telas (BELL et al., 2012). A renovação do processo de ensino-aprendizagem não reside na tecnologia em si, mas na **intencionalidade pedagógica** com a qual o professor media a investigação. 
 
-Quando integramos a abordagem **STHEAM** (Ciência, Tecnologia, Humanidades, Engenharia, Artes e Matemática), a tecnologia deixa de ser um fim instrumental e passa a ser uma ferramenta humanizada de leitura de mundo. O "H" de Humanidades garante que a construção de um algoritmo ou o uso de uma simulação digital considere dilemas éticos, impactos socioambientais e a diversidade cultural do território escolar.
+Quando integramos a abordagem **STHEAM** (Ciência, Tecnologia, Humanidades, Engenharia, Artes e Matemática), a tecnologia deixa de ser um fim instrumental e passa a ser uma ferramenta humanizada de leitura de mundo. O "H" de Humanidades garante que a construção de um algoritmo ou o uso de uma simulação digital considere dilemas éticos, impactos socioambientais e a diversidade cultural do território escolar. 
+
+👉 **Conheça mais a [Jornada STREAM](https://go.hotmart.com/H108219234R?dp=1)**
 
 ## O Papel Transformador dos Recursos Educacionais Abertos (REA)
 
@@ -65,9 +67,9 @@ Na **Bio+Tech EduDesign**, acreditamos que o professor não deve caminhar sozinh
 1. **Baixe Nosso Catálogo de REAs Gratuitos:** Acesse sequências didáticas, guias de atividades desconectadas e planos de aula prontos e alinhados à BNCC e BNCC da Computação para as Ciências da Natureza.
 2. **Consultoria em Design de REA e Formação Docente:** Oferecemos mentoria e consultoria para redes de ensino, escolas e grupos de professores que desejam desenhar seus próprios materiais pedagógicos abertos, acessíveis e alinhados às metodologias ativas e à abordagem STHEAM.
 
-👉 **[Acesse o Repositório de REAs da Bio+Tech EduDesign e baixe seu primeiro kit de atividades]**(https://bio-tech-edu.github.io/)
+👉 **[Acesse o Repositório de REAs da Bio+Tech EduDesign e baixe seu primeiro kit de atividades](https://bio-tech-edu.github.io/)**
 
-👉 **Precisa de apoio para sua escola ou projeto de extensão?** [Agende uma conversa com nossa equipe de consultoria em Design Instrucional Acessível e REA!]
+👉 **Precisa de apoio para sua escola ou projeto de extensão?** Agende uma conversa com nossa equipe de consultoria em [Design Instrucional Acessível e REA](mailto:pamellabiotec@gmail.com)
 
 ---
 

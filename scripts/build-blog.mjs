@@ -75,7 +75,7 @@ function resolveCover(raw, file) {
   const alvo = String(raw).trim().replace(/^\.?\//, "");
   const base = path.basename(alvo);
   const sem = base.replace(/\.[^.]+$/, "");
-  const achado = [alvo, `assets/img/blog/${base}`, `assets/img/blog/${sem}.webp`, `assets/blog/${base}`].find((c) => fs.existsSync(path.join(ROOT, c)));
+  const achado = [alvo, `assets/img/blog/${base}`, `assets/img/blog/${sem}.webp`].find((c) => fs.existsSync(path.join(ROOT, c)));
   if (!achado) { avisar("aviso", file, 0, `capa não encontrada: "${raw}". Coloque o arquivo em assets/img/blog/. A publicação sai sem capa.`); return ""; }
   if (achado !== alvo) avisar("aviso", file, 0, `capa "${raw}" resolvida como "${achado}". Atualize o campo cover.`);
   const kb = fs.statSync(path.join(ROOT, achado)).size / 1024;
@@ -250,6 +250,59 @@ ${p._html}
 
 posts.forEach((p, i) => fs.writeFileSync(path.join(OUT_DIR, `${p.slug}.html`), postPage(p, i)));
 
+// ---------- páginas institucionais: paginas/*.md → raiz (ex.: privacidade.html, termos.html) ----------
+function paginaInstitucional({ slug, titulo, resumo, atual, corpo }) {
+  const url = `${SITE}/${slug}.html`;
+  const data = atual ? `<p class="meta">Última atualização: ${esc(fmtDate(atual))}</p>` : "";
+  return `<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>${esc(titulo)} | Bio+Tech EduDesign</title>
+    <meta name="description" content="${esc(resumo)}" />
+    <meta name="theme-color" content="#071b30" />
+    <link rel="canonical" href="${url}" />
+    <link rel="icon" type="image/png" href="assets/img/favicon.png" />
+    ${THEME_SCRIPT}
+    ${FONTS}
+    <link rel="stylesheet" href="assets/css/styles.css" />
+    <link rel="stylesheet" href="assets/css/blog.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+    <div class="bg-orb orb-one"></div>
+    <div class="bg-orb orb-two"></div>
+    ${fragment(HEADER, 0)}
+    <main id="conteudo">
+      <article class="container post">
+        <nav class="crumbs" aria-label="Você está em"><a href="index.html">Início</a> / <span>${esc(titulo)}</span></nav>
+        <h1>${esc(titulo)}</h1>
+        ${data}
+        <div class="prose">
+${corpo}
+        </div>
+      </article>
+    </main>
+    ${fragment(FOOTER, 0)}
+    <script src="assets/js/lib.js"></script>
+    <script src="assets/js/theme.js"></script>
+  </body>
+</html>
+`;
+}
+const PAGINAS_DIR = path.join(ROOT, "paginas");
+const paginas = [];
+for (const f of fs.existsSync(PAGINAS_DIR) ? fs.readdirSync(PAGINAS_DIR).filter((x) => x.endsWith(".md") && !x.startsWith("_")) : []) {
+  const { data, content } = matter(fs.readFileSync(path.join(PAGINAS_DIR, f), "utf8"));
+  const slug = f.replace(/\.md$/, "");
+  const atual = isoDate(data.atualizado);
+  const atualValida = /^\d{4}-\d{2}-\d{2}$/.test(atual) ? atual : "";
+  toc = []; seenIds = new Map();
+  fs.writeFileSync(path.join(ROOT, `${slug}.html`), paginaInstitucional({ slug, titulo: String(data.title || slug), resumo: String(data.summary || ""), atual: atualValida, corpo: marked.parse(content) }));
+  paginas.push({ slug, atual: atualValida });
+}
+
 const publico = posts.map(({ _html, _toc, ...rest }) => rest);
 fs.writeFileSync(path.join(OUT_DIR, "posts.json"), JSON.stringify(publico, null, 2) + "\n");
 
@@ -267,6 +320,7 @@ fs.writeFileSync(path.join(ROOT, "sitemap.xml"), `<?xml version="1.0" encoding="
 <url><loc>${SITE}/</loc></url>
 <url><loc>${SITE}/blog.html</loc><lastmod>${posts[0]?.date ?? today}</lastmod></url>
 ${posts.map((p) => `<url><loc>${SITE}/${p.url}</loc><lastmod>${p.atualizado || p.date}</lastmod></url>`).join("\n")}
+${paginas.map((x) => `<url><loc>${SITE}/${x.slug}.html</loc>${x.atual ? `<lastmod>${x.atual}</lastmod>` : ""}</url>`).join("\n")}
 </urlset>
 `);
 
@@ -305,7 +359,7 @@ fs.writeFileSync(path.join(ROOT, "404.html"), `<!DOCTYPE html>
 
 const nErros = problemas.filter((p) => p.nivel === "erro").length;
 const nAvisos = problemas.length - nErros;
-console.log(`${nErros ? "⚠" : "✔"} ${posts.length} de ${files.length} publicação(ões) gerada(s); blog.html, 404.html e sitemap.xml atualizados.${nAvisos ? ` ${nAvisos} aviso(s).` : ""}`);
+console.log(`${nErros ? "⚠" : "✔"} ${posts.length} de ${files.length} publicação(ões) gerada(s); blog, páginas institucionais e sitemap atualizados.${nAvisos ? ` ${nAvisos} aviso(s).` : ""}`);
 if (nErros) {
   console.error(`✖ ${nErros} erro(s) encontrados: as publicações com erro NÃO foram geradas. Corrija o(s) arquivo(s) indicado(s) acima.`);
   process.exit(1);

@@ -8,7 +8,10 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const problemas = [];
 const existe = (p) => fs.existsSync(p) && (fs.statSync(p).isFile() || fs.existsSync(path.join(p, "index.html")));
 
-const paginas = ["index.html", "blog.html", "404.html"].filter((f) => fs.existsSync(path.join(ROOT, f)));
+const paginas = fs.readdirSync(ROOT).filter((f) => f.endsWith(".html"));
+for (const obrig of ["index.html", "blog.html", "404.html", "privacidade.html", "termos.html"]) {
+  if (!fs.existsSync(path.join(ROOT, obrig))) problemas.push(`página obrigatória ausente: ${obrig} (rode o build)`);
+}
 const blogDir = path.join(ROOT, "blog");
 if (fs.existsSync(blogDir)) fs.readdirSync(blogDir).filter((f) => f.endsWith(".html")).forEach((f) => paginas.push(`blog/${f}`));
 

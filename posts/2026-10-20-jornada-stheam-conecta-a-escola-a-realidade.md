@@ -13,7 +13,7 @@ cover_alt: Professora negra sentada com colegas diversos aponta com entusiasmo p
 rascunho: false
 ---
 
-Se você acompanhou nossa reflexão anterior sobre os novos desafios impostos pelo ECA Digital e pela BNCC da Computação, já percebeu que a abordagem STHEAM (Ciência, Tecnologia, Humanidades, Engenharia, Artes e Matemática) não é apenas mais um conceito modista na educação. Ela é uma resposta necessária e urgente para conectarmos o currículo escolar à vida e ao território dos estudantes de forma significativa.
+Se você acompanhou nossa reflexão anterior sobre os novos desafios impostos pelo ECA Digital e pela BNCC da Computação, já percebeu que a [abordagem STHEAM](https://go.hotmart.com/H108219234R?dp=1) (Ciência, Tecnologia, Humanidades, Engenharia, Artes e Matemática) não é apenas mais um conceito modista na educação. Ela é uma resposta necessária e urgente para conectarmos o currículo escolar à vida e ao território dos estudantes de forma significativa.
 
 Contudo, a grande dúvida que aflige muitos educadores da Educação Básica permanece: *como sair da teoria e colocar projetos interdisciplinares e autorais em prática com a carga horária apertada e os recursos que já temos?*
 
@@ -43,7 +43,7 @@ Conforme aponta a literatura sobre formação docente, a atualização pedagógi
 
 Nós, educadores, sabemos bem que nossa formação profissional nunca se encerra no diploma universitário. A sala de aula é um organismo vivo que exige constante renovação, e contar com uma metodologia estruturada faz toda a diferença para evitar a sobrecarga de trabalho e resgatar o entusiasmo de ensinar.
 
-A Jornada STHEAM é o mapa definitivo para simplificar o alinhamento curricular, dominar metodologias ativas e criar experiências memoráveis com os seus alunos.
+A Jornada STHEAM é o mapa definitivo para simplificar o alinhamento curricular, dominar metodologias ativas e criar experiências memoráveis com os seus alunos. Para saber mais sobre essa incrível jornada, [acesse aqui](https://go.hotmart.com/H108219234R?dp=1).
 
 👉 **Não perca nossa próxima publicação!** No artigo final desta série, vamos apresentar detalhadamente a estrutura dos módulos da Jornada STHEAM, depoimentos de quem já aplicou a metodologia e uma oportunidade exclusiva para os leitores do portal **Bio+Tech EduDesign** garantirem sua vaga.
 

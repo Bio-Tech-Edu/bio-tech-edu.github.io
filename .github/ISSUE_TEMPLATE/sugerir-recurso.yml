@@ -1,0 +1,48 @@
+name: Sugerir recurso educacional
+description: Indique um OAD, REA ou RED para o catálogo.
+title: "[Recurso] "
+labels: ["recurso"]
+body:
+  - type: markdown
+    attributes:
+      value: "Sugestões de recursos abertos são bem-vindas. Confirme que a licença permite reutilização."
+  - type: input
+    id: nome
+    attributes:
+      label: Nome do recurso
+    validations:
+      required: true
+  - type: dropdown
+    id: tipo
+    attributes:
+      label: Tipo
+      options:
+        - OAD (objeto de aprendizagem digital)
+        - REA (recurso educacional aberto)
+        - RED (recurso educacional digital)
+    validations:
+      required: true
+  - type: input
+    id: link
+    attributes:
+      label: Link do recurso
+      placeholder: "https://..."
+    validations:
+      required: true
+  - type: input
+    id: habilidades
+    attributes:
+      label: Habilidades da BNCC ou da BNCC Computação
+      placeholder: "Ex.: EM13CNT101, EM13CNT103"
+  - type: input
+    id: licenca
+    attributes:
+      label: Licença do recurso
+      placeholder: "Ex.: CC BY-SA 4.0, MIT, domínio público"
+    validations:
+      required: true
+  - type: textarea
+    id: justificativa
+    attributes:
+      label: Por que ele ajuda no ensino?
+      description: Em uma ou duas frases, que aprendizagem ele favorece e para qual público.

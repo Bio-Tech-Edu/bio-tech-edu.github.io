@@ -58,7 +58,7 @@ Combine a avaliação formativa integrada ao próprio recurso com uma pergunta r
 
 ## A Solução Bio+Tech EduDesign: REAs Prontos e Consultoria em Design Educacional
 
-No portal **Bio+Tech EduDesign**, nos dedicamos a criar e curar Recursos Educacionais Abertos que conectam o ensino de Ciências da Natureza ao Pensamento Computacional, às Metodologias Ativas e às Humanidades (STHEAM).
+No portal **Bio+Tech EduDesign**, nos dedicamos a criar e curar Recursos Educacionais Abertos que conectam o ensino de Ciências da Natureza ao Pensamento Computacional, às Metodologias Ativas e às Humanidades por meio da [Jornada STHEAM](https://go.hotmart.com/H108219234R?dp=1).
 
 Se você deseja economizar tempo no seu planejamento ou quer capacitar sua equipe para produzir REAs institucionais com alto padrão pedagógico e acessibilidade:
 

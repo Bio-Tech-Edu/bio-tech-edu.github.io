@@ -1,0 +1,36 @@
+name: Sugerir tema para o blog
+description: Proponha um tema para publicação no blog.
+title: "[Blog] "
+labels: ["blog"]
+body:
+  - type: input
+    id: tema
+    attributes:
+      label: Tema proposto
+    validations:
+      required: true
+  - type: dropdown
+    id: publico
+    attributes:
+      label: Público principal
+      multiple: true
+      options:
+        - Professores
+        - Estudantes universitários
+        - Estagiários
+        - Coordenação pedagógica
+    validations:
+      required: true
+  - type: textarea
+    id: objetivo
+    attributes:
+      label: O que o leitor vai conseguir fazer depois de ler?
+    validations:
+      required: true
+  - type: checkboxes
+    id: autoria
+    attributes:
+      label: Autoria
+      options:
+        - label: Quero escrever o texto (ou colaborar com ele)
+        - label: Sugiro o tema para outra pessoa escrever

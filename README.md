@@ -22,11 +22,14 @@ Site estático (HTML, CSS e JavaScript puros), publicado pelo GitHub Pages. Tudo
 ```
 index.html               página inicial (fonte do cabeçalho e do rodapé de todas as páginas)
 blog.html                página do blog (GERADA a partir de scripts/blog.template.html)
+privacidade.html         política de privacidade (GERADA a partir de paginas/privacidade.md)
+termos.html              termos de uso e regras de comentários (GERADA a partir de paginas/termos.md)
 404.html                 página de erro (GERADA)
 sitemap.xml, robots.txt  indexação em buscadores (sitemap GERADO)
 data/
   projects.json          catálogo de recursos (dados separados da lógica)
 posts/                   textos do blog em markdown (fonte das publicações)
+paginas/                 textos institucionais em markdown (fonte de privacidade.html e termos.html)
 blog/                    publicações geradas (HTML, posts.json, feed.xml) e config.json (editável)
 assets/
   css/styles.css         tokens de tema (escuro/claro), layout e componentes globais
@@ -36,17 +39,21 @@ assets/
   js/catalog.js          catálogo: busca, filtros e cards
   js/blog.js             blog: carrossel, busca, filtros, tags, comunidade e mídia
   js/post.js             publicação: citação ABNT
-  js/comments.js         publicação: comentários (Giscus ou Disqus)
+  js/comments.js         publicação: comentários (Disqus ou Giscus), carregados após o clique
   img/                   favicon, hero (WebP), capturas (WebP), brand/ (originais) e blog/ (imagens dos posts)
 scripts/
   build-blog.mjs         conversor markdown → HTML
   blog.template.html     modelo do blog.html
-  check-links.mjs        verificador de links, imagens e IDs
+  check-links.mjs        verificador de links, imagens, IDs e páginas obrigatórias
+  check-comments.mjs     verificador da configuração de comentários
 .github/workflows/       automação (build + validação + publicação dos arquivos gerados)
-docs/                    plano de sprints
+.github/ISSUE_TEMPLATE/  modelos de issue (problema, recurso, tema de blog, denúncia de comentário)
+.github/PULL_REQUEST_TEMPLATE.md  checklist de pull request
+CONTRIBUTING.md          como contribuir (conteúdo, código, licenças e conduta)
+docs/                    plano de sprints e status
 ```
 
-**Regra de ouro:** não edite à mão os arquivos GERADOS (`blog.html`, `404.html`, `sitemap.xml`, `blog/*.html`, `blog/posts.json`, `blog/feed.xml`). Eles são recriados a cada build. Para mudar o cabeçalho ou o rodapé, edite o `index.html`.
+**Regra de ouro:** não edite à mão os arquivos GERADOS (`blog.html`, `privacidade.html`, `termos.html`, `404.html`, `sitemap.xml`, `blog/*.html`, `blog/posts.json`, `blog/feed.xml`). Eles são recriados a cada build. Para mudar o cabeçalho ou o rodapé, edite o `index.html`.
 
 ## Caminhos e GitHub Pages
 
@@ -124,16 +131,22 @@ Dois lembretes: os arquivos gerados (`blog/*.html`, `blog/posts.json`, `blog/fee
 
 ### Comentários
 
-Os comentários são carregados somente após o clique do leitor (privacidade e desempenho) e configurados em `blog/config.json`, no campo `comentarios`. Enquanto o provedor não estiver configurado, a publicação mostra um aviso.
+Os comentários são fornecidos pelo **Disqus** (shortname `biotechedu`), configurado em `blog/config.json`:
 
-**Opção recomendada: Giscus** (gratuito, sem anúncios, usa o GitHub Discussions; o leitor precisa de conta no GitHub):
+```json
+"comentarios": {
+  "provedor": "disqus",
+  "disqus": { "shortname": "biotechedu" }
+}
+```
 
-1. Em *Settings → General → Features*, ative **Discussions** no repositório.
-2. Crie a categoria **Comentários** (formato *Announcement*) e instale o app https://github.com/apps/giscus no repositório.
-3. Em https://giscus.app, informe o repositório e a categoria e copie `data-repo-id` e `data-category-id`.
-4. Preencha `giscus.repoId` e `giscus.categoryId` em `blog/config.json` (mantenha `"provedor": "giscus"`).
+Por privacidade, o Disqus só é carregado depois que o leitor clica em "Carregar comentários". Antes do clique, a página mostra o aviso de consentimento com link para a [política de privacidade](https://bio-tech-edu.github.io/privacidade.html).
 
-**Alternativa: Disqus** (login por e-mail e redes sociais; plano gratuito com anúncios e rastreamento): crie o site em https://disqus.com, copie o *shortname* para `disqus.shortname` e use `"provedor": "disqus"`.
+Se o provedor estiver vazio, a publicação mostra "Os comentários serão ativados em breve…". Se o shortname for inválido, o `npm test` falha e indica o erro.
+
+**Configuração no painel do Disqus** (feita uma vez, pelo administrador do site no Disqus): veja o passo a passo em `docs/PLANO-DE-SPRINTS.md`, seção "Configuração manual do Sprint 1".
+
+**Alternativa: Giscus** (usa GitHub Discussions; exige conta no GitHub): troque `"provedor"` para `"giscus"` e preencha `giscus.repoId` e `giscus.categoryId`, obtidos em https://giscus.app depois de ativar o *Discussions* do repositório.
 
 ### Comunidade e mídia
 
@@ -151,7 +164,11 @@ Abra http://localhost:8000. O site usa `fetch` para carregar JSON e, por isso, n
 
 ## Contribuição
 
-Sugestões de conteúdo, acessibilidade e código são bem-vindas por *issues* e *pull requests*. Todo *pull request* roda a validação automática (`npm test`). O roteiro de evolução está em [`docs/PLANO-DE-SPRINTS.md`](docs/PLANO-DE-SPRINTS.md).
+Leia o [CONTRIBUTING.md](CONTRIBUTING.md) antes de abrir uma issue ou um pull request. Há modelos prontos para problemas, sugestões de recursos, temas de blog e denúncias de comentários. Todo pull request roda a validação automática (`npm test`).
+
+Regras de convivência e de uso: [termos de uso](https://bio-tech-edu.github.io/termos.html). Tratamento de dados pessoais: [política de privacidade](https://bio-tech-edu.github.io/privacidade.html).
+
+Roteiro de evolução: [`docs/PLANO-DE-SPRINTS.md`](docs/PLANO-DE-SPRINTS.md).
 
 ## Licença
 

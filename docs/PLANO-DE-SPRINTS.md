@@ -8,7 +8,7 @@ Legenda de esforço: P (até 1 dia), M (2 a 3 dias), G (1 semana). **[IA]** indi
 |---|---|---|---|
 | **0 (concluída neste pacote)** | Corrigir e estabilizar | Correção do `blog.js` (elemento `wa-box` ausente derrubava o blog); estrutura `assets/css|js|img` e `data/`; imagens em WebP; catálogo em `data/projects.json`; verificador de links/IDs; CI com validação em PR; 404, sitemap e robots | `npm test` verde; blog lista posts; peso das imagens < 1 MB |
 | **0.1 (correção do build)** | Build do blog resiliente | Conversor que isola o erro por texto e aponta arquivo e linha; `area`/`atuacao` em lista; capas em WebP; verificação de que cada post listado tem página | Um texto com erro não impede os demais; `npm test` verde |
-| **1** | Comunidade e comentários | Ativar Discussions + Giscus (ou Disqus); política de privacidade e termos (LGPD); modelos de *issue* e *pull request*; `CONTRIBUTING.md`; links da wiki em rodapé e menu (M) | Comentário publicado e moderado em um post; página de privacidade no ar |
+| **1** | Comunidade e comentários | Disqus (shortname `biotechedu`) com carregamento sob clique; política de privacidade e termos (LGPD); modelos de *issue* e *pull request*; `CONTRIBUTING.md`; wiki no menu e no rodapé (M) | Comentário publicado e moderado em um post; página de privacidade no ar |
 | **2** | Acessibilidade verificável | `axe-core`/`pa11y` no CI; revisão manual com leitor de tela (NVDA/VoiceOver); `prefers-contrast`; textos alternativos reais para as 17 capturas **[IA]** (gerar e revisar) (M) | 0 violações críticas no CI; todas as imagens com `alt` descritivo |
 | **3** | Catálogo profissional | JSON Schema para `projects.json` validado no CI; filtros por habilidade BNCC, componente curricular e nível; página estática por recurso (`recursos/<slug>.html`) com citação e JSON-LD (G) | Cada recurso com URL própria e indexável; filtros combináveis |
 | **4** | Persistência local | Favoritos e "Minha sequência didática" em LocalStorage; exportar/importar JSON; versão para impressão do plano (CSS `@media print`) (M) | Dados sobrevivem a recarregar; exportação abre em outro navegador |
@@ -20,7 +20,35 @@ Legenda de esforço: P (até 1 dia), M (2 a 3 dias), G (1 semana). **[IA]** indi
 
 ## Dependências e riscos
 
-- Sprint 1 depende de ativar o Discussions e instalar o app do Giscus (ações do administrador da organização).
-- Giscus exige conta no GitHub; professores sem conta podem preferir Disqus ou outra solução. Avaliar com a comunidade antes de fixar o provedor.
+- Sprint 1 depende do cadastro do site no Disqus (shortname `biotechedu`) e de ajustes no painel do Disqus. Veja a seção "Configuração manual do Sprint 1".
+- O plano gratuito do Disqus pode exibir anúncios. A organização decide se mantém o plano ou migra para outro provedor (o Giscus já está suportado pelo código).
 - Se `main` tiver proteção de branch, o *bot* do workflow não consegue publicar os arquivos gerados: permitir o *bot* ou mudar o fluxo para *pull request* automático.
 - Service worker (Sprint 6) exige cuidado com versões de cache para não manter conteúdo antigo.
+
+## Status do Sprint 1
+
+| Item | Status no repositório | Pendência manual |
+|---|---|---|
+| Comentários com Disqus (`biotechedu`), carregados após o clique | Pronto (código, config e testes) | Cadastro e ajustes no painel do Disqus (abaixo) |
+| Validação da configuração de comentários | Pronto (`scripts/check-comments.mjs`, no `npm test` e no workflow) | Nenhuma |
+| Política de privacidade (LGPD) | Pronto como texto (`paginas/privacidade.md`) | Revisão jurídica ou do encarregado de dados antes da publicação oficial |
+| Termos de uso e regras de comentários | Pronto como texto (`paginas/termos.md`) | Revisão jurídica antes da publicação oficial |
+| Modelos de issue e pull request | Pronto (`.github/`) | Ativar as issues no repositório, se estiverem desativadas |
+| `CONTRIBUTING.md` | Pronto | Nenhuma |
+| Wiki no menu e no rodapé | Pronto (menu principal, rodapé e menu lateral do blog) | Nenhuma |
+| Comentário publicado e moderado | Não verificável no sandbox | Publicar um comentário de teste e moderá-lo (passo 4 abaixo) |
+| Página de privacidade no ar | Gerada pelo build | Confirmar no site após o *merge* |
+
+### Configuração manual do Sprint 1
+
+Estes passos não podem ser feitos pelo repositório. Os nomes exatos de menus do Disqus podem mudar com atualizações do painel.
+
+1. **Cadastrar o site no Disqus.** Entre em https://disqus.com/admin/ com a conta da organização e confirme que existe o site com shortname `biotechedu`. Se for outro, troque em `blog/config.json` (`comentarios.disqus.shortname`) e rode `npm test`.
+2. **Dados do site.** Em *Settings → General*, informe o nome (Bio+Tech EduDesign) e a URL `https://bio-tech-edu.github.io`.
+3. **Domínios permitidos.** Em *Settings → Advanced* (ou a seção equivalente de domínios confiáveis), inclua `bio-tech-edu.github.io`. Sem isso, o Disqus pode recusar o carregamento na página.
+4. **Moderação.** Em *Settings → Moderation*, prefira **pré-moderar todos os comentários**, já que o público inclui estudantes. Depois, publique um comentário de teste em uma publicação, aprove-o e confirme que ele aparece. Apague o comentário de teste em seguida.
+5. **Pages.** Em *Settings → Pages*, confirme *Deploy from a branch* → `main` / `(root)`.
+6. **Issues.** Em *Settings → General → Features*, confirme que **Issues** está ativado (os modelos dependem disso).
+7. **Revisão jurídica.** Antes da divulgação oficial, validar `paginas/privacidade.md` e `paginas/termos.md` com a assessoria jurídica da instituição à qual o projeto se vincula. Se houver encarregado de dados (DPO) institucional, indicá-lo na política.
+8. **Verificação final.** Abrir uma publicação, clicar em "Carregar comentários", confirmar que o formulário aparece e que o link de privacidade funciona.
+
