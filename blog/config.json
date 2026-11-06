@@ -9,7 +9,8 @@
       "category": "Comentários",
       "categoryId": ""
     },
-    "disqus": { "shortname": "" }
+    "site_name": "Bio Tech EduDesign",
+    "disqus_shortname": "biotechedu"
   },
   "midia": [
     { "titulo": "Wiki da comunidade (GitHub)", "url": "https://github.com/Bio-Tech-Edu/.github/wiki", "descricao": "Guias, boas práticas e documentação da comunidade" },
