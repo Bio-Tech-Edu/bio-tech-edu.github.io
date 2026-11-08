@@ -102,10 +102,10 @@
     ]
   },
   {
-    "slug": "org",
-    "title": "Org",
+    "slug": "quimica-organica",
+    "title": "Química Orgânica Imersiva & Mentoria de Adaptação",
     "type": "REA",
-    "summary": "Jornada interativa com cientistas brasileiras, missões, simulações e desafios em formato de aprendizagem imersiva.",
+    "summary": "Jornada interativa com cientistas brasileiras, missões, simulações e desafios com aplicação da metodologias ativas como PBL, gamificação e uso do H5P.",
     "description": "A proposta utiliza narrativa, interatividade e avaliação formativa para ampliar o engajamento e estimular o raciocínio científico.",
     "screenshot": "assets/img/screenshots/org.webp",
     "repo": "https://github.com/Bio-Tech-Edu/org",
@@ -135,6 +135,24 @@
       "EM13TD01",
       "EM13TD04",
       "EM13TD05"
+    ]
+  },
+  {
+    "slug": "mapa-preferencias-alimentares-notion",
+    "title": "Template Notion: Mapa de Preferências Alimentares - Versão Minimalista",
+    "type": "RED",
+    "summary": "Um instrumento prático de escuta e organização para transformar batalhas à mesa em conversas gentis, focado em pessoas neurodivergentes.",
+    "description": "O Mapa de Preferências Alimentares (MaPA) é um template minimalista construído no Notion, inspirado na técnica de encadeamento alimentar.",
+    "screenshot": "assets/img/screenshots/mapa.png",
+    "repo": null,
+    "link": null,
+    "bncc": [
+      "EF05CI08",
+      "EM13CNT207"
+    ],
+    "bnccComputacao": [
+      "EM13TD01",
+      "EM13TD04"
     ]
   }
 ]

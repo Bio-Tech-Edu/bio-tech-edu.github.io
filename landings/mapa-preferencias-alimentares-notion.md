@@ -9,11 +9,11 @@ licenca: "Uso pessoal; reprodução e revenda proibidas"
 
 preco: "R$ 15,00"
 preco_obs: "pagamento único, acesso vitalício"
-checkout: "https://pay.hotmart.com/COLOQUE_SEU_LINK_AQUI"
+checkout: "https://pay.hotmart.com/K108387687R"
 cta_texto: "Comprar Template por R$ 15,00"
 
 vendedor: "Bio+Tech EduDesign"
-vendedor_contato: "contato@biotechedudesign.com"
+vendedor_contato: "pamellabiotec@gmail.com"
 vendedor_documento: ""
 
 arrependimento_dias: 7
@@ -32,13 +32,13 @@ faq:
     resposta: "Assim que o pagamento for aprovado pela Hotmart, você receberá um e-mail com as instruções e o link exclusivo para duplicar o template para a sua conta."
   - pergunta: "Posso personalizar as categorias?"
     resposta: "Sim! O Notion é 100% editável. Você pode adicionar novas tags, alterar cores e adaptar o banco de dados conforme a necessidade da sua família."
-
+screenshot: "assets/img/screenshots/mapa.png"
 imagem_alt: "Captura de tela do Template Notion do Mapa de Preferências Alimentares, mostrando a tabela de alimentos, as tags de contexto e a área de cuidado do cuidador."
 ---
 
 ## Sobre o produto
 
-O **Mapa de Preferências Alimentares** é um template minimalista construído no Notion, inspirado na técnica de **encadeamento alimentar**. Ele atua como um banco de dados vivo para registrar, mapear e acompanhar alimentos favoritos, aceitos ou evitados.
+O **Mapa de Preferências Alimentares** é um template minimalista construído no Notion, inspirado na técnica de **encadeamento alimentar**. Ele atua como um banco de dados vivo para registrar, mapear e acompanhar alimentos favoritos, aceitos ou evitados, auxilia no acompanhamento profissional de nutricionista, médico, pediatra, neuropediatra, fonoaudiologa, terapeuta ocupacional, psicopedagoga, atendimento educacional especializado (AEE) e outros.
 
 Mais do que uma planilha, este é um **instrumento de escuta e organização**. O template foi desenhado para ajudar a transformar as dolorosas “batalhas à mesa” em conversas mais gentis, previsíveis e profundamente alinhadas às necessidades singulares de cada pessoa neurodivergente e de quem cuida. 
 

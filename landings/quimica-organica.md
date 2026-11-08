@@ -15,24 +15,24 @@ imagem_alt: "Captura de tela do recurso Org mostrando simulações interativas d
 
 # Serviço Adicional de Consultoria/Mentoria B2C (via Hotmart)
 servico_adicional:
-  titulo: "Mentoria B2C: Adaptação do REA Org & Treinamento Docente"
+  titulo: "Mentoria B2C: Adaptação do REA Química Orgânica & Treinamento Docente"
   preco: "R$ 75,00"
   preco_obs: "pagamento único, treinamento individualizado"
   checkout: "https://pay.hotmart.com/COLOQUE_SEU_LINK_AQUI"
   cta_texto: "Contratar Treinamento por R$ 75,00"
   vendedor: "Bio+Tech EduDesign"
-  vendedor_contato: "contato@biotechedudesign.com"
+  vendedor_contato: "pamellabiotec@gmail.com"
   arrependimento_dias: 7
   garantia: "Reembolso integral em até 7 dias após o primeiro encontro."
 ---
 
 ## Sobre o recurso
 
-O **Org** é um Recurso Educacional Aberto (REA) voltado ao ensino de Química Orgânica por meio de uma narrativa imersiva com cientistas brasileiras, missões e simulações conceituais[cite: 9, 11]. 
+O **Org** é um Recurso Educacional Aberto (REA) voltado ao ensino de Química Orgânica por meio de uma narrativa imersiva com cientistas brasileiras, missões e simulações conceituais. 
 
-A proposta utiliza a metodologia de **aprendizagem baseada em jogos, interatividade digital e avaliação formativa**[cite: 9, 11] para afastar a memorização mecânica de nomenclaturas e fórmulas. Em vez disso, o estudante assume o papel de pesquisador, enfrentando desafios reais que conectam a biologia molecular, a química de compostos orgânicos e a ciência de dados ao cotidiano científico brasileiro.
+A proposta utiliza a metodologia de **aprendizagem baseada em jogos, interatividade digital e avaliação formativa** para afastar a memorização mecânica de nomenclaturas e fórmulas. Em vez disso, o estudante assume o papel de pesquisador, enfrentando desafios reais que conectam a biologia molecular, a química de compostos orgânicos e a ciência de dados ao cotidiano científico brasileiro.
 
-Por ser um REA distribuído sob a licença **CC BY-SA 4.0**[cite: 4, 9, 11], qualquer educador pode acessar gratuitamente seu código-fonte, modificar suas atividades e utilizá-lo livremente em sala de aula[cite: 2, 4].
+Por ser um REA distribuído sob a licença **CC BY-SA 4.0**, qualquer educador pode acessar gratuitamente seu código-fonte, modificar suas atividades e utilizá-lo livremente em sala de aula.
 
 ## Como usar em sala de aula
 
@@ -43,11 +43,11 @@ Por ser um REA distribuído sob a licença **CC BY-SA 4.0**[cite: 4, 9, 11], qua
 ## Habilidades trabalhadas
 
 - **BNCC Ciências da Natureza:**
-  - `EM13CN01`: Analisar processos de conservação e transformação de matéria e energia para prever parâmetros e evoluções de sistemas[cite: 5, 6, 7, 8, 9, 10, 11].
-  - `EM13CNT204`: Elaborar explicações, previsões e modelos para interpretar fenômenos com base na estrutura dos compostos químicos e biológicos[cite: 4, 7, 9, 11].
+  - `EM13CN01`: Analisar processos de conservação e transformação de matéria e energia para prever parâmetros e evoluções de sistemas.
+  - `EM13CNT204`: Elaborar explicações, previsões e modelos para interpretar fenômenos com base na estrutura dos compostos químicos e biológicos.
 - **BNCC Computação:**
-  - `EM13TD01`: Compreender e utilizar tecnologias digitais para a construção de conhecimento em ambientes simulados[cite: 7, 9, 11].
-  - `EM13TD05`: Utilizar ferramentas computacionais para modelar, simular e solucionar problemas complexos[cite: 5, 6, 7, 8, 9, 10, 11].
+  - `EM13TD01`: Compreender e utilizar tecnologias digitais para a construção de conhecimento em ambientes simulados.
+  - `EM13TD05`: Utilizar ferramentas computacionais para modelar, simular e solucionar problemas complexos.
 
 ---
 
