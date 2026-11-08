@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Wiki da comunidade
+    url: https://github.com/Bio-Tech-Edu/.github/wiki
+    about: Guias, boas práticas e perguntas frequentes da comunidade.
+  - name: Política de privacidade e termos
+    url: https://bio-tech-edu.github.io/privacidade.html
+    about: Leia antes de denunciar um comentário ou pedir a remoção de dados pessoais.

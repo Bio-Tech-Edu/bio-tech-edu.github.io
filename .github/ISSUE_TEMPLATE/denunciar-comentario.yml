@@ -1,0 +1,36 @@
+name: Denunciar comentário
+description: Sinalize um comentário que descumpre as regras de convivência.
+title: "[Moderação] "
+labels: ["moderação"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Esta issue é **pública**. **Não copie** o comentário, nem nomes, e-mails ou outros dados pessoais: descreva o problema.
+        A moderação dos comentários é feita pelo painel do Disqus. Esta issue serve para acionar a equipe mantenedora.
+  - type: input
+    id: pagina
+    attributes:
+      label: Endereço da publicação onde está o comentário
+      placeholder: "https://bio-tech-edu.github.io/blog/..."
+    validations:
+      required: true
+  - type: dropdown
+    id: motivo
+    attributes:
+      label: Motivo
+      options:
+        - Ofensa, discriminação ou discurso de ódio
+        - Spam ou propaganda
+        - Dados pessoais de terceiros expostos
+        - Conteúdo ilegal ou violação de direitos autorais
+        - Informação científica ou normativa incorreta
+        - Outro
+    validations:
+      required: true
+  - type: textarea
+    id: descricao
+    attributes:
+      label: Descreva o problema sem copiar o texto do comentário
+    validations:
+      required: true

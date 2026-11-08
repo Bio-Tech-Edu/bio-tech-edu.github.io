@@ -1,0 +1,63 @@
+name: Gerar blog e validar site
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "posts/**"
+      - "landings/**"
+      - "assets/downloads/**"
+      - "assets/css/**"
+      - "paginas/**"
+      - "assets/img/blog/**"
+      - "assets/js/**"
+      - "blog/config.json"
+      - "data/**"
+      - "scripts/**"
+      - "index.html"
+      - "package.json"
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: blog-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Converter landing pages (markdown → HTML)
+        id: landings
+        run: node scripts/build-landings.mjs
+        continue-on-error: true   # uma landing com erro não impede as demais
+      - name: Converter posts e páginas (markdown → HTML)
+        id: build
+        run: node scripts/build-blog.mjs
+        continue-on-error: true   # um texto com erro não impede a publicação dos demais
+      - name: Validar links, imagens e IDs
+        run: node scripts/check-links.mjs
+      - name: Validar configuração de comentários
+        run: node scripts/check-comments.mjs
+      - name: Publicar arquivos gerados
+        if: github.event_name != 'pull_request'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add blog recursos lp blog.html 404.html privacidade.html termos.html sitemap.xml
+          git diff --cached --quiet || (git commit -m "chore(blog): atualiza publicações geradas" && git push)
+      - name: Falhar se algum texto tiver erro (veja as anotações com arquivo e linha)
+        if: always() && (steps.build.outcome == 'failure' || steps.landings.outcome == 'failure')
+        run: |
+          echo "::error::Há texto(s) em posts/, paginas/ ou landings/ com erro. Os demais foram publicados. Corrija o(s) arquivo(s) indicados nas anotações."
+          exit 1
