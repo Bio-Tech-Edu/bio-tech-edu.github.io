@@ -1,18 +1,18 @@
 ---
 catalogo: true
 slug: "consultoria-educacional-biotech"
-title: "Transformação Curricular com Ciência Aplicada e Computação"
+title: "Transformação Curricular com Ciência Aplicada e Tecnologias Educacionais"
 modo: "proposta"
 selo: "Consultoria, Mentoria e Recursos Educacionais Abertos (REAs)"
 resumo: "A Bio+Tech EduDesign conecta biologia, ciência de dados e design educacional em um ecossistema prático. Adapte recursos abertos à sua realidade, alinhe-se à BNCC e gere impacto pedagógico real."
 cta_texto: "Agendar Consultoria Educacional"
 vendedor: "Bio+Tech EduDesign"
-vendedor_contato: "contato@biotechedudesign.com"
+vendedor_contato: "pamellabiotec@gmail.com"
 
 formulario:
   posicao: "topo"
-  endpoint: "https://api.seuservico.com/leads/biotech"
-  titulo: "Modernize o ensino de ciências na sua instituição"
+  endpoint: "https://chat.whatsapp.com/Fzi4OJkWyMq4qjGdjovfiZ"
+  titulo: "Modernize-se! Acesse nossa Comunidade Virtual de Inovação Pedagógico (CVIP)"
   botao: "Falar com um Especialista"
   comunicacoes: "Desejo receber atualizações sobre novos REAs e artigos de design educacional."
 
@@ -66,7 +66,7 @@ blocos:
     titulo: "Explore nosso Catálogo de Recursos (REAs e REDs)"
     texto: "Conheça nossos laboratórios digitais e dashboards. Oferecemos consultoria completa para adaptar, personalizar e treinar sua equipe no uso destas ferramentas:"
     itens:
-      - titulo: "Org (Aprendizagem Imersiva)"
+      - titulo: "Química Orgânica (Aprendizagem Imersiva)"
         texto: "Jornada interativa com cientistas brasileiras, missões e desafios. **Habilidades:** EM13CN01, EM13CNT204, EM13TD01."
       - titulo: "Cinética (Simulação Química)"
         texto: "Exploração de velocidade de reação e variáveis de processos químicos. **Habilidades:** EM13CN01, EM13CNT103, EM13TD04."
@@ -101,6 +101,10 @@ cta_final:
   titulo: "Eleve o padrão do ensino de ciências na sua instituição."
   texto: "Agende uma reunião de diagnóstico e descubra como adaptar nosso catálogo de tecnologia educacional para as suas turmas."
   botao: "Agendar Consultoria Educacional"
+
+cover: assets/img/blog/capa_dua_rea.webp
+licenca: "Uso comercial; reprodução e revenda proibidas"
+imagem_alt: Professores diversos analisam e debatem entusiasmados sobre acessibilidade digital em materiais educacionais ao redor de um Chromebook, imagem gerada por IA.  
 ---
 
 ## Sobre a Bio+Tech EduDesign

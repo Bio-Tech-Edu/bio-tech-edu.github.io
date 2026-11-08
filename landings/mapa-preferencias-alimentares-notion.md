@@ -4,7 +4,7 @@ title: "Template Notion: Mapa de Preferências Alimentares - Versão Minimalista
 modo: "venda"
 resumo: "Um instrumento prático de escuta e organização para transformar batalhas à mesa em conversas gentis, focado em pessoas neurodivergentes."
 tipo: "RED"
-publico: ["Mães e Cuidadores", "Pessoas neurodivergentes", "Profissionais de saúde"]
+publico: ["Mães e Cuidadores", "Pessoas neurodivergentes", "Profissionais da Educação Especial", "Profissionais de saúde"]
 licenca: "Uso pessoal; reprodução e revenda proibidas"
 
 preco: "R$ 15,00"

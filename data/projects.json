@@ -154,5 +154,24 @@
       "EM13TD01",
       "EM13TD04"
     ]
+  },
+  {
+    "slug": "consultoria-educacional-biotech",
+    "title": "Transformação Curricular com Ciência Aplicada e Tecnologias Educacionais",
+    "type": "RED",
+    "summary": "Consultoria, Mentoria e Recursos Educacionais Abertos (REAs)",
+    "description": "A Bio+Tech EduDesign conecta biologia, ciência de dados e design educacional em um ecossistema prático. Adapte recursos abertos à sua realidade, alinhe-se à BNCC e gere impacto pedagógico real.",
+    "screenshot": "assets/img/blog/capa_dua_rea.webp",
+    "repo": null,
+    "link": null,
+    "bncc": [
+      "EM13CN02",
+      "EM13CNT301"
+    ],
+    "bnccComputacao": [
+      "EM13MD01",
+      "EM13MD03", 
+      "EM13TD01"
+    ]
   }
 ]
