@@ -13,7 +13,7 @@ formulario:
   posicao: "topo"
   endpoint: "https://chat.whatsapp.com/Fzi4OJkWyMq4qjGdjovfiZ"
   titulo: "Modernize-se! Acesse nossa Comunidade Virtual de Inovação Pedagógico (CVIP)"
-  botao: "Falar com um Especialista"
+  botao: "Acessar CVIP"
   comunicacoes: "Desejo receber atualizações sobre novos REAs e artigos de design educacional."
 
 blocos:
