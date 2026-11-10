@@ -4,9 +4,9 @@
   "type": "module",
   "description": "Site estático Bio+Tech EduDesign com blog gerado a partir de arquivos markdown.",
   "scripts": {
-    "build": "node scripts/build-landings.mjs && node scripts/build-blog.mjs",
-    "build:landings": "node scripts/build-landings.mjs",
-    "build:blog": "node scripts/build-blog.mjs",
+    "build": "node scripts/build-landings.mjs && node scripts/build-blog.mjs && node scripts/normalize-domain.mjs",
+    "build:landings": "node scripts/build-landings.mjs && node scripts/normalize-domain.mjs",
+    "build:blog": "node scripts/build-blog.mjs && node scripts/normalize-domain.mjs",
     "check": "node scripts/check-links.mjs && node scripts/check-comments.mjs",
     "test": "npm run build && node scripts/check-links.mjs && node scripts/check-comments.mjs"
   },
