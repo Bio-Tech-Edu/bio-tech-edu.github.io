@@ -1,5 +1,43 @@
 [
   {
+    "slug": "diretrizes-para-uso-da-ia-na-edu",
+    "title": "MEC Homologa Diretrizes para Uso da IA na Educação",
+    "date": "2026-11-10",
+    "atualizado": "",
+    "summary": "O MEC homologou o Parecer CNE/CP nº 15/26 com regras para o uso ético de IA na educação. Saiba o que muda e como a Mentoria AdaptaREA ajuda você a implementar tecnologia com regência humana e segurança pedagógica.",
+    "area": "Educação digital",
+    "areas": [
+      "Educação digital",
+      "Ciências da Natureza"
+    ],
+    "atuacao": "Docência",
+    "atuacoes": [
+      "Docência",
+      "Design Instrucional"
+    ],
+    "formato": "Artigo",
+    "publico": [
+      "Professores",
+      "Gestores educacionais",
+      "Licenciandos"
+    ],
+    "habilidades": [],
+    "tags": [
+      "IA na Educação",
+      "MEC",
+      "BNCC Computação",
+      "REA",
+      "Mentoria AdaptaREA"
+    ],
+    "destaque": 1,
+    "cover": "",
+    "coverAlt": "Ilustração de um professor mediando o uso de tecnologias digitais e inteligência artificial em sala de aula.",
+    "autoria": "Pâmella Araújo Balcaçar",
+    "comentarios": true,
+    "readingTime": 5,
+    "url": "blog/diretrizes-para-uso-da-ia-na-edu.html"
+  },
+  {
     "slug": "jornada-stheam-conecta-a-escola-a-realidade",
     "title": "Muito Além da Teoria: Como a Jornada STHEAM Conecta a Escola à Realidade",
     "date": "2026-10-29",
