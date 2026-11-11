@@ -10,7 +10,7 @@ tags: [IA na Educação, MEC, BNCC Computação, REA, Mentoria AdaptaREA]
 destaque: 1
 formato: Artigo
 publico: [Professores, Gestores educacionais, Licenciandos]
-cover: assets/img/blog/diretrizes-ia-mec.webp
+cover: assets/blog/prof_edu_digital.png
 cover_alt: Ilustração de um professor mediando o uso de tecnologias digitais e inteligência artificial em sala de aula.
 rascunho: false
 ---
