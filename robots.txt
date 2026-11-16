@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://bio-tech-edu.github.io/sitemap.xml
+Sitemap: https://biotech.pro.br/sitemap.xml

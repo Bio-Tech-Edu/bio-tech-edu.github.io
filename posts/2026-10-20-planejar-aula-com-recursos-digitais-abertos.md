@@ -65,7 +65,7 @@ Se você deseja economizar tempo no seu planejamento ou quer capacitar sua equip
 1. **Acesse Nossos Kits REA Prontos:** Baixe gratuitamente planos de aula, guias de experimentos e sequências didáticas investigativas prontas para aplicação imediata.
 2. **Serviço de Consultoria e Produção de REA Sob Medida:** Ajudamos redes públicas e privadas, faculdades de licenciatura e projetos educacionais a desenhar, adaptar e publicar seus próprios Recursos Educacionais Abertos de acordo com a BNCC.
 
-👉 **[Explore nosso repositório de REAs e baixe agora o Guia de Planejamento de Aulas com Tecnologias Abertas]**(https://bio-tech-edu.github.io/)
+👉 **[Explore nosso repositório de REAs e baixe agora o Guia de Planejamento de Aulas com Tecnologias Abertas]**(https://biotech.pro.br/)
 
 👉 **Sua instituição quer criar um repositório próprio de REA ou formar professores em Design Instrucional?** [Fale com nossos especialistas em consultoria de REA!]
 

@@ -1,92 +1,76 @@
-# Instruções de publicação: modelos do setor educacional
+# Instruções de publicação: domínio, serviços e captação de leads
 
-Base: branch `main` no commit `d0a422d`. Este pacote traz 7 commits: as correções do blog, as landing pages dos produtos e a nova estrutura de páginas avulsas (propostas e kits gratuitos).
+Base: branch `main` no commit `9299501` ("Add: publicação no blog e adição da imagem").
 
-## 1. Arquivos
+## 1. O que esta entrega faz
 
-| Arquivo | Uso |
-|---|---|
-| `bio-tech-edu-setor-educacional.patch` | 7 commits sobre `d0a422d`. Use para publicar pelo Git. |
-| `bio-tech-edu-setor-educacional.zip` | Projeto completo já atualizado, para subir pela interface do GitHub. |
-| `blog.html` | Página do blog (sem alterações desde a entrega anterior). |
+1. **Domínio `biotech.pro.br`:** o domínio passa a vir do arquivo `CNAME`. Canonical, Open Graph, sitemap, feed, `robots.txt` e textos do repositório usam o domínio novo. Uma verificação nova impede que o endereço antigo volte.
+2. **Página inicial:** "Para quem é" atualizado; glossário com serviço, mentoria, consultoria e assinatura; metodologia com os quatro pilares das landing pages; nova seção "Serviços".
+3. **Captação de leads (MailerLite):** o formulário da landing de consultoria envia nome e e-mail ao MailerLite e leva a pessoa à comunidade no WhatsApp.
+4. **Correção:** a landing de consultoria aparecia como "Gratuito" e o formulário enviava para um convite do WhatsApp. Agora aparece como "Sob consulta" e o envio vai ao MailerLite.
+5. **Documentação:** README e plano de sprints reescritos; guias de domínio e do MailerLite; guia de landing pages atualizado.
+6. **Build e publicação da `main`:** o `package.json` chamava `scripts/normalize-domain.mjs`, que não existe no repositório, e por isso `npm test` falhava. O domínio agora vem do `CNAME` e o script deixa de ser necessário. O `blog.yml` passa a acionar o `static.yml` depois de commitar as páginas geradas, porque commits do bot não disparam outros workflows.
+7. **Ajustes sobre os commits recentes:** os links de acesso dos REAs usam o domínio novo; a capa da nova publicação foi convertida para WebP (de 1,6 MB para 67 KB) e movida para `assets/img/blog/`.
 
-## 2. Aplicar e testar
+Não foram alterados: o carrossel do blog, o JavaScript do blog e do catálogo, e as regras de CSS existentes. As únicas regras novas de CSS são `.section-lead`, `.types-group` e `.services .cta-row`, em `assets/css/styles.css`. As regras `.blog-hero` já tinham sido removidas de `assets/css/blog.css` na `main`.
+
+## 2. Ordem de execução
+
+**Antes do merge:** confira o modo de publicação do Pages (`docs/DOMINIO.md`, seção 2) e faça DNS, GitHub Pages e HTTPS (passos 1 a 4). O merge muda os endereços do site e só deve ocorrer quando `https://biotech.pro.br` abrir.
 
 ```
 git clone https://github.com/Bio-Tech-Edu/bio-tech-edu.github.io.git
 cd bio-tech-edu.github.io
 git checkout main && git pull
-git checkout -b setor-educacional
-git am bio-tech-edu-setor-educacional.patch
+git checkout -b dominio-servicos-leads
+git am bio-tech-edu-dominio-servicos-leads.patch
 npm ci
 npm test
 git status --short
 ```
 
-O `npm test` deve terminar com:
+O `npm test` deve terminar com cinco linhas de ✔ (landing pages, blog, links, comentários e domínio). Os avisos de `servico_adicional`, `screenshot`, `subtitle` e `licenca` são esperados (veja a seção 5). O `git status` deve estar vazio.
 
 ```
-✔ 8 de 8 página(s) gerada(s) (recursos/ e lp/). 8 aviso(s).
-✔ 5 de 5 publicação(ões) gerada(s); blog, páginas institucionais e sitemap atualizados.
-✔ 18 páginas verificadas: links, imagens e IDs ok.
-✔ comentários: provedor "disqus" configurado e chaves do script conferidas.
+git push -u origin dominio-servicos-leads
 ```
 
-Os 8 avisos são de **licença** dos produtos do catálogo. Confirme a licença de cada um e preencha o campo `licenca` em `landings/<slug>.md`. O `git status` deve estar vazio depois do build.
+Abra o pull request, aguarde o check **Gerar blog e validar site** e faça o merge.
 
-## 3. O que muda para o visitante
+**Depois do merge:** MailerLite (`docs/MAILERLITE-AUTOMACAO.md`) e o teste real do formulário, antes de divulgar a página.
 
-Ao publicar, **nenhuma página nova fica pública automaticamente**. Os modelos de proposta e de kit gratuito começam com `_` e o build os ignora até que você os copie e preencha. Assim, a publicação não expõe números, depoimentos ou ofertas que ainda não foram verificados.
+## 3. Conferência em produção
 
-Muda, de imediato:
+- `https://biotech.pro.br`: nas seções "Para quem é", "Tipos de recurso e de serviço", "Metodologia" e "Serviços", os títulos e os cards aparecem alinhados, e o menu mostra "Tipos" e "Serviços".
+- Menu em largura intermediária (cerca de 800 a 1000 px) e em celular: sem rolagem horizontal.
+- `https://biotech.pro.br/blog.html`: carrossel, busca e filtros funcionando.
+- `https://biotech.pro.br/recursos/consultoria-educacional-biotech.html`: selo "Sob consulta", formulário no topo.
+- Envio de teste do formulário (janela anônima e celular): botão "Garantindo sua vaga...", abertura do WhatsApp e novo inscrito em *Subscribers* do MailerLite.
+- `https://biotech.pro.br/sitemap.xml` e `robots.txt` com o domínio novo.
 
-- A **política de privacidade** ganha a seção 2.1, sobre os dados enviados por formulários.
-- Os **termos de uso** ganham a seção 6, sobre propostas e materiais gratuitos.
-- As **landing pages dos produtos** continuam como estão.
-
-## 4. Publicar
-
-```
-git push -u origin setor-educacional
-```
-
-Abra o pull request para `main` e confirme que o check **Gerar blog e validar site** está verde. Faça o merge. O workflow regenera as páginas e publica o GitHub Pages em cerca de um minuto.
-
-Conferência em produção, com janela anônima ou Ctrl+F5:
-
-- `privacidade.html`: a seção 2.1 aparece.
-- `termos.html`: a seção 6 aparece.
-- Catálogo: os 8 cards continuam com **Ver detalhes**.
-
-## 5. Usar os modelos (quando a oferta estiver pronta)
-
-1. Copie `landings/_modelo-proposta.md` ou `landings/_modelo-captura.md` para `landings/<slug>.md`.
-2. Substitua **todos** os marcadores entre colchetes duplos por informação real. O build recusa a página e aponta a linha de cada marcador.
-3. Para o kit gratuito, coloque o arquivo em `assets/downloads/` e confirme o nome em `formulario.arquivo`.
-4. Configure o serviço de formulário e informe o endereço https em `formulario.endpoint`. Confirme no painel dele que os envios chegam ao e-mail certo.
-5. Rode `npm test`. A página aparece em `lp/<slug>.html`.
-6. Antes de publicar, siga a seção 13 do guia (revisão jurídica e LGPD).
-
-O guia completo está em `docs/GUIA-LANDING-PAGES.md`.
-
-## 6. Como reverter
-
-Os hashes mudam ao aplicar o patch, então use a posição no histórico:
+## 4. Como reverter
 
 ```
 git checkout main && git pull
-git log --oneline -8                  # confira: os 7 commits da entrega no topo
-git checkout -b reverter-setor-educacional
-git revert --no-edit HEAD~7..HEAD
-git push -u origin reverter-setor-educacional
+git log --oneline -8
+git checkout -b reverter-dominio-servicos-leads
+git revert --no-edit HEAD~N..HEAD     # N = número de commits da entrega
+git push -u origin reverter-dominio-servicos-leads
 ```
 
-Se o merge foi **Squash and merge**, a entrega virou um commit: use `git revert --no-edit HEAD`.
+Se o merge foi *Squash and merge*, use `git revert --no-edit HEAD`. A reversão de domínio também exige remover o domínio personalizado em *Settings → Pages* (veja `docs/DOMINIO.md`).
 
-## 7. Pontos não verificados e pendências
+## 5. Avisos esperados do build
 
-- **Aparência visual:** as páginas foram conferidas por estrutura e comportamento, sem renderizar no navegador. Confira `lp/*.html` com os modelos preenchidos em desktop, celular e nos dois temas antes de divulgar.
-- **Conteúdo do documento:** os números, depoimentos e a descrição da equipe do modelo original não foram publicados, porque não há como verificá-los. Substitua por dados reais, ou apague o campo.
-- **Oferta fora do catálogo:** o Projeto Executivo não é um recurso aberto. Confirme se ele deve aparecer neste site, já que o projeto é uma vitrine de recursos educacionais abertos.
-- **Revisão jurídica e LGPD:** antes de qualquer página de proposta ou de captura, veja a seção 13 do guia.
-- **Assets antigos:** os PNGs em `assets/blog/` continuam no repositório. Não são usados e podem sair em outra entrega.
+| Aviso | Significado |
+|---|---|
+| `campo desconhecido "servico_adicional"` (6 landings) | O gerador ainda não exibe a oferta adicional (mentoria paga). O link de pagamento é um marcador. O texto do corpo da página continua publicado |
+| `campo desconhecido "screenshot"` (mapa de preferências) | O campo correto é `imagem`; a página usa a captura do catálogo |
+| `campo desconhecido "subtitle"` (publicação de IA) | O gerador do blog ainda não exibe subtítulos |
+| `falta "licenca"` | Confirme a licença de cada produto e preencha o campo |
+
+## 6. Pontos não verificados
+
+- **Aparência visual:** as páginas foram conferidas por estrutura e comportamento, sem renderização em navegador. Confira o layout em desktop, em largura intermediária e em celular, nos dois temas.
+- **Envio ao MailerLite:** não foi possível testar contra o serviço real a partir do ambiente de desenvolvimento. O teste real da seção 3 é obrigatório.
+- **DNS e HTTPS do domínio novo:** não foi possível consultar o DNS a partir do ambiente de desenvolvimento.

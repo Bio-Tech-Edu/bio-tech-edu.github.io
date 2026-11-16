@@ -82,7 +82,7 @@ Garantir que todos os seus Recursos Educacionais Abertos (REA) sigam os padrões
 1. **Repositório de REAs Acessíveis:** Todos os nossos materiais pedagógicos disponíveis no portal são desenhados sob as diretrizes do DUA e WCAG, prontos para uso em salas de aula inclusivas.
 2. **Consultoria e Auditoria em Acessibilidade Digital de REA:** Prestamos serviços de consultoria para instituições de ensino, editoras pedagógicas e professores que desejam auditar, adequar ou produzir materiais digitais, apostilas e cursos online totalmente acessíveis e inclusivos.
 
-👉 **[Explore nossos REAs com validação de acessibilidade e DUA](https://bio-tech-edu.github.io/)**
+👉 **[Explore nossos REAs com validação de acessibilidade e DUA](https://biotech.pro.br/)**
 
 👉 **Sua instituição precisa adequar materiais pedagógicos às normas de acessibilidade?** **[Solicite um orçamento para nossa Consultoria em Design Instrucional Acessível e REA!](mailto:pamellabiotec@gmail.com)**
 

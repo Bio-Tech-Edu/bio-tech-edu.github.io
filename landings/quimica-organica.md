@@ -8,7 +8,7 @@ publico: ["Professores de Química", "Licenciandos em Ciências", "Estudantes do
 habilidades: ["EM13CN01", "EM13CNT204"]
 habilidades_computacao: ["EM13TD01", "EM13TD05"]
 repositorio: "https://github.com/Bio-Tech-Edu/org"
-acesso: "https://bio-tech-edu.github.io/org/"
+acesso: "https://biotech.pro.br/org/"
 cta_texto: "Acessar REA Gratuito"
 licenca: "CC BY-SA 4.0"
 imagem_alt: "Captura de tela do recurso Org mostrando simulações interativas de Química Orgânica e narrativa com cientistas brasileiras."

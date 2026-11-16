@@ -4,7 +4,7 @@ summary: Quais dados o site trata, como funcionam os comentários do Disqus e qu
 atualizado: 2026-11-06
 ---
 
-Esta política explica como o site **Bio+Tech EduDesign** (https://bio-tech-edu.github.io) trata dados pessoais, em linguagem clara, de acordo com a Lei Geral de Proteção de Dados Pessoais (LGPD, Lei nº 13.709/2018).
+Esta política explica como o site **Bio+Tech EduDesign** (https://biotech.pro.br) trata dados pessoais, em linguagem clara, de acordo com a Lei Geral de Proteção de Dados Pessoais (LGPD, Lei nº 13.709/2018).
 
 ## 1. Quem é responsável
 
@@ -12,7 +12,7 @@ O site é um projeto educacional mantido por Pâmella Araújo Balcaçar, vincula
 
 ## 2. Dados tratados pelo próprio site
 
-O site é estático: não há cadastro nem login, e o site não grava cookies próprios. Formulários de propostas e de materiais gratuitos, quando existem, enviam os dados ao serviço indicado em cada página (seção 2.1). Fora isso, tratamos apenas:
+O site é estático: não há cadastro nem login, e o site não grava cookies próprios. Formulários de inscrição, de propostas e de materiais gratuitos, quando existem, enviam os dados aos serviços descritos na seção 2.1. Fora isso, tratamos apenas:
 
 - **Preferência de tema (claro ou escuro):** fica no armazenamento local do seu navegador (localStorage). Não é enviada a nenhum servidor e pode ser apagada nas configurações do navegador.
 - **Registros técnicos de acesso:** o GitHub Pages, que hospeda o site, registra dados como endereço IP, tipo de navegador e horário de acesso, conforme a [política de privacidade do GitHub](https://docs.github.com/pt/site-policy/privacy-policies/github-privacy-statement).
@@ -21,16 +21,18 @@ O site é estático: não há cadastro nem login, e o site não grava cookies pr
 
 Não vendemos dados pessoais e não os usamos para publicidade.
 
-### 2.1 Formulários de propostas e de materiais gratuitos
+### 2.1 Formulários de inscrição, propostas e materiais gratuitos
 
-Algumas páginas do site apresentam um formulário para solicitar uma proposta ou baixar um material gratuito. Ao enviá-lo, os dados informados são recebidos pelo serviço de formulário indicado naquela página, em nome da organização responsável pela oferta.
+Algumas páginas do site têm um formulário para entrar na comunidade, solicitar uma proposta ou baixar um material gratuito. Ao enviá-lo, você fornece os dados pedidos naquela página.
 
-- **Dados:** nome, e-mail e os demais campos do formulário da página, como função na educação, tipo de instituição, número de alunos ou WhatsApp.
-- **Finalidade:** responder à sua solicitação, enviar o material escolhido e, somente se você marcar a opção, enviar novidades e materiais educacionais.
+- **Dados:** nome e e-mail nos formulários de comunidade e de materiais. Formulários de proposta podem pedir também função na educação, tipo de instituição, número de alunos ou WhatsApp.
+- **MailerLite:** nos formulários de comunidade e de materiais, nome e e-mail são enviados ao MailerLite, serviço de envio de e-mails de terceiros, que opera como nosso operador de dados e pode tratá-los em servidores fora do Brasil (transferência internacional, com base no seu consentimento e nas garantias do próprio serviço, art. 33 da LGPD). Usamos esses dados para enviar o e-mail de boas-vindas com o acesso aos recursos e, conforme o aceite que você deu, novidades e artigos de design educacional.
+- **WhatsApp:** depois do envio, você é levado ao convite da comunidade no WhatsApp (Meta). A partir daí valem os termos e a política do WhatsApp. Seu número e nome de perfil podem ficar visíveis a administradores e participantes, conforme as configurações do grupo e do seu perfil. Entrar no grupo é uma escolha sua, feita no aplicativo.
+- **Falhas de conexão:** se o envio dos dados não for concluído por problema de conexão, você é levado ao convite mesmo assim e seus dados podem não ter sido registrados. Nesse caso, basta preencher o formulário de novo.
 - **Base legal:** seu consentimento (art. 7º, I, da LGPD), dado ao marcar a caixa de aceite. Nas propostas solicitadas por você, também são usadas medidas preliminares a um contrato (art. 7º, V).
-- **Novidades:** você pode cancelar o recebimento a qualquer momento, pelo link presente nos e-mails ou pelos canais da seção 7.
-- **Compartilhamento:** o serviço de formulário trata os dados conforme a política própria dele. Não vendemos dados nem os compartilhamos com terceiros para publicidade.
-- **Prazo:** mantemos os dados pelo tempo necessário para atender à sua solicitação e cumprir obrigações legais. Excluímos os dados de contato quando você solicitar.
+- **Cancelamento:** todo e-mail enviado traz um link para cancelar o recebimento. Você também pode pedir a exclusão dos seus dados pelos canais da seção 7.
+- **Compartilhamento:** não vendemos dados nem os compartilhamos para publicidade. Os serviços citados tratam os dados conforme as políticas próprias deles.
+- **Prazo:** mantemos os dados enquanto você estiver inscrito e pelo tempo necessário para cumprir obrigações legais. Excluímos os dados de contato quando você pedir ou cancelar a inscrição.
 
 ## 3. Comentários (Disqus)
 

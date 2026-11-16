@@ -8,7 +8,7 @@ publico: ["Professores de Química", "Licenciandos em Ciências", "Estudantes do
 habilidades: ["EM13CN01", "EM13CNT103"]
 habilidades_computacao: ["EM13TD04", "EM13TD05"]
 repositorio: "https://github.com/Bio-Tech-Edu/solucoes"
-acesso: "https://bio-tech-edu.github.io/solucoes/"
+acesso: "https://biotech.pro.br/solucoes/"
 cta_texto: "Acessar REA Gratuito"
 licenca: "CC BY-SA 4.0"
 imagem_alt: "Captura de tela do recurso Soluções mostrando simulação de dissolução, saturação, diluição e curvas de solubilidade."

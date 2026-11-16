@@ -8,7 +8,7 @@ publico: ["Professores de Química", "Licenciandos em Ciências", "Estudantes do
 habilidades: ["EM13CN01", "EM13CNT103"]
 habilidades_computacao: ["EM13TD04", "EM13TD05"]
 repositorio: "https://github.com/Bio-Tech-Edu/cinetica"
-acesso: "https://bio-tech-edu.github.io/cinetica/"
+acesso: "https://biotech.pro.br/cinetica/"
 cta_texto: "Acessar REA Gratuito"
 licenca: "CC BY-SA 4.0"
 imagem_alt: "Captura de tela do recurso Cinética mostrando gráficos de velocidade de reação e simulador de colisões moleculares."

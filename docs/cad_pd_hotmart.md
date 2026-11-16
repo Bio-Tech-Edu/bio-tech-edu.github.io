@@ -34,7 +34,7 @@ O processo é estruturado de forma prática, direta e dividida em etapas estrat�
 4.  **Comunidade Exclusiva:** Acesso contínuo à nossa rede para atualização constante.
 
 ### Sobre a Mentora
-Desenvolvida por **Pâmella Araújo Balcaçar**, especialista em Educação Digital e design instrucional na intersecção entre Ciências Biológicas e Computação, a metodologia da Bio+Tech EduDesign alia o rigor científico e tecnológico à empatia com a realidade da sala de aula. Tendo mais de 15 anos de experiência de atuação na educação promovendo essa intersecção no ensino. 
+Desenvolvida por **Pâmella Araújo Balcaçar**, especialista em Educação Digital e design instrucional na intersecção entre Ciências Biológicas e a Computação, a metodologia da Bio+Tech EduDesign alia o rigor científico e tecnológico à empatia com a realidade da sala de aula. Tendo mais de 15 anos de experiência de atuação na educação promovendo essa intersecção no ensino. 
 
 Não passe mais horas tentando adaptar materiais sozinho ou deixando de usar tecnologias incríveis por falta de tempo ou suporte técnico. 
 

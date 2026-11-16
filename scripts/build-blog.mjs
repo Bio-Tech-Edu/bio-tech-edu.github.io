@@ -276,8 +276,9 @@ ${lpPaginas.map((r) => `<url><loc>${SITE}/lp/${r}</loc></url>`).join("\n")}
 </urlset>
 `);
 
+fs.writeFileSync(path.join(ROOT, "robots.txt"), `User-agent: *\nAllow: /\n\nSitemap: ${SITE}/sitemap.xml\n`);
 const tpl = fs.readFileSync(path.join(ROOT, "scripts", "blog.template.html"), "utf8");
-fs.writeFileSync(path.join(ROOT, "blog.html"), tpl.replace("<!--THEME-->", THEME_SCRIPT).replace("<!--HEADER-->", fragment(HEADER, 0)).replace("<!--FOOTER-->", fragment(FOOTER, 0)));
+fs.writeFileSync(path.join(ROOT, "blog.html"), tpl.replace("<!--SITE-->", SITE).replace("<!--THEME-->", THEME_SCRIPT).replace("<!--HEADER-->", fragment(HEADER, 0)).replace("<!--FOOTER-->", fragment(FOOTER, 0)));
 
 fs.writeFileSync(path.join(ROOT, "404.html"), `<!DOCTYPE html>
 <html lang="pt-BR">

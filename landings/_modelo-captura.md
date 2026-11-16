@@ -27,6 +27,14 @@ vendedor_contato: "[[E-MAIL DE CONTATO]]"
 formulario:
   posicao: "topo"                  # o formulário fica ao lado do título, como no modelo
   endpoint: "[[LINK HTTPS DO SERVIÇO QUE RECEBE O FORMULÁRIO]]"
+  # MAILERLITE (captação de leads com redirecionamento, ex.: comunidade no WhatsApp). Para usar, troque o
+  # endpoint acima pelo endereço de envio do formulário do MailerLite e descomente as linhas abaixo:
+  # provedor: "mailerlite"
+  # redirecionar: "https://chat.whatsapp.com/CODIGO-DO-CONVITE"     # para onde a pessoa vai depois do envio
+  # botao_enviando: "Garantindo sua vaga..."                         # texto do botão durante o envio
+  # consentimento: "Texto do aceite. Com o MailerLite, toda inscrição entra na lista; por isso o aceite é único."
+  # Endereço de envio: https://assets.mailerlite.com/jsonp/<conta>/forms/<formulário>/subscribe
+  # No modo MailerLite o formulário tem só Nome e E-mail, e "comunicacoes" é ignorado.
   arquivo: "assets/downloads/[[NOME-DO-ARQUIVO]].pdf"   # o material gratuito; deve existir no repositório
   titulo: "Solicite agora seu kit"
   botao: "Garanta seu kit gratuito"

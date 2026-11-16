@@ -850,3 +850,8 @@ a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{o
 /* --- sprint 1: links institucionais no rodapé --- */
 .footer-links{display:flex;flex-wrap:wrap;gap:4px 16px}
 .footer-links a{min-height:44px;display:inline-flex;align-items:center;color:var(--cyan);font-weight:600}
+
+/* --- seções de serviços e glossário (classes novas; nenhuma regra existente foi alterada) --- */
+.section-lead{margin:0 auto 32px;max-width:760px;text-align:center;color:var(--muted);line-height:1.8}
+.types-group{margin-top:40px}
+.services .cta-row{justify-content:center}

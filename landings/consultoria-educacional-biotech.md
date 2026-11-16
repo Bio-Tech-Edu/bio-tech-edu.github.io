@@ -10,11 +10,14 @@ vendedor: "Bio+Tech EduDesign"
 vendedor_contato: "pamellabiotec@gmail.com"
 
 formulario:
+  provedor: "mailerlite"
   posicao: "topo"
-  endpoint: "https://chat.whatsapp.com/Fzi4OJkWyMq4qjGdjovfiZ"
-  titulo: "Modernize-se! Acesse nossa Comunidade Virtual de Inovação Pedagógico (CVIP)"
+  endpoint: "https://assets.mailerlite.com/jsonp/2784700/forms/203766765538247789/subscribe"
+  redirecionar: "https://chat.whatsapp.com/Fzi4OJkWyMq4qjGdjovfiZ"
+  titulo: "Modernize-se! Acesse nossa Comunidade Virtual de Inovação Pedagógica (CVIP)"
   botao: "Acessar CVIP"
-  comunicacoes: "Desejo receber atualizações sobre novos REAs e artigos de design educacional."
+  botao_enviando: "Garantindo sua vaga..."
+  consentimento: "Desejo receber o e-mail de boas-vindas com o acesso aos Recursos Educacionais Abertos (REAs) e atualizações sobre novos REAs e artigos de design educacional. Concordo que meu nome e e-mail sejam tratados pela Bio+Tech EduDesign e pelo serviço de e-mail MailerLite, conforme a política de privacidade."
 
 blocos:
   - tipo: "cards"

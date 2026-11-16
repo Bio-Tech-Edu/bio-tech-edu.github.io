@@ -8,7 +8,7 @@ publico: ["Professores de Química", "Licenciandos em Ciências", "Estudantes do
 habilidades: ["EM13CN01", "EM13CNT103"]
 habilidades_computacao: ["EM13TD04", "EM13TD05"]
 repositorio: "https://github.com/Bio-Tech-Edu/equilibrio"
-acesso: "https://bio-tech-edu.github.io/equilibrio/"
+acesso: "https://biotech.pro.br/equilibrio/"
 cta_texto: "Acessar REA Gratuito"
 licenca: "CC BY-SA 4.0"
 imagem_alt: "Captura de tela do recurso Equilíbrio mostrando perturbações em sistemas reversíveis e gráficos de constantes de equilíbrio (Kc)."

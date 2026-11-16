@@ -63,7 +63,7 @@ O nome do arquivo deve ser exatamente igual ao `slug`. Exemplo: `slug: "cinetica
 | `habilidades_computacao` | não | Códigos da BNCC Computação. |
 | `licenca` | recomendado | Licença ou condições de uso. O build avisa quando falta. |
 | `imagem_alt` | recomendado | Descrição da imagem para leitores de tela. O build avisa quando falta. |
-| `imagem` | não | Caminho de outra imagem, a partir da raiz. Se omitido, usa a captura do catálogo. |
+| `imagem` | não | Caminho de outra imagem, a partir da raiz (`cover` também é aceito). Se omitido, usa a captura do catálogo. |
 | `cta_texto` | não | Texto do botão principal. |
 
 ### Campos do modo gratuito
@@ -129,6 +129,9 @@ O build não para por causa de um arquivo com erro: gera os demais e aponta o pr
 | `falta "licenca"` (aviso) | Confirme a licença do recurso e preencha o campo. |
 | `falta "imagem_alt"` (aviso) | Descreva a imagem em uma frase. |
 | `cabeçalho inválido` | Confira aspas, dois-pontos e recuos do cabeçalho (a parte entre as linhas `---`). |
+| `campo desconhecido "x"` (aviso) | Erro de grafia no nome do campo, ou campo que o gerador ainda não suporta (ex.: `servico_adicional`); ele é ignorado e não aparece na página. |
+| `com o MailerLite, "formulario.endpoint" deve ser o endereço de envio` | Copie o `action` do código de incorporação do MailerLite. |
+| `com o MailerLite, "formulario.redirecionar" é obrigatório` | Informe a página https de destino (ex.: convite do WhatsApp). |
 
 Além disso, o `npm test` verifica se cada produto do catálogo tem a sua landing page. Se faltar, o teste aponta qual slug precisa do arquivo.
 
@@ -242,6 +245,44 @@ Campos do bloco `formulario`:
 | `redirecionar` | Opcional: outra página https para onde ir depois do envio. |
 
 Cada página tem um campo oculto de origem (`origem`, com o slug) e um campo de proteção contra robôs (que o visitante não vê). O serviço de formulário precisa aceitar envios do site; siga a documentação dele para configurar o destino dos e-mails e, se for o caso, o redirecionamento.
+
+### Formulário com MailerLite (captação de leads com redirecionamento)
+
+Use quando o formulário deve **inscrever a pessoa em uma lista do MailerLite** e depois levá-la a outra página, como a comunidade do WhatsApp. Funciona em `proposta` e `captura`, em páginas avulsas e em produtos do catálogo.
+
+```yaml
+formulario:
+  provedor: "mailerlite"
+  posicao: "topo"
+  endpoint: "https://assets.mailerlite.com/jsonp/<conta>/forms/<formulário>/subscribe"
+  redirecionar: "https://chat.whatsapp.com/<convite>"
+  titulo: "Título do formulário"
+  botao: "Acessar a comunidade"
+  botao_enviando: "Garantindo sua vaga..."
+  consentimento: "Texto do aceite, citando o MailerLite e a política de privacidade."
+```
+
+| Campo | Descrição |
+|---|---|
+| `provedor` | `mailerlite`. Se o `endpoint` tiver o formato do MailerLite, o provedor é reconhecido mesmo sem este campo. |
+| `endpoint` | **Obrigatório.** Endereço de envio do formulário, copiado do código de incorporação do MailerLite (atributo `action`). O build recusa outros formatos. |
+| `redirecionar` | **Obrigatório.** Página https para onde a pessoa vai depois do envio. |
+| `botao_enviando` | Texto do botão durante o envio. Padrão: "Garantindo sua vaga...". |
+| `consentimento` | Texto do aceite obrigatório. Substitui o texto padrão. |
+
+Como o formulário se comporta:
+
+- Os campos são **Nome** e **E-mail**, enviados como `fields[name]` e `fields[email]`, o formato do formulário incorporado do MailerLite.
+- O envio acontece em segundo plano e a pessoa é **sempre** levada ao destino, mesmo se o envio falhar ou demorar mais de 8 segundos.
+- A caixa opcional `comunicacoes` não existe nesse modo: toda inscrição entra na lista. Por isso, o texto de `consentimento` deve cobrir o recebimento do e-mail de boas-vindas e das novidades. O build avisa se `comunicacoes` for preenchido.
+- Sem JavaScript, o formulário mostra um aviso com o link direto para o destino.
+- O script `assets/js/lead-form.js` só é carregado nas páginas que têm esse formulário.
+
+Antes de divulgar, faça o teste real descrito em `docs/MAILERLITE-AUTOMACAO.md`.
+
+### Rótulos de acesso em produtos do catálogo
+
+O selo e a ficha do recurso mostram o tipo de acesso conforme o `modo`: `gratuito` ("Gratuito"), `venda` ("Produto pago"), `proposta` ("Sob consulta") e `captura` ("Gratuito, com cadastro"). O campo `selo` substitui o texto do selo.
 
 ### Depoimentos e prova social
 

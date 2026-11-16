@@ -19,6 +19,13 @@ const CAMPO = /^[a-z][a-z0-9_]*$/;
 const https = (u) => /^https:\/\/\S+$/.test(String(u || ""));
 const MARCADOR = /\[\[[^\]]*\]\]/;
 const noActions = process.env.GITHUB_ACTIONS === "true";
+const MAILERLITE = /^https:\/\/assets\.mailerlite\.com\/jsonp\/\d+\/forms\/\d+\/subscribe$/;
+const CAMPOS_MAILERLITE = [
+  { nome: "name", rotulo: "Nome", tipo: "text", autocomplete: "name" },
+  { nome: "email", rotulo: "E-mail", tipo: "email", autocomplete: "email" },
+];
+const CONSENTIMENTO_MAILERLITE = "Concordo em receber o e-mail de boas-vindas e novidades da Bio+Tech EduDesign e que meus dados sejam tratados por ela e pelo serviço de e-mail MailerLite, conforme a política de privacidade.";
+const CHAVES = new Set(["catalogo", "slug", "title", "modo", "tipo", "selo", "resumo", "cta_texto", "publico", "habilidades", "habilidades_computacao", "licenca", "imagem", "cover", "imagem_alt", "acesso", "repositorio", "preco", "preco_obs", "checkout", "vendedor", "vendedor_contato", "vendedor_documento", "arrependimento_dias", "garantia", "inclui", "faq", "formulario", "blocos", "cta_final", "prova_social", "cabecalho"]);
 const CONSENTIMENTO_PADRAO = "Concordo que meus dados sejam usados para o contato sobre esta solicitação, conforme a política de privacidade do site.";
 const CAMPOS_PROPOSTA = [
   { nome: "nome", rotulo: "Nome completo", tipo: "text", autocomplete: "name" },
@@ -46,7 +53,14 @@ function validarFormulario(f, modo, file) {
   const erro = (m) => { avisar("erro", file, m); return null; };
   if (!f.endpoint) return erro(`modo ${modo} precisa de "formulario.endpoint" (link https do serviço que recebe os dados).`);
   if (!https(f.endpoint)) return erro('"formulario.endpoint" deve começar com https://');
-  const campos = Array.isArray(f.campos) && f.campos.length ? f.campos : (modo === "proposta" ? CAMPOS_PROPOSTA : CAMPOS_CAPTURA);
+  if (f.provedor !== undefined && !["mailerlite", "padrao"].includes(String(f.provedor))) return erro(`"formulario.provedor" desconhecido: "${f.provedor}". Use "mailerlite" ou "padrao".`);
+  const ml = f.provedor === "mailerlite" || MAILERLITE.test(String(f.endpoint));
+  if (ml) {
+    if (!MAILERLITE.test(String(f.endpoint))) return erro('com o MailerLite, "formulario.endpoint" deve ser o endereço de envio do formulário: https://assets.mailerlite.com/jsonp/<conta>/forms/<formulário>/subscribe');
+    if (f.redirecionar && !https(f.redirecionar)) return erro('"formulario.redirecionar" deve começar com https://');
+    if (!f.redirecionar && modo !== "captura") return erro('com o MailerLite, "formulario.redirecionar" é obrigatório: é para onde a pessoa vai depois do envio (ex.: a comunidade do WhatsApp).');
+  }
+  const campos = Array.isArray(f.campos) && f.campos.length ? f.campos : (ml ? CAMPOS_MAILERLITE : modo === "proposta" ? CAMPOS_PROPOSTA : CAMPOS_CAPTURA);
   for (const c of campos) {
     if (!c || !CAMPO.test(String(c.nome || ""))) return erro(`campo de formulário com nome inválido: "${c?.nome ?? ""}" (use minúsculas, números e _).`);
     if (!c.rotulo) return erro(`campo "${c.nome}" sem "rotulo".`);
@@ -60,13 +74,16 @@ function validarFormulario(f, modo, file) {
     if (!fs.existsSync(path.join(ROOT, arquivo))) return erro(`arquivo do material não encontrado: ${arquivo}. Coloque o arquivo no repositório antes de publicar.`);
   }
   if (f.redirecionar && !https(f.redirecionar)) return erro('"formulario.redirecionar" deve começar com https://');
+  if (ml && f.comunicacoes) avisar("aviso", file, '"formulario.comunicacoes" é ignorado com o MailerLite: toda inscrição entra na lista. Coloque o texto do aceite em "formulario.consentimento".');
   return {
     titulo: String(f.titulo || ""),
     endpoint: String(f.endpoint),
     botao: String(f.botao || (modo === "captura" ? "Baixar material gratuito" : "Solicitar proposta")),
     campos,
-    consentimento: String(f.consentimento || CONSENTIMENTO_PADRAO),
-    comunicacoes: f.comunicacoes === undefined ? "Quero receber novidades e materiais por e-mail." : String(f.comunicacoes),
+    ml,
+    botaoEnviando: String(f.botao_enviando || "Garantindo sua vaga..."),
+    consentimento: String(f.consentimento || (ml ? CONSENTIMENTO_MAILERLITE : CONSENTIMENTO_PADRAO)),
+    comunicacoes: ml ? "" : f.comunicacoes === undefined ? "Quero receber novidades e materiais por e-mail." : String(f.comunicacoes),
     redirecionar: arquivo ? `${SITE}/${arquivo}` : String(f.redirecionar || ""),
     arquivo,
   };
@@ -105,6 +122,7 @@ function lerLanding(file) {
   const marcador = bruto.match(MARCADOR);
   if (marcador) return erro(`marcador não preenchido: ${marcador[0]}. Substitua pelo texto real (ou apague o campo) antes de publicar.`);
 
+  const chavesDoArquivo = Object.keys(data); // antes de o gerador acrescentar campos internos
   const nome = file.replace(/\.md$/, "");
   const slug = String(data.slug || "");
   if (!slug) return erro('falta o campo "slug".');
@@ -155,7 +173,8 @@ function lerLanding(file) {
   }
   if (data.cta_final && (!data.cta_final.titulo || !data.cta_final.botao)) return erro('"cta_final" precisa de "titulo" e "botao".');
 
-  const imagem = data.imagem ? String(data.imagem) : (produto ? produto.screenshot : "");
+  for (const k of chavesDoArquivo) if (!CHAVES.has(k)) avisar("aviso", file, `campo desconhecido "${k}" (será ignorado). Confira a grafia.`);
+  const imagem = data.imagem ? String(data.imagem) : data.cover ? String(data.cover) : (produto ? produto.screenshot : "");
   if (imagem && !fs.existsSync(path.join(ROOT, imagem))) return erro(`imagem não encontrada: ${imagem}`);
   if (imagem && !data.imagem_alt) avisar("aviso", file, 'falta "imagem_alt". Descreva a imagem para leitores de tela.');
   if (catalogo && !data.licenca) avisar("aviso", file, 'falta "licenca". Confirme a licença do recurso antes de publicar.');
@@ -174,7 +193,7 @@ function formHtml(F, L) {
   const campos = F.campos.map((c) => {
     const id = `campo-${c.nome}`;
     const obrig = c.obrigatorio !== false;
-    const attrs = `name="${c.nome}" id="${id}"${obrig ? ' required aria-required="true"' : ""}${c.autocomplete ? ` autocomplete="${esc(c.autocomplete)}"` : ""}`;
+    const attrs = `name="${F.ml ? `fields[${c.nome}]` : c.nome}" id="${id}"${obrig ? ' required aria-required="true"' : ""}${c.autocomplete ? ` autocomplete="${esc(c.autocomplete)}"` : ""}`;
     const control = c.tipo === "select"
       ? `<select ${attrs}><option value="">Selecione</option>${c.opcoes.map((o) => `<option value="${esc(o)}">${esc(o)}</option>`).join("")}</select>`
       : `<input type="${esc(c.tipo || "text")}" ${attrs}${c.tipo === "number" ? ' min="1"' : ""} />`;
@@ -182,16 +201,19 @@ function formHtml(F, L) {
   }).join("");
   const titulo = F.titulo ? `<h2 id="formulario-titulo">${esc(F.titulo)}</h2>` : "";
   return `<div class="lp-form-card" id="formulario">
-            <form class="lp-form" action="${esc(F.endpoint)}" method="post"${F.titulo ? ' aria-labelledby="formulario-titulo"' : ""}>
+            <form class="lp-form" action="${esc(F.endpoint)}" method="post"${F.titulo ? ' aria-labelledby="formulario-titulo"' : ""}${F.ml ? ` data-lead-form data-redirect="${esc(F.redirecionar)}" data-sending-label="${esc(F.botaoEnviando)}"` : ""}>
               ${titulo}
-              <input type="hidden" name="_subject" value="${esc(L.title)}" />
+              ${F.ml ? `<input type="hidden" name="ml-submit" value="1" />
+              <input type="hidden" name="anticsrf" value="true" />` : `<input type="hidden" name="_subject" value="${esc(L.title)}" />
               <input type="hidden" name="origem" value="${esc(L.slug)}" />
-              ${F.redirecionar ? `<input type="hidden" name="_next" value="${esc(F.redirecionar)}" />` : ""}
+              ${F.redirecionar ? `<input type="hidden" name="_next" value="${esc(F.redirecionar)}" />` : ""}`}
               <div class="hp-field" aria-hidden="true"><label for="campo-_gotcha">Deixe este campo vazio</label><input type="text" name="_gotcha" id="campo-_gotcha" tabindex="-1" autocomplete="off" /></div>
               ${campos}
               <div class="lp-check"><input type="checkbox" id="consentimento" name="consentimento" value="sim" required aria-required="true" /><label for="consentimento">${esc(F.consentimento)} <a href="../privacidade.html">Ler a política de privacidade</a></label></div>
               ${F.comunicacoes ? `<div class="lp-check"><input type="checkbox" id="comunicacoes" name="comunicacoes" value="sim" /><label for="comunicacoes">${esc(F.comunicacoes)}</label></div>` : ""}
-              <button class="btn primary" type="submit">${esc(F.botao)}</button>
+              <button class="btn primary" type="submit">${esc(F.botao)}</button>${F.ml ? `
+              <p class="visually-hidden lead-status" role="status" aria-live="polite"></p>
+              <noscript><p>Ative o JavaScript para enviar o formulário, ou <a href="${esc(F.redirecionar)}" target="_blank" rel="noopener noreferrer">entre direto na comunidade</a>.</p></noscript>` : ""}
             </form>
           </div>`;
 }
@@ -227,8 +249,9 @@ function landingPage(L) {
     ctaTexto = data.cta_texto ? String(data.cta_texto) : acesso ? "Acessar o recurso" : "Ver no GitHub";
     ctaHref = acesso || repo; ctaExternoAttr = ctaExterno;
   }
+  const rotuloAcesso = venda ? "Produto pago" : modo === "proposta" ? "Sob consulta" : modo === "captura" ? "Gratuito, com cadastro" : "Gratuito";
   const selo = catalogo
-    ? `<div class="card-tags"><span class="project-tag">${esc(tipo)}</span><span class="format-tag">${venda ? "Produto pago" : "Gratuito"}</span></div>`
+    ? `<div class="card-tags"><span class="project-tag">${esc(tipo)}</span><span class="format-tag">${esc(data.selo || rotuloAcesso)}</span></div>`
     : (data.selo ? `<div class="card-tags"><span class="format-tag">${esc(data.selo)}</span></div>` : "");
 
   const ficha = (catalogo || tipo || publico.length || toList(data.habilidades).length || toList(data.habilidades_computacao).length || data.licenca)
@@ -236,7 +259,7 @@ function landingPage(L) {
           <h2 id="h-ficha">Ficha do recurso</h2>
           <dl class="ficha">
             ${tipo ? itemFicha("Tipo", `${esc(tipo)}: ${TIPOS[tipo]}`) : ""}
-            ${catalogo ? itemFicha("Acesso", venda ? "Pago, com compra pela plataforma indicada" : "Gratuito") : ""}
+            ${catalogo ? itemFicha("Acesso", venda ? "Pago, com compra pela plataforma indicada" : modo === "proposta" ? "Sob consulta, mediante proposta" : modo === "captura" ? "Gratuito, com cadastro" : "Gratuito") : ""}
             ${publico.length ? itemFicha("Público", esc(publico.join(", "))) : ""}
             ${hab(toList(data.habilidades), "Habilidades BNCC", "bncc")}
             ${hab(toList(data.habilidades_computacao), "Habilidades BNCC Computação", "computacao")}
@@ -310,7 +333,7 @@ function landingPage(L) {
   const direita = topoForm ? `<div class="lp-hero-form">${formHtml(F, L)}</div>` : imagemFig;
 
   const ld = jsonLd(catalogo
-    ? { "@context": "https://schema.org", "@type": "LearningResource", name: L.title, description: data.resumo, url, inLanguage: "pt-BR", isAccessibleForFree: !venda, learningResourceType: TIPOS[tipo], image: `${SITE}/${imagem}`, ...(data.licenca ? { license: String(data.licenca) } : {}) }
+    ? { "@context": "https://schema.org", "@type": "LearningResource", name: L.title, description: data.resumo, url, inLanguage: "pt-BR", ...(modo === "proposta" ? {} : { isAccessibleForFree: !venda }), learningResourceType: TIPOS[tipo], image: `${SITE}/${imagem}`, ...(data.licenca ? { license: String(data.licenca) } : {}) }
     : { "@context": "https://schema.org", "@type": "WebPage", name: L.title, description: data.resumo, url, inLanguage: "pt-BR", image: `${SITE}/${imagem || "assets/img/hero.png"}` });
   const crumbs = catalogo
     ? `<a href="../index.html">Início</a> / <a href="../index.html#projetos">Catálogo</a> / <span>${esc(L.title)}</span>`
@@ -377,7 +400,8 @@ ${corpoBlocos ? `\n${corpoBlocos}\n` : ""}${posForm ? `\n        ${posForm}\n` :
     </main>
     ${fragment(FOOTER, 1)}
     <script src="../assets/js/lib.js"></script>
-    <script src="../assets/js/theme.js"></script>
+    <script src="../assets/js/theme.js"></script>${F && F.ml ? `
+    <script src="../assets/js/lead-form.js"></script>` : ""}
   </body>
 </html>
 `;

@@ -2,7 +2,7 @@
 
 Obrigada pelo interesse em colaborar com o Bio+Tech EduDesign. Este projeto reúne recursos educacionais abertos para professores, estudantes universitários e estagiários, e toda contribuição deve tornar o material mais correto, acessível e útil em sala de aula.
 
-Antes de começar, veja a [Wiki da comunidade](https://github.com/Bio-Tech-Edu/.github/wiki) e as [regras de convivência](https://bio-tech-edu.github.io/termos.html).
+Antes de começar, veja a [Wiki da comunidade](https://github.com/Bio-Tech-Edu/.github/wiki) e as [regras de convivência](https://biotech.pro.br/termos.html).
 
 ## Formas de contribuir
 
@@ -43,7 +43,7 @@ Conteúdo científico e normativo deve citar fontes. Para normas como a BNCC, in
 
 ## Comentários e moderação
 
-Os comentários são feitos pelo Disqus e seguem as [regras de convivência](https://bio-tech-edu.github.io/termos.html). Para denunciar um comentário, use o recurso do próprio Disqus ou abra uma issue "Denunciar comentário" sem incluir dados pessoais.
+Os comentários são feitos pelo Disqus e seguem as [regras de convivência](https://biotech.pro.br/termos.html). Para denunciar um comentário, use o recurso do próprio Disqus ou abra uma issue "Denunciar comentário" sem incluir dados pessoais.
 
 ## Licenças
 

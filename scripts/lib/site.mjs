@@ -6,7 +6,18 @@ import { fileURLToPath } from "node:url";
 import { marked } from "marked";
 
 export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..");
-export const SITE = "https://bio-tech-edu.github.io";
+// O domínio do site vem do arquivo CNAME da raiz (fonte única). Para trocar de domínio, edite só o CNAME.
+function dominioDoRepositorio() {
+  const arquivo = path.join(ROOT, "CNAME");
+  if (!fs.existsSync(arquivo)) return "bio-tech-edu.github.io";
+  const d = fs.readFileSync(arquivo, "utf8").trim().toLowerCase();
+  if (!/^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)+$/.test(d)) {
+    throw new Error(`CNAME inválido: "${d}". Use só o domínio, sem https:// nem barra (ex.: biotech.pro.br).`);
+  }
+  return d;
+}
+export const DOMINIO = dominioDoRepositorio();
+export const SITE = `https://${DOMINIO}`;
 export const AUTOR_PADRAO = "Pâmella Araújo Balcaçar";
 
 export const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));

@@ -48,7 +48,7 @@ Sabemos que a sensação de estar sempre correndo contra o tempo para dar conta 
 
 A abordagem STHEAM oferece justamente o suporte metodológico necessário para transformar essas exigências em projetos vivos e prazerosos de ensinar e aprender. Quer dar o próximo passo e ver como levar essa transdisciplinaridade para a sua realidade escolar de forma descomplicada?
 
-👉 **Leia a seguir:** *[Muito Além da Teoria: Como a Jornada STHEAM Conecta a Escola à Realidade](https://bio-tech-edu.github.io/blog/jornada-stheam-conecta-a-escola-a-realidade.html)* e descubra estratégias práticas para tirar os projetos autorais do papel com os recursos que você já tem disponíveis!
+👉 **Leia a seguir:** *[Muito Além da Teoria: Como a Jornada STHEAM Conecta a Escola à Realidade](https://biotech.pro.br/blog/jornada-stheam-conecta-a-escola-a-realidade.html)* e descubra estratégias práticas para tirar os projetos autorais do papel com os recursos que você já tem disponíveis!
 
 ## Referências
 
