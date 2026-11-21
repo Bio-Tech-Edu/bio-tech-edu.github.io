@@ -19,7 +19,6 @@ function avisar(nivel, file, line, msg) {
 }
 const CHAVES = new Set(["title", "date", "slug", "summary", "area", "atuacao", "formato", "publico", "habilidades", "tags", "destaque", "cover", "cover_alt", "atualizado", "comentarios", "autoria", "rascunho"]);
 
-// Aceita o caminho como escrito, a pasta atual (assets/img/blog) e a versão .webp; avisa se ajustou ou se pesa demais.
 function resolveCover(raw, file) {
   const alvo = String(raw).trim().replace(/^\.?\//, "");
   const base = path.basename(alvo);
@@ -41,7 +40,6 @@ for (const f of files) {
   const m = texto.match(/^---\r?\n([\s\S]*?)\r?\n---/);
   if (!m) { avisar("erro", f, 1, 'cabeçalho ausente. O arquivo deve começar com "---", ter os campos e fechar com outro "---".'); continue; }
 
-  // chaves repetidas e campos desconhecidos (apontando a linha do arquivo)
   const vistas = new Map();
   let repetida = false;
   m[1].split(/\r?\n/).forEach((ln, i) => {
@@ -133,12 +131,39 @@ function postPage(p, i) {
   const nav = newer || older
     ? `<nav class="post-nav" aria-label="Navegação entre publicações">${older ? `<a class="prev" href="${older.slug}.html"><small>← Publicação anterior</small><span>${esc(older.title)}</span></a>` : "<span></span>"}${newer ? `<a class="next" href="${newer.slug}.html"><small>Próxima publicação →</small><span>${esc(newer.title)}</span></a>` : "<span></span>"}</nav>`
     : "";
+  
+  // UI do Text-to-Speech (injetado via script sem depender de HTML rígido avulso)
+  const ttsUI = `<div class="leitor-voz" role="group" aria-label="Ouvir este artigo" data-leitor-voz hidden>
+          <button type="button" class="btn secondary" data-leitor-voz-alternar>
+            <svg class="leitor-voz__icone" data-icone="tocar" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 5v14l11-7z" /></svg>
+            <svg class="leitor-voz__icone" data-icone="pausar" viewBox="0 0 24 24" aria-hidden="true" focusable="false" hidden><path fill="currentColor" d="M6 5h4v14H6zM14 5h4v14h-4z" /></svg>
+            <span data-leitor-voz-rotulo>Ouvir texto</span>
+          </button>
+          <button type="button" class="btn secondary" data-leitor-voz-parar aria-disabled="true" title="Parar leitura">
+            <svg class="leitor-voz__icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M6 6h12v12H6z" /></svg>
+            <span class="visually-hidden">Parar</span>
+          </button>
+          <div class="leitor-voz__velocidade">
+            <label class="visually-hidden" for="leitor-voz-velocidade-${esc(p.slug)}">Velocidade da voz</label>
+            <select id="leitor-voz-velocidade-${esc(p.slug)}" data-leitor-voz-velocidade>
+              <option value="0.75">0,75x</option>
+              <option value="1" selected>1x</option>
+              <option value="1.25">1,25x</option>
+              <option value="1.5">1,5x</option>
+              <option value="2">2x</option>
+            </select>
+          </div>
+          <span class="leitor-voz__progresso" data-leitor-voz-progresso aria-hidden="true"></span>
+          <span class="visually-hidden" role="status" data-leitor-voz-status></span>
+        </div>`;
+
   const ld = jsonLd({
     "@context": "https://schema.org", "@type": "BlogPosting", headline: p.title, description: p.summary, inLanguage: "pt-BR",
     datePublished: p.date, dateModified: p.atualizado || p.date, mainEntityOfPage: url, articleSection: p.areas.join(", "), keywords: p.tags.join(", "),
     image: `${SITE}/${p.cover || "assets/img/hero.png"}`, author: { "@type": "Person", name: p.autoria },
     publisher: { "@type": "Organization", name: "Bio+Tech EduDesign", logo: { "@type": "ImageObject", url: `${SITE}/assets/img/favicon.png` } },
   });
+  
   return `<!DOCTYPE html>
 <html lang="pt-BR">
   <head>
@@ -171,6 +196,7 @@ function postPage(p, i) {
         <div class="card-tags">${p.areas.map((a) => `<span class="project-tag">${esc(a)}</span>`).join("")}<span class="format-tag">${esc(p.formato)}</span></div>
         <h1>${esc(p.title)}</h1>
         <p class="meta">${meta}</p>
+        ${ttsUI}
         ${cover}
         ${skills}
         ${tocHtml}
@@ -179,7 +205,7 @@ ${p._html}
         </div>
         <footer class="post-foot">
           <div class="post-tags" aria-label="Tags">${tags}</div>
-          <p><a class="btn secondary" href="${wa}" target="_blank" rel="noopener noreferrer">Compartilhar no WhatsApp</a> <a class="btn secondary" href="../blog.html">Voltar ao blog</a></p>
+          <p><a class="btn secondary" href="${wa}" target="_blank" rel="noopener noreferrer">Compartilhar no WhatsApp</a> <a class="btn secondary" href="../blog.html" data-no-tts>Voltar ao blog</a></p>
         </footer>
         ${cite}
         ${comments}
@@ -192,6 +218,7 @@ ${p._html}
     <script src="../assets/js/theme.js"></script>
     <script src="../assets/js/post.js"></script>
     <script src="../assets/js/comments.js"></script>
+    <script type="module" src="../assets/js/leitor-voz.js"></script>
   </body>
 </html>
 `;

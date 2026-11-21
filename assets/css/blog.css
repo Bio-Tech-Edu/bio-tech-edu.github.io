@@ -93,3 +93,75 @@
 .post-nav .next{text-align:right}
 .notfound{padding:96px 0;text-align:center;display:grid;gap:16px;justify-items:center}
 @media (max-width:980px){.related .post-list{grid-template-columns:1fr}.post-nav{grid-template-columns:1fr}}
+
+/* ==========================================================================
+   LEITOR DE VOZ (TTS)
+   ========================================================================== */
+
+/* Barra de controles do Text-to-Speech */
+.leitor-voz {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  margin: var(--space-4) 0;
+  padding: var(--space-3);
+  background-color: var(--panel);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line);
+}
+
+.leitor-voz[hidden] {
+  display: none !important;
+}
+
+.leitor-voz .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  min-height: 44px; /* WCAG Target Size */
+}
+
+.leitor-voz__icone {
+  width: 20px;
+  height: 20px;
+}
+
+.leitor-voz__velocidade {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.leitor-voz__velocidade select {
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid var(--line-strong);
+  background-color: var(--bg);
+  color: var(--text);
+  min-height: 44px; /* WCAG Target Size */
+}
+
+.leitor-voz__progresso {
+  font-size: var(--text-sm);
+  color: var(--muted);
+  margin-left: auto;
+}
+
+/* Destaque do bloco (parágrafo) que está sendo lido */
+.tts-lendo {
+  background-color: var(--green-soft);
+  border-left: 4px solid var(--green);
+  padding: var(--space-2) var(--space-3);
+  margin-left: calc(var(--space-3) * -1);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  transition: background-color 0.2s ease, border-left-color 0.2s ease;
+}
+
+/* Modo Redução de Movimento - Elimina transição de scroll e destaque suave */
+@media (prefers-reduced-motion: reduce) {
+  .tts-lendo {
+    transition: none;
+  }
+}
